@@ -1,0 +1,21 @@
+.modal-lg {
+	max-width: 800px; 
+}
+
+.modal-header {
+    	background-color: #28a745; 
+    	color: white;
+}
+
+.modal-body .row {
+    	margin-bottom: 10px;
+}
+
+.modal-body .label {
+    	font-weight: bold;
+    	color: #343a40; 
+}
+
+
+
+
