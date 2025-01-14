@@ -80,7 +80,7 @@
                                             <button type="button" name="saveSubCategoryButton" class="btn btn-success mb-3" id="saveSubCategoryButton">Submit</button>
                                             <button type="button" name="editSubCategoryButton" class="btn btn-success mb-3" id="editSubCategoryButton">Update</button>
                                         </div>
-                                        <input type="hidden" id="categoryId" name="categoryId">
+                                        
                                         <div id="errorMessages"></div>
                                     </form>
                                 </div>

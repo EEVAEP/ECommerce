@@ -1,7 +1,7 @@
 
-<!---<cfparam name="url.categoryId" default="">
-<cfset subCategoryListQuery = application.modelAdminCtg.listSubCategories(url.categoryId)>--->
-
+<cfparam name="url.productId" default="">
+<!---<cfset productListQuery = application.modelAdminCtg.listProducts(url.productId)>--->
+ 
 
 <!DOCTYPE html>
 <html lang="en">
@@ -41,46 +41,88 @@
             <h4>Product</h4>
 
             <button class="btn btn-success text-white add"
-                    id="createSubCategoryBtn"
+                    id="createProductBtn"
                     data-bs-toggle="modal" 
-                    data-bs-target="#createSubCategoryModal">
+                    data-bs-target="#createProductModal">
                     <i class="bi bi-plus-circle"></i>
             </button>
 
-            <!---<div class="modal fade" 
-				id="createSubCategoryModal"
+            <div class="modal fade" 
+				id="createProductModal"
                 data-bs-backdrop="static" 
 				data-bs-keyboard="false" 
 				tabindex="-1" 
-				aria-labelledby="createSubCategoryLabel" 
+				aria-labelledby="createProductLabel" 
 				aria-hidden="true">
     				<div class="modal-dialog">
         				<div class="modal-content">
             					<div class="modal-header">
-                					<h5 class="modal-title mx-auto d-block" id="createSubCategoryLabel">Add SubCategories</h5>
+                					<h5 class="modal-title mx-auto d-block" id="createProductLabel">Add Product</h5>
                                 </div>
 
                                 <div class="modal-body">
-                                    <form method="post" id="subCategoryForm" action="">
-                                        <cfset categoryNameQuery = application.modelAdminCtg.getCategoryName()>
-                                        <label for="categoryName">Category Name</label>
-                        				<select class="form-control" id="categoryName" name="categoryName">
-                                            
-                            				<cfoutput query="categoryNameQuery">
-                        						<option value="#categoryNameQuery.fldCategory_ID#">#categoryNameQuery.fldCategoryName#</option>
-											</cfoutput>
-                        				</select>
+                                    <form method="post" id="productForm" action="">
                                         <div class="form-group pt-1 ">
-                                            <label for="subCategoryName" class="form-label">SubCategory Name</label>
-                        					<input type="text" class="form-control" id="subCategoryName" name="subCategoryName" placeholder="SubCategoryName">
+                                            <cfset categoryNameQuery = application.modelAdminCtg.getCategoryName()>
+                                            <label for="categoryName">Category Name</label>
+                        				    <select class="form-control" id="categoryName" name="categoryName">
+                                            
+                            				    <cfoutput query="categoryNameQuery">
+                        						    <option value="#categoryNameQuery.fldCategory_ID#">#categoryNameQuery.fldCategoryName#</option>
+											    </cfoutput>
+                        				    </select>
                                         </div>
+                                        <div class="form-group pt-1 ">
+                                            <cfset subCategoryNameQuery = application.modelAdminCtg.getSubCategoryName()>
+                                            <label for="subCategoryName" class="form-label">SubCategory Name</label>
+                        					<select class="form-control" id="subCategoryName" name="subCategoryName">
+                                                <cfoutput query="subCategoryNameQuery">
+                        						    <option value="#subCategoryNameQuery.fldSubCategory_ID#">#subCategoryNameQuery.fldSubCategoryName#</option>
+											    </cfoutput>
+                        				    </select>
+                                        </div>
+
+                                        <div class="form-group pt-1 ">
+                                            <label for="productName" class="form-label">Product Name</label>
+                        					<input type="text" class="form-control" id="productName" name="productName" placeholder="ProductName">
+                                        </div>
+
+                                        <div class="form-group pt-1 ">
+                                            <cfset brandNameQuery = application.modelAdminCtg.getProductBrandName ()>
+                                            <label for="productBrand" class="form-label">productBrand</label>
+                        					<select class="form-control" id="productBrand" name="productBrand">
+                                                <cfoutput query="brandNameQuery">
+                        						    <option value="#brandNameQuery.fldBrand_ID#">#brandNameQuery.fldBrandName#</option>
+											    </cfoutput>
+                        				    </select>
+                                        </div>
+
+                                        <div class="form-group pt-1 ">
+                                            <label for="productDescription" class="form-label">Product Description</label>
+                        					<input type="text" class="form-control" id="productDescription" name="productDescription" placeholder="productDescription">
+                                        </div>
+
+                                        <div class="form-group pt-1 ">
+                                            <label for="productPrice" class="form-label">Product Price</label>
+                        					<input type="number" class="form-control" id="productPrice" name="productPrice" placeholder="productPrice">
+                                        </div>
+
+                                        <div class="form-group pt-1 ">
+                                            <label for="productPrice" class="form-label">Product Tax</label>
+                        					<input type="number" class="form-control" id="productTax" name="productTax" placeholder="productTax">
+                                        </div>
+
+                                        <div class="form-group col-md-6 pt-2">
+                        					<label for="productImg">Product Image</label>
+                        					<input type="file" class="form-control-file" id="productImg" name="productImg">
+                    					</div>
 
                                         <div class="form-group pt-1 mt-3">
                                             <button type="button" class="btn btn-secondary mb-3" data-bs-dismiss="modal">Cancel</button>
-                                            <button type="button" name="saveSubCategoryButton" class="btn btn-success mb-3" id="saveSubCategoryButton">Submit</button>
-                                            <button type="button" name="editSubCategoryButton" class="btn btn-success mb-3" id="editSubCategoryButton">Update</button>
+                                            <button type="button" name="saveProductButton" class="btn btn-success mb-3" id="saveProductButton">Submit</button>
+                                            <button type="button" name="editProductButton" class="btn btn-success mb-3" id="editProductButton">Update</button>
                                         </div>
-                                        <input type="hidden" id="categoryId" name="categoryId">
+                                        
                                         <div id="errorMessages"></div>
                                     </form>
                                 </div>
@@ -89,8 +131,58 @@
                     </div>
             </div>
 
+
+           <!--- <div class="products">
+    <!-- Start CF Loop -->
+    <cfoutput query="subCategoryListQuery">
+      <cfset encryptedId = encrypt(subCategoryListQuery.idSubCategory, application.encryptionKey, "AES", "Hex")>
+      
+      <div class="card" data-id="#encryptedId#">
+        <!-- Placeholder for product image -->
+        <img src="https://via.placeholder.com/60" alt="Product Image">
+        <!-- Product Details -->
+        <h2>#subCategoryListQuery.fldSubCategoryName#</h2>
+        <p>#subCategoryListQuery.fldCategoryName#</p>
+        <div class="price">₹#NumberFormat(subCategoryListQuery.price, "999,999.00")#</div>
         
-        <div class="table-responsive">
+        <!-- Actions -->
+        <div class="actions">
+          <!-- Edit Button -->
+          <button 
+            class="btn btn-sm btn-outline-primary edit"
+            id="createSubCategoryBtn"
+            data-bs-toggle="modal" 
+            data-bs-target="##createSubCategoryModal"
+            data-id="#encryptedId#">
+            <i class="bi bi-pencil-fill"></i> Edit
+          </button>
+          
+          <!-- Delete Button -->
+          <button 
+            class="btn btn-sm btn-outline-danger delete"
+            id="deleteSubCategoryBtn"
+            data-bs-toggle="modal" 
+            data-bs-target="##deleteSubConfirmModal"
+            data-id="#encryptedId#">
+            <i class="bi bi-trash-fill"></i> Delete
+          </button>
+          
+          <!-- View Button -->
+          <button 
+            class="btn btn-sm btn-outline-info view"
+            id="viewCategoryBtn"
+            data-id="#encryptedId#">
+            <i class="bi bi-chevron-right"></i> View
+          </button>
+        </div>
+      </div>
+    </cfoutput>
+    <!-- End CF Loop -->
+  </div>
+</div>--->
+
+        
+        <!---<div class="table-responsive">
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -167,7 +259,7 @@
     
     <script src="../../assets/js/bootstrap.min.js"></script>
 	<script src="../../assets/js/bootstrap.bundle.min.js"></script>
-    
+    <script src="../../assets/js/AdminProduct.js"></script>
         
     
 

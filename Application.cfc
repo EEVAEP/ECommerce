@@ -28,6 +28,17 @@
         	<cfif NOT structKeyExists(session,"username") AND NOT arrayFindNoCase(local.pages, ListLast(CGI.SCRIPT_NAME,'/'))>
 		    	<cflocation url="../../view/Admin/Login.cfm" addToken="no">
 	    	</cfif>
+
+
+
+			<cfset local.restrictedPages = [    "dashboard.cfm","SubCategory.cfm",
+                                            "ProductPage.cfm"
+                                        ]>     
+        <cfif NOT structKeyExists(session,"roleid") AND arrayFindNoCase(local.restrictedPages, listLast(CGI.SCRIPT_NAME,'/'))>
+            <cflocation  url="../../view/Admin/Login.cfm" addToken = "false">
+        <cfelseif structKeyExists(session, "roleid") AND session.roleid NEQ 1 AND arrayFindNoCase(local.restrictedPages, listLast(CGI.SCRIPT_NAME,'/'))>
+            <cflocation url = "../../view/Admin/Login.cfm" addToken = "false">
+        </cfif>
     	</cffunction>
 	
        
