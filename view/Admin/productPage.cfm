@@ -186,7 +186,7 @@
                                             id="viewProductBtn"
                                             data-bs-toggle="modal" 
                     				        data-bs-target="##viewProductModal"
-                                            id="#encryptedId#">
+                                            data-id="#encryptedId#">
                                             <i class="bi bi-chevron-right"></i> 
                                         </button>
                                     </td>
@@ -225,12 +225,12 @@
      	        data-bs-backdrop="static" 
                 data-bs-keyboard="false" 
      	        tabindex="-1" 
-     	        aria-labelledby="viewContactModalLabel" 
+     	        aria-labelledby="viewProductModalLabel" 
                 aria-hidden="true">
                 <div class="modal-dialog modal-lg"> 
                     <div class="modal-content">
                         <div class="modal-header bg-success text-white"> 
-                            <h5 class="modal-title mx-auto d-block" id="viewContactModalLabel">VIEW CONTACT DETAILS</h5>
+                            <h5 class="modal-title mx-auto d-block" id="viewContactModalLabel">VIEW PRODUCT DETAILS</h5>
                             <button type="button" class="btn-close btn-close-white"
                                 data-bs-dismiss="modal" aria-label="Close">
                             </button>
@@ -240,21 +240,30 @@
                     	        <div class="col-md-4 text-center">
                         	        <img id="viewPhoto" src="" alt="Profile Picture" class="img-fluid rounded">
                     	        </div>
-                    
-                   
-                    						<!---<div class="col-md-8">
-									
-                        						<div class="row">
-                            							<div class="col-6 text-end label">Name:</div>
-                            							<div class="col-6 value" id="viewName"></div>
-                        						</div>
-                        						
-                    						
-                					        </div>--->
+                    			<div class="col-md-8">
+									<div class="row">
+                            			<div class="col-6 text-end label">Product Name:</div>
+                            			<div class="col-6 value" id="viewProductName"></div>
+                        			</div>
+                                    <div class="row">
+                            			<div class="col-6 text-end label">Product Brand:</div>
+                            			<div class="col-6 value" id="viewProductBrand"></div>
+                        			</div>
+                                    <div class="row">
+                            			<div class="col-6 text-end label">Product Description:</div>
+                            			<div class="col-6 value" id="viewProductDescription"></div>
+                        			</div>
+                                    <div class="row">
+                            			<div class="col-6 text-end label">Product Price:</div>
+                            			<div class="col-6 value" id="viewProductPrice"></div>
+                        			</div>
+                                    <div class="row">
+                            			<div class="col-6 text-end label">Product Tax:</div>
+                            			<div class="col-6 value" id="viewProductTax"></div>
+                        			</div>	
+                				</div>
             					
-        				
-    				            
-			                </div>
+        				    </div>
 
                         </div>
                     </div>

@@ -576,7 +576,9 @@
                                             fldProductId,
                                             fldImageFileName,
                                             fldDefaultImage,
-                                            fldCreatedById
+                                            fldCreatedById,
+                                            fldDeactivatedById,
+                                            fldDeactivatedDate
                                             
                                         )
                     VALUES(
@@ -587,7 +589,9 @@
                             <cfelse>
                                 <cfqueryparam value = "0" cfsqltype = "cf_sql_tinyint">,
                             </cfif>
-                            <cfqueryparam value = "#session.userid#" cfsqltype = "cf_sql_integer">
+                            <cfqueryparam value = "#session.userid#" cfsqltype = "cf_sql_integer">,
+                            <cfqueryparam value = "#session.userid#" cfsqltype = "cf_sql_integer">,
+                            <cfqueryparam value = "#now()#" cfsqltype = "cf_sql_date" >
                             
                         )
                 </cfquery>
@@ -723,6 +727,123 @@
 
 
 
+    <!--- --------------------------Product Image delete ---------------------------------------------- --->
 
+        <cffunction  name="deleteImage" access = "public" returntype = "string">
+        <cfargument  name="imageId" type = "integer" required = "true">
+        <cfargument  name="productId" type = "string" required = "true">
+        <cftry>
+
+            <cfset local.decryptedId = decryptId(arguments.productId)>
+            <cfset local.productImageCount  = getProductImageCount(productId = local.decryptedId )>
+            
+            <cfif local.productImageCount LE 3 >
+                <cfreturn "*Atleast 3 Images required" >
+            <cfelse>
+                <cfquery name = "local.qryCheckDefaultImg">
+                    SELECT
+                        fldDefaultImage
+                    FROM 
+                        tblproductimages
+                    WHERE
+                        fldProductImage_ID = <cfqueryparam value = "#arguments.imageId#" cfsqltype = "cf_sql_varchar">
+                </cfquery>
+                
+                <cfif local.qryCheckDefaultImg.fldDefaultImage EQ 1>
+                   
+                    <cfset local.imageDeleteResult = imageDeleteFunction(imageId = arguments.imageId)>
+                    
+                    <cfif local.imageDeleteResult EQ 1>
+                        <cfset local.newDafaultImageId = arguments.imageId + 1 >
+                        
+                        <cfquery name = "local.qryChangeDefaultImage">
+                            UPDATE 
+                                tblproductimages
+                            SET 
+                                fldDefaultImage = <cfqueryparam value = "1" cfsqltype = "cf_sql_integer">
+                            WHERE
+                                fldProductImage_ID = <cfqueryparam value = "#local.newDafaultImageId#" cfsqltype = "cf_sql_tinyint">
+                            AND 
+                                fldCreatedById = <cfqueryparam value = "#session.userid#" cfsqltype = "cf_sql_integer">
+                        </cfquery>  
+                        <cfreturn "Success">                    
+                    <cfelse>
+                        <cfreturn  "Image edit Failed">
+                    </cfif>
+                <cfelse>
+                    <cfset local.imageDeleteResult = imageDeleteFunction(imageId = arguments.imageId )>
+                    <cfif local.imageDeleteResult EQ 1>
+                        <cfreturn "Success">
+                    <cfelse>
+                        <cfreturn "Image edit Failed" >
+                    </cfif>              
+                </cfif>
+            </cfif>
+        <cfcatch type="exception">
+            <cfdump var = "#cfcatch#">
+        </cfcatch>
+        </cftry>
+    </cffunction>
+
+
+    <cffunction  name="imageDeleteFunction" access = "private" returntype = "any">
+        <cfargument name = "imageId" type = "integer" required = "true">
+        <cftry>
+            <cfquery result = "local.qryImageDelete">
+                DELETE FROM 
+                    tblproductimages
+                WHERE
+                    fldProductImage_ID = <cfqueryparam value = "#arguments.imageId#" cfsqltype = "cf_sql_integer">
+                AND fldCreatedById = <cfqueryparam value = "#session.userid#" cfsqltype = "cf_sql_integer">
+            </cfquery> 
+            <cfreturn local.qryImageDelete.recordCount >      
+        <cfcatch type="exception">
+            <cfdump var = "#cfcatch#">
+        </cfcatch>
+        </cftry>
+    </cffunction>
+
+
+<!--------- --------------------------------Display Product Details----------------------------------->
+
+    <cffunction name="getProductDetails" access="remote" returnformat="JSON">	
+		<cfargument name="productId" type="string" required="true">
+		<cfset local.decryptedId = decryptId(arguments.productId)>
+        
+        <cfquery name="local.getDisplayProduct">
+            SELECT 
+                prd.fldProductName,
+                prd.fldProduct_ID AS idProduct,
+                sub.fldSubCategoryName,
+                br.fldBrandName,
+                prd.fldPrice,
+                prd.fldTax,
+                img.fldDefaultImage,
+                img.fldImageFileName,
+                prd.fldDescription
+            FROM 
+                tblproduct AS prd
+            INNER JOIN 
+                tblsubcategory AS sub
+             ON 
+                prd.fldSubCategoryId = sub.fldSubCategory_ID
+            INNER JOIN 
+                tblbrands AS br
+            ON 
+               prd.fldBrandId = br.fldBrand_ID
+            INNER JOIN 
+                tblproductImages AS img
+            ON 
+                prd.fldProduct_ID = img.fldProductId
+            WHERE 
+                prd.fldProduct_ID = <cfqueryparam value="#local.decryptedId#" cfsqltype="cf_sql_integer">
+            AND
+                prd.fldActive = <cfqueryparam value="1" cfsqltype="cf_sql_integer">
+            AND
+	            img.fldDefaultImage = <cfqueryparam value="1" cfsqltype="cf_sql_integer">
+            
+        </cfquery>
+        <cfreturn local.getDisplayProduct> 
+    </cffunction>
 
 </cfcomponent>

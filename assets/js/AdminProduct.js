@@ -216,6 +216,82 @@ $(document).ready(function() {
 	});
 
 
+	// Product Image Delete //
+	$('#img-list').on('click','.img-dlt-btn',function(){
+        imageId = $(this).attr('img_id');
+		let button = $(this);
+        let formData = new FormData();
+        formData.append('imageId',imageId);
+		formData.append('productId',productId);
+        console.log(imageId);
+		for (let [key, value] of formData.entries()) {
+            console.log(key + ':', value);
+        }
+        $.ajax({
+            url : "../../controller/AdminProduct.cfc?method=deleteImage",
+            method : 'POST' ,
+            data : formData ,
+            processData : false,
+            contentType : false,
+            success : function(response){
+                    console.log("Success");
+                    let data = JSON.parse(response);
+                    if(data === "Success"){
+                        button.closest('li').remove();
+                    }
+                    else{
+                        addError(data);
+                    }
+            },
+            error : function(){
+                console.log("Request failed") ;
+            }           
+        })
+    });
+
+	$(document).on('click', '.view', function() {
+		
+		productId = $(this).data('id');
+		console.log(productId);
+		$.ajax({
+			url:'../../model/AdminCategory.cfc?method=getProductDetails',
+			type:'POST',
+			data:{
+				productId:productId
+			},
+			success:function(response){
+				const data=JSON.parse(response);
+				console.log(data);
+				
+				
+            	let viewProductName= data.DATA[0][0];
+				let viewProductBrand= data.DATA[0][3];
+				let viewProductPrice= data.DATA[0][4];
+				let viewProductTax= data.DATA[0][5];
+				let viewProductDescription= data.DATA[0][8];
+				
+				
+				let basePath = "../../uploads/";
+				let viewPhotoSrc = basePath + data.DATA[0][7];
+				$('#viewPhoto').attr('src', viewPhotoSrc);
+
+				$('#viewProductName').text(viewProductName);
+				$('#viewProductBrand').text(viewProductBrand);
+				$('#viewProductPrice').text(viewProductPrice);
+				$('#viewProductTax').text(viewProductTax);
+				$('#viewProductDescription').text(viewProductDescription);
+
+				
+
+				
+			},
+			error:function(){
+				console.log("Request Failed");
+			}
+		});
+	});
+
+
 });
 function addOnError(errors) {
 	$('#errorMessages').empty();
