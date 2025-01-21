@@ -26,9 +26,8 @@
         <cfargument name="email" required="true" type="string">
         <cfargument name="phone" required="true" type="string">
     	<cfargument name="password" required="true" type="string">
-		<cfargument name="roleId" required="true" type="numeric">
-        	
-		<cfset local ={}>
+		
+        <cfset local ={}>
 
         <cfquery name="local.qryCheckUser">
             SELECT *
@@ -36,6 +35,8 @@
 			    tblUser
         	WHERE 
 				fldFirstname = <cfqueryparam value="#arguments.fname#" cfsqltype="cf_sql_varchar">
+			OR 
+				fldPhone  = <cfqueryparam value="#arguments.phone#" cfsqltype="cf_sql_varchar">
 			AND
 				fldEmail = <cfqueryparam value="#arguments.email#" cfsqltype="cf_sql_varchar">
     	</cfquery>
@@ -58,7 +59,7 @@
                         <cfqueryparam value="#arguments.lname#" cfsqltype="cf_sql_varchar">,
 					    <cfqueryparam value="#arguments.email#" cfsqltype="cf_sql_varchar">,
 					    <cfqueryparam value="#arguments.phone#" cfsqltype="cf_sql_varchar">,
-						<cfqueryparam value="#arguments.roleId#" cfsqltype="cf_sql_varchar">,
+						<cfqueryparam value="2" cfsqltype="cf_sql_integer">,
             			<cfqueryparam value="#local.hashedPassword#" cfsqltype="cf_sql_varchar">,
 					    <cfqueryparam value="#local.salt#" cfsqltype="cf_sql_varchar">
 						

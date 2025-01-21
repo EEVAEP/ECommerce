@@ -5,16 +5,15 @@
  												lname=form.lname,
                                                 email=form.email,
 												phone=form.phone, 
-												password=form.password, 
-												roleId=form.roleName)>
+												password=form.password)>
+						
         
-        <cfif structKeyExists(variables, "validationErrors") AND arrayLen(validationErrors) EQ 0>
+       <cfif structKeyExists(variables, "validationErrors") AND arrayLen(validationErrors) EQ 0>
 		    <cfset result = application.modelService.registerUser(form.fname,
  												form.lname,
                                                 form.email,
 												form.phone, 
-												form.password, 
-												form.roleName)>
+												form.password)>
 		    <cfif result.success>
             	    <cfset successMessage = result.message>
 		    <cfelse>
@@ -86,7 +85,7 @@
                     <input type="password" class="form-control" name="password" id="password" placeholder="Enter your password">
                 </div>
                
-                <cfset RoleNameQuery = application.modelService.getRoleName()> 
+                <!---<cfset RoleNameQuery = application.modelService.getRoleName()> 
                 <div class="mb-2">
                     <label for="roleName" class="form-label">Select Role</label>
                     <select class="form-control" id="roleName" name="roleName">
@@ -97,7 +96,7 @@
                             </option>
                         </cfoutput>
                     </select>
-                </div>
+                </div>--->
                 
                 
                 <button type="submit" name="submit" class="btn w-100 custom-btn">SignUp</button>

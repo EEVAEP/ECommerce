@@ -12,8 +12,11 @@
 		<cfset application.encryptionKey = generateSecretKey("AES")>
 		<cfset application.userService = createObject("component","controller.userLogin")>
 		<cfset application.CntrlProduct = createObject("component","controller.AdminProduct")>
+
 		<cfset application.modelService = createObject("component","model.registerAndLogin")>
 		<cfset application.modelAdminCtg = createObject("component","model.AdminCategory")>
+		<cfset application.modelUserPage = createObject("component","model.UserPage")>
+
 		<cfreturn true>
     </cffunction>
 
@@ -32,7 +35,7 @@
             		(structKeyExists(session, "roleid") AND session.roleid NEQ 1)
         		)
     		)>
-    		<cflocation url="../../view/Admin/Login.cfm" addToken="no">
+    		<cflocation url="../Login.cfm" addToken="no">
 		</cfif>
 
     </cffunction>
