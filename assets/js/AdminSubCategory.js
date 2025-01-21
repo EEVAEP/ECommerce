@@ -60,7 +60,6 @@ $(document).ready(function() {
 		subCategoryId = $(this).data('id');
 		console.log(subCategoryId);
 
-        
         $.ajax({
 			url:'../../model/AdminCategory.cfc?method=getSubCategoryById',
 			type:'POST',

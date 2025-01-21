@@ -43,15 +43,11 @@
         <cfargument  name="imageId" type = "integer" required = "true">
         <cfargument  name="productId" type = "string" required = "true">
 
-        
-        
         <cfset local.errors = []>
         <cfset local.deleteImageResult = application.modelAdminCtg.deleteImage(
                                                                                 imageId = arguments.imageId,
                                                                                 productId = arguments.productId
-
-                                                                            )
-        >
+                                                                            )>
         <cfif local.deleteImageResult EQ "Success">
             <cfreturn "Success">
         <cfelse>

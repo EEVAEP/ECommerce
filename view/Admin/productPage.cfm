@@ -72,12 +72,12 @@
                                 <div class="modal-body">
                                     <form method="post" id="productForm" action="" enctype="multipart/form-data">
                                         <div class="form-group pt-1 ">
-                                            <cfset categoryNameQuery = application.modelAdminCtg.getCategoryName()>
+                                            <cfset categoryNameQuery = application.modelAdminCtg.getCategoryList()>
                                             <label for="categoryName">Category Name</label>
                         				    <select class="form-control" id="categoryName" name="categoryName">
                                             
                             				    <cfoutput query="categoryNameQuery">
-                        						    <option value="#categoryNameQuery.fldCategory_ID#">#categoryNameQuery.fldCategoryName#</option>
+                        						    <option value="#categoryNameQuery.idCategory#">#categoryNameQuery.fldCategoryName#</option>
 											    </cfoutput>
                         				    </select>
                                         </div>
@@ -268,9 +268,8 @@
                         </div>
                     </div>
                 </div>
-            
+            </div>
         </div>
-       
     
 
         <script src="../../assets/js/jquery.js"></script>

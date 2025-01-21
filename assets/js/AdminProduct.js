@@ -1,7 +1,6 @@
 $(document).ready(function() {
 	var productId;
     
-	
 	$('#createProductBtn').on('click',function(){
 		document.getElementById("createProductLabel").innerText = "Add Product";
 		$('#productForm').trigger('reset');
@@ -23,9 +22,7 @@ $(document).ready(function() {
         var productPrice = $('#productPrice');
         var productTax = $('#productTax');
         
-
-
-    	var formData = new FormData();
+		var formData = new FormData();
 		formData.append('categoryId', categoryId.val());
         formData.append('subCategoryId', subCategoryId.val());
         formData.append('productName', productName.val());
@@ -34,8 +31,6 @@ $(document).ready(function() {
         formData.append('productPrice', productPrice.val());
         formData.append('productTax', productTax.val());
         
-
-
 		let productImg = $('#productImg')[0].files;
         if(productImg.length < 3){
             alert('Please select atleast 3 images for products');
@@ -45,7 +40,6 @@ $(document).ready(function() {
                 formData.append('productImg',productImg[i]);
             }          
         }       
-        
         for (let [key, value] of formData.entries()) {
             console.log(key + ':', value);
         }
