@@ -1,12 +1,6 @@
 
 <cfset variables.NavCategory = application.modelUserPage.getNavCategories()>
 
-<cfset variables.displayRandomProducts = application.modelUserPage.getRandomProducts()>
-
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -61,7 +55,7 @@
                                 <cfloop query = "variables.getSubCategory">
                                     <li>
                                         <a class="dropdown-item subcategory-link"
-                                            href = "UserSubCategory.cfm?CategoryId=#encryptedId#">
+                                            href = "userCategory.cfm?CategoryId=#encryptedId#">
                                             #variables.getSubCategory.fldSubCategoryName#
                                         </a>
                                     </li>
@@ -78,31 +72,7 @@
 
             
 
-    <section class = "app-section">
-    <div class="container">
-        <img src="../../assets/img/cartImage" class="banner-img" alt = "banner">
-    </div>
-    </section>
-
-    <div class="container mt-4">
-        <h4 class="custom-heading">Random Products</h4>
-        <div class="row random-products mt-3">
-            <cfoutput query="variables.displayRandomProducts">
-                <cfset encryptedId = encrypt(variables.displayRandomProducts.idProduct, application.encryptionKey, "AES", "Hex")>
-                <div class="col-md-3">
-                    <a href="UserProduct.cfm?productId=#encryptedId#" class="product-link">
-                        <div class="product-card">
-                            <img src="../../uploads/#variables.displayRandomProducts.fldImageFileName#" class = "randomImg" alt="Product">
-                            <div class="product-info">
-                                <h5 class="product-name">#variables.displayRandomProducts.fldProductName#</h5>
-                                <p class="product-price">#variables.displayRandomProducts.fldPrice#</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </cfoutput>
-        </div>
-    </div>
+  
     
     <footer class="text-white text-center py-5 mt-5">
         <p>&copy; 2025 Shopping Cart. All Rights Reserved.</p>

@@ -1,7 +1,6 @@
+<cfparam name="url.categoryId" default="">
 
 <cfset variables.NavCategory = application.modelUserPage.getNavCategories()>
-
-<cfset variables.displayRandomProducts = application.modelUserPage.getRandomProducts()>
 
 
 
@@ -61,7 +60,7 @@
                                 <cfloop query = "variables.getSubCategory">
                                     <li>
                                         <a class="dropdown-item subcategory-link"
-                                            href = "UserSubCategory.cfm?CategoryId=#encryptedId#">
+                                            href = "userCategory.cfm?CategoryId=#encryptedId#">
                                             #variables.getSubCategory.fldSubCategoryName#
                                         </a>
                                     </li>
@@ -75,34 +74,36 @@
         </div>
     </nav>
 
+    <!---<div class="container mt-4">
+    <h4 class="custom-heading">Category Product List Page</h4>
+    <!-- Loop through Subcategories -->
+    <cfoutput query="variables.subcategories">
+        <div class="subcategory mb-4">
+            <h5 class="subcategory-title">#variables.subcategories.fldSubCategoryName#</h5>
+            <div class="row">
+                <!-- Fetch Products for Each Subcategory -->
+                <cfset variables.products = application.modelUserPage.getProductsBySubCategory(subCategoryId = variables.subcategories.fldSubCategory_ID)>
+                <cfoutput query="variables.products">
+                    <div class="col-md-3">
+                        <div class="card product-card">
+                            <img src="../../uploads/#variables.products.fldImageFileName#" class="card-img-top" alt="Product">
+                            <div class="card-body text-center">
+                                <h6 class="card-title">#variables.products.fldProductName#</h6>
+                                <p class="card-text">$#variables.products.fldPrice#</p>
+                            </div>
+                        </div>
+                    </div>
+                </cfoutput>
+            </div>
+        </div>
+    </cfoutput>
+</div>--->
+
+
 
             
 
-    <section class = "app-section">
-    <div class="container">
-        <img src="../../assets/img/cartImage" class="banner-img" alt = "banner">
-    </div>
-    </section>
-
-    <div class="container mt-4">
-        <h4 class="custom-heading">Random Products</h4>
-        <div class="row random-products mt-3">
-            <cfoutput query="variables.displayRandomProducts">
-                <cfset encryptedId = encrypt(variables.displayRandomProducts.idProduct, application.encryptionKey, "AES", "Hex")>
-                <div class="col-md-3">
-                    <a href="UserProduct.cfm?productId=#encryptedId#" class="product-link">
-                        <div class="product-card">
-                            <img src="../../uploads/#variables.displayRandomProducts.fldImageFileName#" class = "randomImg" alt="Product">
-                            <div class="product-info">
-                                <h5 class="product-name">#variables.displayRandomProducts.fldProductName#</h5>
-                                <p class="product-price">#variables.displayRandomProducts.fldPrice#</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </cfoutput>
-        </div>
-    </div>
+  
     
     <footer class="text-white text-center py-5 mt-5">
         <p>&copy; 2025 Shopping Cart. All Rights Reserved.</p>
