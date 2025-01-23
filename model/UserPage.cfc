@@ -6,46 +6,6 @@
     	<cfreturn local.decryptedId>
 	</cffunction>
 
-    <cffunction  name="getNavCategories" access="public" returntype="any">
-        <cfargument name="categoryId" type="string" required="false">
-        <cfquery name="local.qryCategory">
-            SELECT 
-                    fldCategory_ID,
-                    fldCategoryName
-                FROM 
-                    tblCategory
-                WHERE 
-                    fldActive = <cfqueryparam value = "1" cfsqltype = "cf_sql_integer">  
-                <cfif structKeyExists(arguments, "categoryId")>
-                    AND fldCategory_ID = <cfqueryparam value = "#arguments.categoryId#" cfsqltype = "cf_sql_integer">               
-                </cfif>
-        </cfquery>
-
-        <cfreturn local.qryCategory>
-    </cffunction>
-
-    <cffunction  name="getNavSubCategories" access="public" returntype="any">
-        <cfargument name="categoryId" type="string" required="true">
-        <cfargument name="subCategoryId" type="string" required="false">
-
-        <cfset local.decryptedId = decryptId(arguments.categoryId)>
-        <cfquery name="local.qrySubCategory">
-            SELECT 
-                    fldSubCategory_ID,
-                    fldSubCategoryName
-                FROM 
-                    tblSubCategory
-                WHERE 
-                    fldActive = <cfqueryparam value = "1" cfsqltype = "cf_sql_integer"> 
-                AND 
-                    fldCategoryId = <cfqueryparam value = "#local.decryptedId#" cfsqltype = "cf_sql_integer"> 
-                
-        </cfquery>
-
-       <cfreturn local.qrySubCategory>
-    </cffunction>
-
-     
     <cffunction  name="getRandomProducts" access="public" returntype="query">
        
         <cfquery name="local.qryRandomProducts">

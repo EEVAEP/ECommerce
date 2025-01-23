@@ -16,7 +16,12 @@
 }
 .dropdown-menu {
     background-color: green;
+    
 }
+.category-list-btn{
+    color: white;
+}
+
 .dropdown-menu .dropdown-item {
     color: white;
 }
@@ -54,6 +59,13 @@
     font-weight: bold;
 }
 
+.custom-SubCatHeading{
+    font-size: 25px;
+    color: #cf66b0;
+    font-family: sans-serif;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
 
 
 
@@ -156,4 +168,98 @@
 
 .product-link:hover {
     text-decoration: none; 
+}
+/* For subcategory product display */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 16px; 
+    margin-top: 20px;
+}
+
+.product-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/* Single Product Page */
+
+
+
+.subproduct-card {
+    
+    background-color: #fff; 
+    transition: transform 0.3s ease, box-shadow 0.3s ease; 
+}
+
+.subproduct-card img {
+    max-height: 250px;
+    border-radius: 4px; 
+}
+.subproduct-card:hover {
+    transform: scale(1.05); 
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); 
+    border-color: #007bff; 
+}
+
+.product-info {
+    margin-left: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    
+}
+
+.product-info h6 {
+    font-size: 1.3rem; 
+    color: #045a0f; 
+    margin-bottom: 8px;
+    font-family: sans-serif;
+}
+
+.product-info p {
+    margin-bottom: 10px; 
+    line-height: 1.5; 
+}
+
+.product-info .text-brand {
+    font-size: .95rem; 
+    color: #13334e; 
+}
+
+.product-info .text-description {
+    font-size: 1rem; 
+    color: #555; 
+}
+
+.product-info .text-primary {
+    font-size: 1.1rem; 
+    color: #007bff;
+    font-weight: bold;
+}
+
+
+.gap-2 > * {
+    margin-right: 0px;
+    margin-left:50px;
+}
+
+@media (max-width: 768px) {
+    .product-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .product-image-wrapper {
+        margin-bottom: 16px;
+    }
+
+    .gap-2 > * {
+        margin-right: 0;
+        margin-bottom: 8px;
+    }
 }
