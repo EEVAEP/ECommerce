@@ -53,7 +53,7 @@
     </header>
 
     
-    <div class="container my-3">
+    <div class="container my-4">
         <h2 class="text-center custom-title">LOGIN</h2>
     </div>
 
@@ -87,7 +87,7 @@
     </div>
 
     
-    <footer class="text-white text-center py-5 mt-5">
+    <footer class="text-white text-center ">
         <p>&copy; 2025 Shopping Cart. All Rights Reserved.</p>
     </footer>
 

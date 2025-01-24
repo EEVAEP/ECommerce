@@ -17,7 +17,7 @@
 
     <div class="container mt-4">
         <h4 class="custom-heading">Random Products</h4>
-        <div class="row random-products mt-3">
+        <div class="row random-products mt-4">
             <cfoutput query="variables.displayRandomProducts">
                 <cfset encryptedId = encrypt(variables.displayRandomProducts.idProduct, application.encryptionKey, "AES", "Hex")>
                 <div class="col-md-3">
@@ -35,7 +35,7 @@
         </div>
     </div>
     
-    <footer class="text-white text-center py-5 mt-5">
+    <footer class="text-white text-center">
         <p>&copy; 2025 Shopping Cart. All Rights Reserved.</p>
     </footer>  
     

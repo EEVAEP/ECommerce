@@ -148,7 +148,7 @@
 }
 
 .product-name {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     font-weight: bold;
     margin-bottom: 5px;
     color: #333;
@@ -190,15 +190,21 @@
 
 
 .subproduct-card {
-    
-    background-color: #fff; 
+    max-height: 300px;
+    background-color: #f3f7f5; 
     transition: transform 0.3s ease, box-shadow 0.3s ease; 
+    align-items: center;
 }
 
-.subproduct-card img {
+
+.product-image {
     max-height: 250px;
     border-radius: 4px; 
+    max-width: fit-content;
+
 }
+
+
 .subproduct-card:hover {
     transform: scale(1.05); 
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); 
@@ -262,4 +268,24 @@
         margin-right: 0;
         margin-bottom: 8px;
     }
+}
+
+
+
+.modal-lg {
+	max-width: 800px; 
+}
+
+.modal-header {
+    	background-color: #28a745; 
+    	color: white;
+}
+
+.modal-body .row {
+    	margin-bottom: 10px;
+}
+
+.modal-body .label {
+    	font-weight: bold;
+    	color: #343a40; 
 }

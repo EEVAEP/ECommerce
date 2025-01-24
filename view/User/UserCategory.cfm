@@ -22,8 +22,8 @@
                                 <div class="card product-card">
                                     <img src="../../uploads/#variables.products.fldImageFileName#" class="card-img-top" alt="Product">
                                     <div class="card-body text-center">
-                                        <h6 class="card-title">#variables.products.fldProductName#</h6>
-                                        <p class="card-text">$#variables.products.fldPrice#</p>
+                                        <h6 class="product-name">#variables.products.fldProductName#</h6>
+                                        <p class="product-price"><i class="fa-solid fa-indian-rupee-sign"></i>#variables.products.fldPrice#</p>
                                     </div>
                                 </div>
                             </a>
@@ -36,7 +36,7 @@
     
 
     
-    <footer class="text-white text-center py-5 mt-5">
+    <footer class="text-white text-center">
         <p>&copy; 2025 Shopping Cart. All Rights Reserved.</p>
     </footer>  
     

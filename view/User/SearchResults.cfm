@@ -45,7 +45,7 @@
     
 
     
-    <footer class="text-white text-center py-5 mt-5">
+    <footer class="text-white text-center">
         <p>&copy; 2025 Shopping Cart. All Rights Reserved.</p>
     </footer>  
     

@@ -556,8 +556,11 @@
 
     <cffunction  name="listProducts" access="public">
         <cfargument name="subCategoryId" type="string" required="true">
+        <cfargument name="sortOrder" type="string" required="false">
+        <cfargument name="minPrice" type="numeric" required="false">
+        <cfargument name="maxPrice" type="numeric" required="false">
 
-        <cfset local.decryptedId = decryptId(arguments.subCategoryId)>
+       <cfset local.decryptedId = decryptId(arguments.subCategoryId)>
         <cfquery name="local.getProductList">
             SELECT 
                 P.fldProductName,
@@ -588,6 +591,22 @@
                 P.fldActive = <cfqueryparam value="1" cfsqltype="cf_sql_integer">
             AND
 	            I.fldDefaultImage = <cfqueryparam value="1" cfsqltype="cf_sql_integer">
+
+            <cfif structKeyExists(arguments, "minPrice") AND structKeyExists(arguments, "maxPrice")>
+                AND P.fldPrice  BETWEEN <cfqueryparam value="#arguments.minPrice#" cfsqltype="cf_sql_integer">
+                AND <cfqueryparam value="#arguments.maxPrice#" cfsqltype="cf_sql_integer"> 
+            </cfif>
+
+            <cfif structKeyExists(arguments, "sortOrder") AND arguments.sortOrder EQ "asc">
+                ORDER By
+                    P.fldPrice ASC
+            </cfif>
+
+            <cfif structKeyExists(arguments, "sortOrder") AND arguments.sortOrder EQ "desc">
+                ORDER By
+                    P.fldPrice DESC
+            </cfif>
+            
         </cfquery>
         
         <cfreturn local.getProductList>
