@@ -1,5 +1,28 @@
 
+<cfparam name="url.productId" default="">
+
 <cfset variables.NavCategory = application.modelAdminCtg.getCategoryList()>
+
+
+
+<cftry>
+    <cfif structKeyExists(url, "productId") AND structKeyExists(session, "userid") AND structKeyExists(session, "roleid")>
+        <cfset variables.getCartcountQuery = application.modelUserPage.getCartProductsCount()>
+        <cfset variables.createCartPrdQuery = application.modelUserPage.createCartProducts(productId = url.productId)>
+        <cfif variables.createCartPrdQuery EQ "success">
+            <cfset variables.displayCartDetails = application.modelUserPage.getCartProductsList()>
+           
+        </cfif>
+       
+    <cfelse>
+        <cfset session.productId = url.productId>
+        <cflocation  url="../../view/Login.cfm" addtoken="false">
+    </cfif>
+    
+<cfcatch>
+    <cfdump var="#cfcatch#">
+</cfcatch>
+</cftry>
 
 
 <!DOCTYPE html>
@@ -40,14 +63,17 @@
         </div>
 
         
-    
-
-        <div class="ms-auto">
-             <a href="/cart">
-                Cart <span id="cart-count" class="count">2</span>
-            </a>
-            <a href="../Login.cfm?logOut" class="btn btn-light">LogOut</a> 
+        <div class="d-flex justify-content gap-2">
+             <p class="cartName">
+                Cart <span id="cart-count" class="count"><cfoutput>
+                <cfif structKeyExists(url, "productId")>
+                #variables.getCartcountQuery#
+                </cfif>
+                </cfoutput></span>
+            </p>
+            <a href="../Login.cfm?logOut" class="btn btn-light">LogOut</a>
         </div>
+
     </header>
 
     <nav class="navbar navbar-expand-lg navbar-custom py-1 px-1">
@@ -103,5 +129,78 @@
             </div>
         </div>
     </nav>
+
+    <cfif structKeyExists(variables, "displayCartDetails")>
+        <!---productId=D524EC46D34CF6BD517D82937944B949--->
+        
+        <div class="cart-container">
+            <h1>Cart</h1>
+            <div class="cart-items">
+                <cfoutput query="variables.displayCartDetails">
+                    <div class="cart-item">
+                        <div class="product-details">
+                            <div class="product-image">
+                                <img src="../../uploads/#variables.displayCartDetails.fldImageFileName#" alt="Product Image" style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+                    
+                            <div class="product-info">
+                                <p><strong>#variables.displayCartDetails.fldProductName#</strong></p>
+                                <p>Brand:#variables.displayCartDetails.fldBrandName#</p>
+                                <p>
+                                    <button>-</button> 
+                                       Quantity:
+                                    <button>+</button>
+                                </p>
+                            </div>
+                        </div>
+                        <div>
+                            <p><strong>#variables.displayCartDetails.priceWithTax#</strong></p>
+                            <p>Tax: #variables.displayCartDetails.fldTax#%</p>
+                            <p>Actual Price: ₹#variables.displayCartDetails.fldPrice#</p>
+                            <button class="btn-remove">Remove</button>
+                        </div>
+                    </div>
+                </cfoutput>
+            </div>
+        
+        
+        <!---<div class="price-details">
+            <cfquery name="calculateTotal" datasource="your_datasource">
+                SELECT 
+                    SUM(price * quantity) AS total_price, 
+                    SUM((price * quantity) * (tax_rate / 100)) AS total_tax
+                FROM cart_table
+                WHERE user_id = <cfqueryparam value="#session.user_id#" cfsqltype="cf_sql_integer">
+            </cfquery>
+            <div class="price-row">
+                <span>Actual Price</span>
+                <span>₹#calculateTotal.total_price#</span>
+            </div>
+            <div class="price-row">
+                <span>Total Tax</span>
+                <span>₹#calculateTotal.total_tax#</span>
+            </div>
+            <div class="price-row">
+                <strong>Total Price</strong>
+                <strong>₹#calculateTotal.total_price + calculateTotal.total_tax#</strong>
+            </div>
+            <button class="btn-checkout">Bought Together</button>
+        </div>
+    </div> --->  
+    </cfif>
+
+
+    <footer class="text-white text-center">
+        <p>&copy; 2025 Shopping Cart. All Rights Reserved.</p>
+    </footer>  
+    
+
+    <script src="../../assets/js/jquery.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+	
+    
+        
+    
+
 </body>
 </html>

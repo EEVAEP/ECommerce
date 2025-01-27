@@ -16,7 +16,11 @@
             <cfif session.roleid EQ "1">
                 <cflocation url="../view/Admin/dashboard.cfm" addtoken="false">
             <cfelseif session.roleid EQ "2">
-                <cflocation url="../view/User/UserHome.cfm" addtoken="false">
+                <cfif structKeyExists(session, "productId")>
+                    <cflocation url="../view/User/UserCart.cfm?productId=#session.productId#" addtoken="false">
+                <cfelse>
+                    <cflocation url="../view/User/UserHome.cfm" addtoken="false">
+                </cfif>
             </cfif>
             
 		<cfelse>

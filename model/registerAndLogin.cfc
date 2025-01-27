@@ -104,9 +104,9 @@
 			<cfset local.result = {}>
 			
 			<cfif local.hashedPassword  EQ  local.qryLogin.fldHashedPassword>
-        			<cfset local.result['userid'] = local.qryLogin.userid>
-				    <cfset local.result['username'] = local.qryLogin.fldEmail>
-					<cfset local.result['role'] = local.qryLogin.fldRoleId>
+        		<cfset local.result['userid'] = local.qryLogin.userid>
+				<cfset local.result['username'] = local.qryLogin.fldEmail>
+				<cfset local.result['role'] = local.qryLogin.fldRoleId>
 			</cfif>
 		</cfif>
 		<cfreturn local.result>

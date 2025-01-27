@@ -408,16 +408,11 @@
             
             <cfset local.uploadedImagePath = []>
             
-    
-        
             <cffile action="uploadAll" 
                 fileField="#arguments.productImg#" 
                 destination="#local.uploadPath#"
                 nameConflict="makeUnique" 
                 result="local.fileUploadResult">
-
-           
-
 
             <cfloop array = "#local.fileUploadResult#" index = "i" item = "image">
                 <cfset local.maxImgSize = 5*1024*1024>

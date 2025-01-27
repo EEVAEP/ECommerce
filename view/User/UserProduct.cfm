@@ -53,9 +53,12 @@
                         <p class="text-description mb-2">#variables.displaySingleProductQry.fldDescription#</p>
                         <p class="font-weight-bold text-danger mb-3"><i class="fa-solid fa-indian-rupee-sign"></i>#variables.displaySingleProductQry.fldPrice#</p>
                     </div>
+
+                    <cfset encryptedId = encrypt(variables.displaySingleProductQry.fldProduct_ID, application.encryptionKey, "AES", "Hex")>
+                   
                     <div class="product-item d-flex gap-2">
-                        <a href="UserCart.cfm?productId=#variables.displaySingleProductQry.fldProduct_ID#" class="btn btn-info btn-sm">Add To Cart</a>
-                        <a href="Order.cfm?productId=#variables.displaySingleProductQry.fldProduct_ID#" class="btn btn-success btn-sm">Order Now</a>
+                        <a href="UserCart.cfm?productId=#encryptedId#" class="btn btn-info btn-sm">Add To Cart</a>
+                        <a href="Order.cfm?productId=#encryptedId#" class="btn btn-success btn-sm">Order Now</a>
                     </div>
                 </div>
             </cfoutput>
