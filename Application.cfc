@@ -10,10 +10,10 @@
     
     <cffunction name="onApplicationStart" returnType="boolean">
 		<cfset application.encryptionKey = generateSecretKey("AES")>
-		<cfset application.userService = createObject("component","controller.userLogin")>
+		<cfset application.userLogin = createObject("component","controller.userLogin")>
 		<cfset application.CntrlProduct = createObject("component","controller.AdminProduct")>
 
-		<cfset application.modelService = createObject("component","model.registerAndLogin")>
+		<cfset application.userLoginService = createObject("component","model.registerAndLogin")>
 		<cfset application.modelAdminCtg = createObject("component","model.AdminCategory")>
 		<cfset application.modelUserPage = createObject("component","model.UserPage")>
 
@@ -21,43 +21,13 @@
     </cffunction>
 
     <cffunction name="onRequestStart" returnType="void">
-       <cfargument name="requestname" required="true">
+        <cfargument name="requestname" required="true">
         <cfif structKeyExists(url,"reload") AND url.reload EQ 1>
             <cfset onApplicationStart()>
         </cfif>
 
-		<!---<cfset local.pages = ["SignUp.cfm", "Login.cfm"]>
-		<cfset local.restrictedPages = ["dashboard.cfm", "SubCategory.cfm", "ProductPage.cfm"]>
-		<cfset currentPage = listLast(CGI.SCRIPT_NAME, '/')>
-		<cfif (NOT structKeyExists(session, "username") AND NOT arrayFindNoCase(local.pages, currentPage)) OR 
-    		(arrayFindNoCase(local.restrictedPages, currentPage) AND 
-				(NOT structKeyExists(session, "roleid") OR 
-            		(structKeyExists(session, "roleid") AND session.roleid NEQ 1)
-        		)
-    		)>
-    		<cflocation url="../Login.cfm" addToken="no">
-		</cfif> --->
-
-
-		
-		<!---<cfset local.adminPages = ["dashboard.cfm", "productPage.cfm", "SubCategory.cfm"]>
-        <cfset local.userPages = ['UserCart.cfm','userOrder.cfm','userProfile.cfm']>
-        <cfset local.authenticationPages = ["Login.cfm","SignUp.cfm"]>
-
-
-        <cfif NOT structKeyExists(session, "roleid") AND session.roleid EQ 1 AND arrayFindNoCase(local.adminPages, listLast(CGI.SCRIPT_NAME, '/'))>
-        	<cflocation url = "../Login.cfm" addToken = "false">
-        <cfelseif structKeyExists(session, "roleid") AND session.roleid NEQ 1 AND arrayFindNoCase(local.adminPages, listLast(CGI.SCRIPT_NAME, '/'))>
-        	<cflocation url = "../Login.cfm" addToken = "false">
-
-        <cfelseif structKeyExists(session, "roleid") AND session.roleid NEQ 2 AND session.roleid NEQ 1
-            AND arrayFindNoCase(local.userPages, listLast(CGI.SCRIPT_NAME, '/'))>
-        	<cflocation url = "../Login.cfm" addToken = "false">
-        </cfif>--->   
-
 		<cfset local.adminPages = ["dashboard.cfm", "productPage.cfm", "SubCategory.cfm"]>
         <cfset local.userPages = ['UserCart.cfm','userOrder.cfm','userProfile.cfm']>
-         <cfset local.authenticationPages = ["Login.cfm","SignUp.cfm"]>
         <cfset local.currentPage = listLast(CGI.SCRIPT_NAME, '/')>
         <cfset local.hasRole = structKeyExists(session, 'roleid')>
         <cfset local.isUser = structKeyExists(session, 'userid')>
@@ -72,9 +42,6 @@
             </cfif>
             <cflocation url = "../Login.cfm" addToken = "false">
         </cfif>
-		
-
-    </cffunction>
-	
-       
+	</cffunction>
+    
 </cfcomponent>

@@ -14,7 +14,7 @@
                 <h5 class="subcategory-title">#variables.displaySubCategoryQry.fldSubCategoryName#</h5>
                 <div class="row">
                     <cfset encryptedId = encrypt(variables.displaySubCategoryQry.idSubCategory, application.encryptionKey, "AES", "Hex")>
-                    <cfset variables.products = application.modelAdminCtg.listProducts(subCategoryId = encryptedId)>
+                    <cfset variables.products = application.modelAdminCtg.getProductsList(subCategoryId = encryptedId)>
                     <cfloop query="variables.products"  endrow="4">
                         <cfset encryptedPrdId = encrypt(variables.products.idProduct, application.encryptionKey, "AES", "Hex")>
                         <div class="col-md-3">
@@ -34,16 +34,7 @@
         </cfoutput>
     </div>
     
-
-    
-    <footer class="text-white text-center">
-        <p>&copy; 2025 Shopping Cart. All Rights Reserved.</p>
-    </footer>  
-    
-
-    <script src="../../assets/js/jquery.js"></script>
-    
-    <script src="../../assets/js/bootstrap.min.js"></script>
+    <cfinclude template="footer.cfm">
 	
 </body>
 </html>
