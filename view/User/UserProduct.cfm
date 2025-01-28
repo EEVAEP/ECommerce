@@ -2,7 +2,7 @@
 
 <cfparam name="url.productId" default="">
 <cfif structKeyExists(url, "productId")>
-    <cfset variables.displaySingleProductQry = application.modelAdminCtg.getProductsList(productId = url.productId)>
+    <cfset variables.displaySingleProductQry = application.modelAdminCtg.getProductById(productId = url.productId)>
     <cfset variables.displayProductImages = application.modelAdminCtg.getProductImages(productId = url.productId)>
     
 </cfif>
@@ -54,7 +54,7 @@
                         <p class="font-weight-bold text-danger mb-3"><i class="fa-solid fa-indian-rupee-sign"></i>#variables.displaySingleProductQry.fldPrice#</p>
                     </div>
 
-                    <cfset encryptedId = encrypt(variables.displaySingleProductQry.idProduct, application.encryptionKey, "AES", "Hex")>
+                    <cfset encryptedId = encrypt(variables.displaySingleProductQry.fldProduct_ID, application.encryptionKey, "AES", "Hex")>
                    
                     <div class="product-item d-flex gap-2">
                         <a href="UserCart.cfm?productId=#encryptedId#" class="btn btn-info btn-sm">Add To Cart</a>
@@ -66,7 +66,18 @@
     </div>
 
 
-    <cfinclude template="footer.cfm">
+            
+    <footer class="text-white text-center">
+        <p>&copy; 2025 Shopping Cart. All Rights Reserved.</p>
+    </footer>  
+    
+
+    <script src="../../assets/js/jquery.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
 	
+    
+        
+    
+
 </body>
 </html>

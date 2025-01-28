@@ -1,7 +1,7 @@
 
 <cftry>
     <cfif structKeyExists(form, "submit")>
-        <cfset variables.validationErrors = application.userLogin.validateRegisterInput(fname=form.fname,
+        <cfset variables.validationErrors = application.userService.validateRegisterInput(fname=form.fname,
  												lname=form.lname,
                                                 email=form.email,
 												phone=form.phone, 
@@ -85,6 +85,20 @@
                     <input type="password" class="form-control" name="password" id="password" placeholder="Enter your password">
                 </div>
                
+                <!---<cfset RoleNameQuery = application.modelService.getRoleName()> 
+                <div class="mb-2">
+                    <label for="roleName" class="form-label">Select Role</label>
+                    <select class="form-control" id="roleName" name="roleName">
+                        <option value="" selected></option>
+                        <cfoutput query="RoleNameQuery">
+                            <option value="#RoleNameQuery.fldRole_ID#">
+                                #RoleNameQuery.fldRoleName#
+                            </option>
+                        </cfoutput>
+                    </select>
+                </div>--->
+                
+                
                 <button type="submit" name="submit" class="btn w-100 custom-btn">SignUp</button>
 
                 <cfif structKeyExists(variables, "errorMessage")>

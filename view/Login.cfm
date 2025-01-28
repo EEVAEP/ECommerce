@@ -6,7 +6,7 @@
 
 <cftry>
     <cfif structKeyExists(form, "submit")>
-        <cfset user = application.userLoginService.validateUserLogin(form.username,
+        <cfset user = application.modelService.validateUserLogin(form.username,
 									                    form.password)>
        
         <cfif structKeyExists(user, "username") AND user.username EQ form.username>

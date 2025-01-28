@@ -11,6 +11,7 @@ header{
     font-size: 2rem;
     margin-right: 10px;
 }
+
 .custom-title {
     font-family: 'Serif';
     font-size: 2rem;
@@ -20,6 +21,7 @@ header{
     margin-top: 20px;
     margin-bottom: 10px;
 }
+
 .custom-btn {
     background: linear-gradient(90deg, #4caf50, #2e7d32);
     color: white;
@@ -29,6 +31,7 @@ header{
     background: linear-gradient(90deg, #66bb6a, #388e3c); 
     color: white;
 }
+
 .error {
     color: red;
     font-size: 14px;
@@ -36,6 +39,8 @@ header{
     margin-bottom: 10px;
     display: block;
 }
+
+
 .success {
     color: green;
     font-size: 16px;

@@ -3,16 +3,16 @@
 <cfparam name="url.SubCategoryId" default="">
 <cftry>
     <cfif structKeyExists(url, "SubCategoryId")>
-        <cfset variables.subCategoryQry = application.modelAdminCtg.getProductsList(subCategoryId = url.SubCategoryId)>
+        <cfset variables.subCategoryQry = application.modelAdminCtg.listProducts(subCategoryId = url.SubCategoryId)>
     </cfif>
     <cfif structKeyExists(url, "sortOrder")>
-        <cfset variables.sortProductsQuery = application.modelAdminCtg.getProductsList(
+        <cfset variables.sortProductsQuery = application.modelAdminCtg.listProducts(
                                                                 subCategoryId = url.subCategoryId,
                                                                 sortOrder = url.sortOrder)>
         
     </cfif>
     <cfif structKeyExists(form, "applyFilterBtn")>
-        <cfset variables.filterProductsQuery = application.modelAdminCtg.getProductsList(
+        <cfset variables.filterProductsQuery = application.modelAdminCtg.listProducts(
                                                                 subCategoryId = url.subCategoryId,
                                                                 minPrice = form.minPrice,
                                                                 maxPrice = form.maxPrice)>
@@ -153,7 +153,19 @@
         </cfif>
     </div>
     
-   <cfinclude template="footer.cfm">
+    <footer class="text-white text-center">
+        <p>&copy; 2025 Shopping Cart. All Rights Reserved.</p>
+    </footer>
+    
+
+    <script src="../../assets/js/jquery.js"></script>
+    
+    <script src="../../assets/js/bootstrap.min.js"></script>
      
+	
+    
+        
+    
+
 </body>
 </html>

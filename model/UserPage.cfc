@@ -1,7 +1,14 @@
 <cfcomponent>
 
+    <cffunction name="decryptId" access="public" returntype="string" output="false">
+    	<cfargument name="encryptedId" type="string" required="true">
+    	<cfset local.decryptedId = decrypt(arguments.encryptedId, application.encryptionKey, "AES", "Hex")>
+    	<cfreturn local.decryptedId>
+	</cffunction>
+
     <cffunction  name="getRandomProducts" access="public" returntype="query">
-       <cfquery name="local.qryRandomProducts">
+       
+        <cfquery name="local.qryRandomProducts">
             SELECT 
                 P.fldProductName,
                 P.fldProduct_ID AS idProduct,
@@ -36,11 +43,11 @@
         <cfreturn local.qryRandomProducts>
     </cffunction>
 
-
     <cffunction name="createCartProducts" access="public" returntype="any">
         <cfargument name="productId" type="string" required="true">
 
-        <cfset local.decryptedId = application.modelAdminCtg.decryptId(arguments.productId)>
+        <cfset local.decryptedId = decryptId(arguments.productId)>
+
         <cfquery name="local.insertProductIntoCart" result="local.insertProductIntoCart">
             INSERT INTO tblcart
                 (fldUserId, fldProductId, fldQuantity, fldCreatedDate)
@@ -64,6 +71,7 @@
                 tblcart
             WHERE
                 fldUserId = <cfqueryparam value = "#session.userid#" cfsqltype = "cf_sql_integer">
+
         </cfquery>
 
         <cfif local.qryCartCount.recordCount GT 0>
@@ -72,7 +80,6 @@
             <cfreturn 0>
         </cfif>
     </cffunction>
-
 
     <cffunction  name="getCartProductsList" access="public" returntype="query">
        <cfquery name="local.qryDisplayCartProducts">
@@ -86,8 +93,7 @@
                 I.fldImageFileName,
                 (P.fldPrice + (P.fldPrice * (P.fldTax / 100))) AS priceWithTax,
                 SUM(P.fldPrice) AS actualPrice,
-                SUM(fldPrice * (fldTax / 100)) AS totalTax,
-                SUM(P.fldPrice + (P.fldPrice * (P.fldTax / 100))) AS totalPrice
+                SUM(P.fldPrice * (P.fldTax / 100)) AS totalTax
             FROM 
                 tblproduct AS P
             INNER JOIN 
@@ -108,16 +114,10 @@
                 I.fldActive = <cfqueryparam value="1" cfsqltype="cf_sql_integer">
             AND
 	            I.fldDefaultImage = <cfqueryparam value="1" cfsqltype="cf_sql_integer">
-             GROUP BY
-                P.fldProductName,
-                P.fldProduct_ID,
-                B.fldBrandName,
-                P.fldPrice,
-                P.fldTax,
-                I.fldDefaultImage,
-                I.fldImageFileName
         </cfquery>
         <cfreturn local.qryDisplayCartProducts>
     </cffunction>
+
+    
 
 </cfcomponent>
