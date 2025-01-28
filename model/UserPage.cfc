@@ -1,14 +1,7 @@
 <cfcomponent>
 
-    <cffunction name="decryptId" access="public" returntype="string" output="false">
-    	<cfargument name="encryptedId" type="string" required="true">
-    	<cfset local.decryptedId = decrypt(arguments.encryptedId, application.encryptionKey, "AES", "Hex")>
-    	<cfreturn local.decryptedId>
-	</cffunction>
-
     <cffunction  name="getRandomProducts" access="public" returntype="query">
-       
-        <cfquery name="local.qryRandomProducts">
+       <cfquery name="local.qryRandomProducts" datasource = "#application.datasource#">
             SELECT 
                 P.fldProductName,
                 P.fldProduct_ID AS idProduct,
@@ -43,12 +36,12 @@
         <cfreturn local.qryRandomProducts>
     </cffunction>
 
+
     <cffunction name="createCartProducts" access="public" returntype="any">
         <cfargument name="productId" type="string" required="true">
 
-        <cfset local.decryptedId = decryptId(arguments.productId)>
-
-        <cfquery name="local.insertProductIntoCart" result="local.insertProductIntoCart">
+        <cfset local.decryptedId = application.modelAdminCtg.decryptId(arguments.productId)>
+        <cfquery name="local.insertProductIntoCart" result="local.insertProductIntoCart" datasource = "#application.datasource#">
             INSERT INTO tblcart
                 (fldUserId, fldProductId, fldQuantity, fldCreatedDate)
             VALUES 
@@ -64,14 +57,13 @@
 
 
     <cffunction name="getCartProductsCount" access="public" returntype="any">
-       <cfquery name="local.qryCartCount">
+       <cfquery name="local.qryCartCount" datasource = "#application.datasource#">
             SELECT 
                 fldCart_ID
             FROM 
                 tblcart
             WHERE
                 fldUserId = <cfqueryparam value = "#session.userid#" cfsqltype = "cf_sql_integer">
-
         </cfquery>
 
         <cfif local.qryCartCount.recordCount GT 0>
@@ -81,8 +73,9 @@
         </cfif>
     </cffunction>
 
+
     <cffunction  name="getCartProductsList" access="public" returntype="query">
-       <cfquery name="local.qryDisplayCartProducts">
+       <cfquery name="local.qryDisplayCartProducts" datasource = "#application.datasource#">
             SELECT 
                 P.fldProductName,
                 P.fldProduct_ID AS idProduct,
@@ -93,7 +86,8 @@
                 I.fldImageFileName,
                 (P.fldPrice + (P.fldPrice * (P.fldTax / 100))) AS priceWithTax,
                 SUM(P.fldPrice) AS actualPrice,
-                SUM(P.fldPrice * (P.fldTax / 100)) AS totalTax
+                SUM(fldPrice * (fldTax / 100)) AS totalTax,
+                SUM(P.fldPrice + (P.fldPrice * (P.fldTax / 100))) AS totalPrice
             FROM 
                 tblproduct AS P
             INNER JOIN 
@@ -114,10 +108,16 @@
                 I.fldActive = <cfqueryparam value="1" cfsqltype="cf_sql_integer">
             AND
 	            I.fldDefaultImage = <cfqueryparam value="1" cfsqltype="cf_sql_integer">
+             GROUP BY
+                P.fldProductName,
+                P.fldProduct_ID,
+                B.fldBrandName,
+                P.fldPrice,
+                P.fldTax,
+                I.fldDefaultImage,
+                I.fldImageFileName
         </cfquery>
         <cfreturn local.qryDisplayCartProducts>
     </cffunction>
-
-    
 
 </cfcomponent>

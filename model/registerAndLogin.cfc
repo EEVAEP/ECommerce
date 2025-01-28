@@ -1,7 +1,7 @@
 <cfcomponent> 
     
     <cffunction name="getRoleName" access="public" returntype="query">
-        	<cfquery name="local.RoleName">
+        	<cfquery name="local.RoleName" datasource = "#application.datasource#">
             		SELECT 
 				            fldRole_ID,
                             fldRoleName
@@ -29,7 +29,7 @@
 		
         <cfset local ={}>
 
-        <cfquery name="local.qryCheckUser">
+        <cfquery name="local.qryCheckUser" datasource = "#application.datasource#">
             SELECT *
         	FROM 
 			    tblUser
@@ -45,7 +45,7 @@
 			<cfset local.salt = generateSecretKey("AES")>
 			<cfset local.hashedPassword = hashPassword(arguments.password, local.salt)>
 				
-			<cfquery>
+			<cfquery datasource = "#application.datasource#">
         		INSERT INTO tblUser(
 									fldFirstname,
 								 	fldLastname,
@@ -81,7 +81,7 @@
     	<cfargument name="password" required="true" type="string">
 		
 		
-    	<cfquery name="local.qryLogin">
+    	<cfquery name="local.qryLogin" datasource = "#application.datasource#">
         	SELECT 
 				fldUser_ID AS userid,
 				fldEmail,
