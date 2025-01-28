@@ -130,9 +130,7 @@
     </nav>
 
     <cfif structKeyExists(variables, "displayCartDetails")>
-        <!---productId=D524EC46D34CF6BD517D82937944B949--->
-        
-        <div class="cart-container">
+       <div class="cart-container">
             <h1>Cart</h1>
             <div class="cart-items">
                 <cfoutput query="variables.displayCartDetails">
@@ -156,33 +154,64 @@
                             <p><strong>#variables.displayCartDetails.priceWithTax#</strong></p>
                             <p>Tax: #variables.displayCartDetails.fldTax#%</p>
                             <p>Actual Price: #variables.displayCartDetails.fldPrice#</p>
-                            <button class="btn-remove">Remove</button>
+                            <cfset encryptedPrdId = encrypt(variables.displayCartDetails.idProduct, application.encryptionKey, "AES", "Hex")>
+                            <button class="btn-remove deleteProduct" 
+                                id="deleteCategoryBtn"
+                                data-bs-toggle="modal" 
+                                data-bs-target="##deleteConfirmModal"
+                                data-id="#encryptedPrdId#">
+                                Remove 
+                            </button>
                         </div>
                     </div>
-
                 </cfoutput>
             </div>
+            <div class="modal fade" 
+			    id="deleteConfirmModal" 
+                data-bs-backdrop="static" 
+			    data-bs-keyboard="false"
+			    tabindex="-1" 
+			    aria-labelledby="deleteConfirmLabel" 
+			    aria-hidden="true">
+    		    <div class="modal-dialog">
+        		    <div class="modal-content">
+            		    <div class="modal-header">
+                		    <h5 class="modal-title mx-auto d-block" id="deleteConfirmLabel">CONFIRM DELETION</h5>
+                		    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            		    </div>
+            		    <div class="modal-body">
+                		    Are you sure you want to remove this product?
+            		    </div>
+            		    <div class="modal-footer">
+                		    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-danger" id="confirmDeleteButton">Delete</button>
+            		    </div>
+        		    </div>
+    		    </div>
+		    </div>
+        
             <cfoutput>    
-                    <div class="price-details">
-                        <div class="price-row">
-                            <span>Actual Price</span>
-                            <span>#variables.displayCartDetails.actualPrice#</span>
-                        </div>
-                        <div class="price-row">
-                            <span>Total Tax</span>
-                            <span>#variables.displayCartDetails.totalTax#</span>
-                        </div>
-                        <div class="price-row">
-                            <strong>Total Price</strong>
-                            <strong>#variables.displayCartDetails.totalPrice#</strong>
-                        </div>
-                        <button class="btn-checkout">Bought Together</button>
+                <div class="price-details">
+                    <div class="price-row">
+                        <span>Actual Price</span>
+                        <span>#variables.displayCartDetails.actualPrice#</span>
                     </div>
+                    <div class="price-row">
+                        <span>Total Tax</span>
+                        <span>#variables.displayCartDetails.totalTax#</span>
+                    </div>
+                    <div class="price-row">
+                        <strong>Total Price</strong>
+                        <strong>#variables.displayCartDetails.totalPrice#</strong>
+                    </div>
+                    <button class="btn-checkout">Bought Together</button>
+                </div>
             </cfoutput>
         </div> 
     </cfif>
 
     <cfinclude template="footer.cfm">
 	
+    <script src="../../assets/js/UserCart.js"></script>
 </body>
 </html>

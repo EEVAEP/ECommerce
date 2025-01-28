@@ -120,4 +120,25 @@
         <cfreturn local.qryDisplayCartProducts>
     </cffunction>
 
+    <cffunction name="deleteCartProduct" access="remote" returnformat = "JSON">
+    	<cfargument name="productId" type="string" required="true">
+
+		<cfset local.decryptedId = application.modelAdminCtg.decryptId(arguments.productId)>
+        <cftry>
+			<cfquery datasource = "#application.datasource#">
+        			DELETE 
+				    FROM 
+                        tblCart
+                    WHERE
+                        fldProductId = <cfqueryparam value="#local.decryptedId#" cfsqltype="cf_sql_integer">
+            </cfquery>
+			<cfset local.response = {status="success", message="Product deleted from cart successfully."}>
+        	<cfreturn local.response>
+    		<cfcatch>
+				<cfset local.response = {status="error", message="An error occurred while deleting the product."}>
+        		<cfreturn local.response>
+    		</cfcatch>
+		</cftry>
+    </cffunction>
+
 </cfcomponent>
