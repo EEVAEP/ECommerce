@@ -3,8 +3,6 @@
 
 <cfset variables.NavCategory = application.modelAdminCtg.getCategoryList()>
 
-
-
 <cftry>
     <cfif structKeyExists(url, "productId") AND structKeyExists(session, "userid") AND structKeyExists(session, "roleid")>
         <cfset variables.createCartPrdQuery = application.modelUserPage.createCartProducts(productId = url.productId)>
@@ -66,7 +64,9 @@
              <p class="cartName">
                 Cart <span id="cart-count" class="count"><cfoutput>
                 <cfif structKeyExists(url, "productId")>
-                #variables.getCartcountQuery#
+                    <cfif structKeyExists(variables, "getCartcountQuery")>
+                        #variables.getCartcountQuery#
+                    </cfif>
                 </cfif>
                 </cfoutput></span>
             </p>
@@ -135,6 +135,7 @@
             <div class="cart-items">
                 <cfoutput query="variables.displayCartDetails">
                     <div class="cart-item">
+                        <cfset encryptedPrdId = encrypt(variables.displayCartDetails.idProduct, application.encryptionKey, "AES", "Hex")>
                         <div class="product-details">
                             <div class="product-image">
                                 <img src="../../uploads/#variables.displayCartDetails.fldImageFileName#" alt="Product Image" style="width: 100%; height: 100%; object-fit: cover;">
@@ -144,17 +145,24 @@
                                 <p><strong>#variables.displayCartDetails.fldProductName#</strong></p>
                                 <p>Brand:#variables.displayCartDetails.fldBrandName#</p>
                                 <p>
-                                    <button>-</button> 
-                                       Quantity:
-                                    <button>+</button>
+                                    <button class="decrease" 
+                                        data-id="#encryptedPrdId#"
+                                        id="decreaseCartProductBtn">
+                                        -
+                                    </button> 
+                                       #variables.displayCartDetails.fldQuantity#
+                                    <button class="increase" 
+                                        data-id="#encryptedPrdId#"
+                                        id="increaseCartProductBtn">
+                                        +
+                                    </button>
                                 </p>
                             </div>
                         </div>
                         <div>
-                            <p><strong>#variables.displayCartDetails.priceWithTax#</strong></p>
+                            <p><i class="fa-solid fa-indian-rupee-sign"></i><strong>#NumberFormat(variables.displayCartDetails.priceWithTax, "0.00")#</strong></p>
                             <p>Tax: #variables.displayCartDetails.fldTax#%</p>
                             <p>Actual Price: #variables.displayCartDetails.fldPrice#</p>
-                            <cfset encryptedPrdId = encrypt(variables.displayCartDetails.idProduct, application.encryptionKey, "AES", "Hex")>
                             <button class="btn-remove deleteProduct" 
                                 id="deleteCategoryBtn"
                                 data-bs-toggle="modal" 
@@ -189,20 +197,35 @@
         		    </div>
     		    </div>
 		    </div>
-        
+
+            <cfset variables.cartActualPrice = 0>
+            <cfset variables.cartTotalTax = 0>
+            <cfset variables.cartTotalPrice = 0>
+
+            <cfoutput query="variables.displayCartDetails">
+                <cfset variables.itemActualPrice = variables.displayCartDetails.fldPrice * variables.displayCartDetails.fldQuantity>
+                <cfset variables.itemTotalTax = (variables.displayCartDetails.fldPrice * (variables.displayCartDetails.fldTax / 100)) * variables.displayCartDetails.fldQuantity>
+                <cfset variables.itemTotalPrice = variables.itemActualPrice + variables.itemTotalTax>
+
+                <!-- Sum calculation -->
+                <cfset variables.cartActualPrice += variables.itemActualPrice>
+                <cfset variables.cartTotalTax += variables.itemTotalTax>
+                <cfset variables.cartTotalPrice += variables.itemTotalPrice>
+            </cfoutput>
+
             <cfoutput>    
                 <div class="price-details">
                     <div class="price-row">
                         <span>Actual Price</span>
-                        <span>#variables.displayCartDetails.actualPrice#</span>
+                        <span>#variables.cartActualPrice#</span>
                     </div>
                     <div class="price-row">
                         <span>Total Tax</span>
-                        <span>#variables.displayCartDetails.totalTax#</span>
+                        <span>#variables.cartTotalTax#</span>
                     </div>
                     <div class="price-row">
                         <strong>Total Price</strong>
-                        <strong>#variables.displayCartDetails.totalPrice#</strong>
+                        <strong><i class="fa-solid fa-indian-rupee-sign"></i>#variables.cartTotalPrice#</strong>
                     </div>
                     <button class="btn-checkout">Bought Together</button>
                 </div>

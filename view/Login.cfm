@@ -2,6 +2,7 @@
 <cfif structKeyExists(url, "logOut")>
 	<cfset structDelete(session, "username")>
 	<cfset structDelete(session, "userid")>
+    <cfset structDelete(session, "roleid")>
 </cfif>
 
 <cftry>
