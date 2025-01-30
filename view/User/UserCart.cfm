@@ -138,7 +138,7 @@
                         <cfset encryptedPrdId = encrypt(variables.displayCartDetails.idProduct, application.encryptionKey, "AES", "Hex")>
                         <div class="product-details">
                             <div class="product-image">
-                                <img src="../../uploads/#variables.displayCartDetails.fldImageFileName#" alt="Product Image" style="width: 100%; height: 100%; object-fit: cover;">
+                                <img src="/uploads/#variables.displayCartDetails.fldImageFileName#" alt="Product Image" style="width: 100%; height: 100%; object-fit: cover;">
                             </div>
                     
                             <div class="product-info">

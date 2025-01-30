@@ -356,7 +356,7 @@
             <cfset arrayAppend(local.errors, "*The product Name should not be empty")>
         <cfelse>
             <cfif NOT structKeyExists(arguments, "productId")>
-                <cfquery name="local.qryCheckProductName">
+                <cfquery name="local.qryCheckProductName" datasource = "#application.datasource#">
                     SELECT 
                         fldProductName 
                     FROM 
@@ -393,7 +393,7 @@
 
         <!--- Product Image validation--->
         <cfif structKeyExists(arguments, "productImg") AND len(arguments.productImg) GT 0 >
-            <cfset local.uploadPath = ExpandPath('../uploads/')>
+            <cfset local.uploadPath = ExpandPath('/uploads/')>
             <cfset local.allowedFormats = "jpg,jpeg,png,jfif">
             
             <cfset local.uploadedImagePath = []>

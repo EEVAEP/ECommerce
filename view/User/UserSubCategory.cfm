@@ -100,7 +100,7 @@
                     <div class="product-item">
                         <a href="UserProduct.cfm?productId=#encryptedId#" class="product-link">
                             <div class="card product-card">
-                                <img src="../../uploads/#variables.subcategoryQry.fldImageFileName#" class="card-img-top" alt="Product">
+                                <img src="/uploads/#variables.subcategoryQry.fldImageFileName#" class="card-img-top" alt="Product">
                                 <div class="card-body text-center">
                                     <h6 class="product-name">#variables.subcategoryQry.fldProductName#</h6>
                                     <p class="product-price"><i class="fa-solid fa-indian-rupee-sign"></i>#variables.subcategoryQry.fldPrice#</p>
@@ -117,7 +117,7 @@
                     <div class="product-item">
                         <a href="UserProduct.cfm?productId=#encryptedId#" class="product-link">
                             <div class="card product-card">
-                                <img src="../../uploads/#variables.sortProductsQuery.fldImageFileName#" class="card-img-top" alt="Product">
+                                <img src="/uploads/#variables.sortProductsQuery.fldImageFileName#" class="card-img-top" alt="Product">
                                 <div class="card-body text-center">
                                     <h6 class="product-name">#variables.sortProductsQuery.fldProductName#</h6>
                                     <p class="product-price"><i class="fa-solid fa-indian-rupee-sign"></i>#variables.sortProductsQuery.fldPrice#</p>
@@ -135,7 +135,7 @@
                         <div class="product-item">
                             <a href="UserProduct.cfm?productId=#encryptedId#" class="product-link">
                                 <div class="card product-card">
-                                    <img src="../../uploads/#variables.filterProductsQuery.fldImageFileName#" class="card-img-top" alt="Product">
+                                    <img src="/uploads/#variables.filterProductsQuery.fldImageFileName#" class="card-img-top" alt="Product">
                                     <div class="card-body text-center">
                                         <h6 class="product-name">#variables.filterProductsQuery.fldProductName#</h6>
                                         <p class="product-price"><i class="fa-solid fa-indian-rupee-sign"></i>#variables.filterProductsQuery.fldPrice#</p>

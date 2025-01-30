@@ -20,7 +20,7 @@
                         <div class="col-md-3">
                             <a href="UserProduct.cfm?productId=#encryptedPrdId#" class="product-link">
                                 <div class="card product-card">
-                                    <img src="../../uploads/#variables.products.fldImageFileName#" class="card-img-top" alt="Product">
+                                    <img src="/uploads/#variables.products.fldImageFileName#" class="card-img-top" alt="Product">
                                     <div class="card-body text-center">
                                         <h6 class="product-name">#variables.products.fldProductName#</h6>
                                         <p class="product-price"><i class="fa-solid fa-indian-rupee-sign"></i>#variables.products.fldPrice#</p>

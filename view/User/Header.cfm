@@ -38,10 +38,10 @@
                 </div>
             </form>
         </div>
-    
 
-        <div class="ms-auto">
-            <a href="../Login.cfm?logOut" class="btn btn-light">LogOut</a> 
+        <div class="d-flex align-items-center gap-2 profile">
+            <a href="UserProfile.cfm"><i class="fa-solid fa-user profile-icon"></i></p>
+            <a href="../Login.cfm?logOut" class="btn btn-light">LogOut</a>
         </div>
     </header>
 

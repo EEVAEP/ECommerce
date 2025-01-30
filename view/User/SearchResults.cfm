@@ -20,7 +20,7 @@
                         <div class="product-item">
                             <a href="UserProduct.cfm?productId=#encryptedId#" class="product-link">
                                 <div class="card product-card">
-                                    <img src="../../uploads/#variables.getSearchResult.fldImageFileName#" class="card-img-top" alt="Product">
+                                    <img src="/uploads/#variables.getSearchResult.fldImageFileName#" class="card-img-top" alt="Product">
                                     <div class="card-body text-center">
                                         <h6 class="product-name">#variables.getSearchResult.fldProductName#</h6>
                                         <p class="product-price">#variables.getSearchResult.fldPrice#</p>

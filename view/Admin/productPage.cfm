@@ -157,7 +157,7 @@
                                 <cfset encryptedId = encrypt(productListQuery.idProduct, application.encryptionKey, "AES", "Hex")>
                                 <tr data-id="#encryptedId#">
                                     <td>
-            					        <img src="../../uploads/#productListQuery.fldImageFileName#" 
+            					        <img src="/uploads/#productListQuery.fldImageFileName#" 
 									        alt="Photo"		
 									        width="30" height="30">
         					        </td>

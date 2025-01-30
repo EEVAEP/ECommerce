@@ -43,7 +43,7 @@
 }
 .banner-img{
     width:100% !important;
-    max-height: 320px !important;
+    max-height: 310px !important;
    
 }
 .custom-heading {
@@ -386,4 +386,24 @@ h1 {
     transform: scale(1); 
 }
 
+/* Profile button*/
+.profile-icon {
+    position: relative;
+    font-size: 20px; 
+    color: #2e7d32; 
+    background-color: #f0f8ff; 
+    padding: 9px; 
+    border-radius: 50%; 
+    transition: color 0.3s ease, background-color 0.3s ease, transform 0.2s ease;
+}
+
+.profile-icon:hover {
+    color: #ffffff; 
+    background-color: #4caf50; 
+    transform: scale(1); 
+}
+
+.profile-icon:active {
+    transform: scale(1); 
+}
 

@@ -33,7 +33,7 @@
                             <div class="carousel-inner">
                                 <cfloop query = "variables.displayProductImages">
                                     <div class="carousel-item product-img-container <cfif variables.displayProductImages.fldDefaultImage EQ 1 >active</cfif> ">
-                                        <img src="../../uploads/#variables.displayProductImages.fldImageFileName#" class="d-block product-image" alt="...">
+                                        <img src="/uploads/#variables.displayProductImages.fldImageFileName#" class="d-block product-image" alt="...">
                                     </div>
                                 </cfloop>
                             </div>

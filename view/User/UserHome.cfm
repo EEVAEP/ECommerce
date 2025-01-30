@@ -23,7 +23,7 @@
                 <div class="col-md-3">
                     <a href="UserProduct.cfm?productId=#encryptedId#" class="product-link">
                         <div class="product-card" data-aos="fade-up">
-                            <img src="../../uploads/#variables.displayRandomProducts.fldImageFileName#" class = "randomImg" alt="Product">
+                            <img src="/uploads/#variables.displayRandomProducts.fldImageFileName#" class = "randomImg" alt="Product">
                             <div class="product-info">
                                 <h5 class="product-name">#variables.displayRandomProducts.fldProductName#</h5>
                                 <p class="product-price"><i class="fa-solid fa-indian-rupee-sign"></i>#variables.displayRandomProducts.fldPrice#</p>
