@@ -167,7 +167,6 @@
 		<cfelse>
 		    <cfreturn local.errors>
 		</cfif>
-        <cfreturn local.errors>
     </cffunction>
 
 

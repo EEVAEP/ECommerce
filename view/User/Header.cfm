@@ -1,5 +1,8 @@
 
 <cfset variables.NavCategory = application.modelAdminCtg.getCategoryList()>
+<cfif structKeyExists(session, "userid") AND structKeyExists(session, "roleid")>
+    <cfset variables.getCartcountQuery = application.modelUserPage.getCartProductsCount()>
+</cfif>
 
 
 <!DOCTYPE html>
@@ -40,7 +43,16 @@
         </div>
 
         <div class="d-flex align-items-center gap-2 profile">
-            <a href="UserProfile.cfm"><i class="fa-solid fa-user profile-icon"></i></p>
+            <a href="UserProfile.cfm"><i class="fa-solid fa-user profile-icon"></i></a>
+            <cfif structKeyExists(session, "userid") AND structKeyExists(session, "roleid")>
+                <a href = "UserCart.cfm" class="cartNameAnchor"><p class="cartName">
+                    Cart <span id="cart-count" class="count"><cfoutput>
+                        <cfif structKeyExists(variables, "getCartcountQuery")>
+                            #variables.getCartcountQuery#
+                        </cfif>
+                    </cfoutput></span>
+                </p></a>
+            </cfif>
             <a href="../Login.cfm?logOut" class="btn btn-light">LogOut</a>
         </div>
     </header>

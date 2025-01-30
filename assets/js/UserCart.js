@@ -58,9 +58,11 @@ document.addEventListener("DOMContentLoaded", function () {
 		});
 
 	});
+	
 });
 
 $(document).ready(function() {
+	var addressId;
 	$(document).on('click', '.increase', function() {
 		productId = $(this).data('id');
 		console.log(productId);
@@ -130,5 +132,231 @@ $(document).ready(function() {
 		});
 
 	});
+
+	$('#createUserAddressBtn').on('click',function(){
+		document.getElementById("createUserAddressLabel").innerText = "Add New Address";
+		$('#userAddressForm').trigger('reset');
+		$('#saveCategoryButton').show();
+		$('#editUserAddressButton').hide();
+		$('#errorMessages').empty();
+		
+	});
+
+	$('#saveUserAddressButton').click(function(event) {
+        event.preventDefault();
+        
+        var firstName = $('#firstName');
+		var lastName = $('#lastName');
+		var addressLine1 = $('#addressLine1');
+		var addressLine2 = $('#addressLine2');
+		var city = $('#city');
+		var state = $('#state');
+		var pincode = $('#pincode');
+		var phoneNumber = $('#phoneNumber');
+        
+        var formData = new FormData();
+		formData.append('firstName', firstName.val());
+		formData.append('lastName', lastName.val());
+		formData.append('addressLine1', addressLine1.val());
+		formData.append('addressLine2', addressLine2.val());
+		formData.append('city', city.val());
+		formData.append('state', state.val());
+		formData.append('pincode', pincode.val());
+		formData.append('phoneNumber', phoneNumber.val());
+
+        for (let [key, value] of formData.entries()) {
+            console.log(key + ':', value);
+        }
+
+       $.ajax({
+			url:'../../model/UserPage.cfc?method=validateUserProfileDetails',
+			type:'POST',
+			data:formData,
+			processData:false,
+			contentType:false,
+			success:function(response){
+                console.log(response);
+				let data = JSON.parse(response);
+				console.log(data);	
+			 	if(data.length === 0){
+			 		$('#createUserAddressModal').modal('hide');
+			 		location.reload();
+			 	}
+			 	else{
+			 		addOnError(data);
+			 	}
+				
+			 },
+			 error:function(){
+			 	console.log("Request Failed");
+			}
+		});
+	});
+
+	$(document).on('click', '.editAddress', function() {
+		document.getElementById('saveUserAddressButton').style.display="none";
+		document.getElementById("createUserAddressLabel").innerText = "Edit Address";
+		$('#editUserAddressButton').show();
+		$('#errorMessages').empty();
+
+		addressId = $(this).data('id');
+		console.log(addressId);
+
+		$.ajax({
+			url:'../../model/UserPage.cfc?method=getUserAddressById',
+			type:'POST',
+			data:{
+				addressId:addressId
+			},
+			success:function(response){
+                
+				let data = JSON.parse(response);
+				console.log(data);	
+				let firstName = data.DATA[0][1];
+				let lastName = data.DATA[0][2];
+				let addressLine1 = data.DATA[0][3];
+				let addressLine2 = data.DATA[0][4];
+				let city = data.DATA[0][5];
+				let state = data.DATA[0][6];
+				let pincode = data.DATA[0][7];
+				let phoneNumber = data.DATA[0][8];
+
+			 	$('#firstName').val(firstName);
+				$('#lastName').val(lastName);
+				$('#addressLine1').val(addressLine1);
+				$('#addressLine2').val(addressLine2);
+				$('#city').val(city);
+				$('#state').val(state);
+				$('#pincode').val(pincode);
+				$('#phoneNumber').val(phoneNumber);
+				
+			 },
+			 error:function(){
+			 	console.log("Request Failed");
+			}
+		});
+
+	});
+
+	$('#editUserAddressButton').on('click',function(event){	
+		event.preventDefault();
+
+		var firstName = $('#firstName');
+		var lastName = $('#lastName');
+		var addressLine1 = $('#addressLine1');
+		var addressLine2 = $('#addressLine2');
+		var city = $('#city');
+		var state = $('#state');
+		var pincode = $('#pincode');
+		var phoneNumber = $('#phoneNumber');
+
+		var formData = new FormData();
+		formData.append('firstName', firstName.val());
+		formData.append('lastName', lastName.val());
+		formData.append('addressLine1', addressLine1.val());
+		formData.append('addressLine2', addressLine2.val());
+		formData.append('city', city.val());
+		formData.append('state', state.val());
+		formData.append('pincode', pincode.val());
+		formData.append('phoneNumber', phoneNumber.val());
+		formData.append('addressId', addressId);
+		
+		for (let [key, value] of formData.entries()) {
+            console.log(key + ':', value);
+        }
+        
+		$.ajax({
+			url:'../../model/UserPage.cfc?method=validateUserProfileDetails',
+			type:'POST',
+			data:formData,
+			processData:false,
+			contentType:false,
+			success:function(response){
+                console.log(response);
+				let data = JSON.parse(response);
+				console.log(data);	
+			 	if(data.length === 0){
+			 		$('#createUserAddressModal').modal('hide');
+			 		location.reload();
+			 	}
+			 	else{
+			 		addOnError(data);
+			 	}
+				
+			 },
+			 error:function(){
+			 	console.log("Request Failed");
+			}
+		});
+
+	});
 });
 
+function addOnError(errors) {
+	$('#errorMessages').empty();
+
+	 errors.forEach(function(error) {
+        	$('#errorMessages').append('<div class="alert alert-danger">' + error + '</div>');
+ 	});
+}
+
+document.querySelectorAll(".deleteAddress").forEach(function(button) {
+	button.addEventListener("click", function() {
+			var addressId = this.getAttribute("data-id");
+			console.log("Address ID to delete:", addressId);
+
+			if (addressId) {
+				document.getElementById("confirmAddressDeleteButton").setAttribute("data-address-id", addressId);
+			} else {
+				alert("Error: Address ID is missing or undefined.");
+			}
+	});
+});
+document.addEventListener("DOMContentLoaded", function () {
+	document.getElementById("confirmAddressDeleteButton").addEventListener("click", function () {
+	const addressId = this.getAttribute("data-address-id");
+	console.log("Address ID from confirm button:", addressId);
+
+	if (!addressId) {
+			alert("Error: No Address ID available for deletion.");
+			return;
+	}
+
+	$.ajax({
+		type: "POST",
+		url: "../../model/UserPage.cfc?method=deleteUserAddress",
+		data: { addressId: addressId },
+		dataType: "json",
+
+		success: function (response) {
+			console.log("AJAX response:", response);
+			if (response.STATUS == "success") {	
+				console.log("Deleting contact...");
+	
+			
+				const deleteModalElement = document.getElementById("deleteAddressConfirmModal");
+				const deleteModal = bootstrap.Modal.getInstance(deleteModalElement);
+				if (deleteModal) {
+						deleteModal.hide();
+				}
+				document.body.classList.remove('modal-open');
+				const backdrop = document.querySelector('.modal-backdrop');
+				if (backdrop) {
+					backdrop.remove();
+				}
+				const AddressItemToDelete = document.querySelector(`.address-card .deleteAddress[data-id="${addressId}"]`).closest('.address-card');
+            	if (AddressItemToDelete) {
+                	AddressItemToDelete.remove();
+                	console.log("Address item deleted:", AddressItemToDelete);
+					
+            	} else {
+                		console.log("Address item not found for deletion");
+            	}
+			
+			} 
+		
+		}
+	});
+});
+
+});

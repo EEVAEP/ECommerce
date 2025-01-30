@@ -1,20 +1,26 @@
 
 <cfparam name="url.productId" default="">
 
+
 <cfset variables.NavCategory = application.modelAdminCtg.getCategoryList()>
 
 <cftry>
-    <cfif structKeyExists(url, "productId") AND structKeyExists(session, "userid") AND structKeyExists(session, "roleid")>
+    <cfif (len(url.productId) EQ 0) AND structKeyExists(session, "userid") AND structKeyExists(session, "roleid")>
+        <cfset variables.displayCartDetails = application.modelUserPage.getCartProductsList()>
+        <cfset variables.getCartcountQuery = application.modelUserPage.getCartProductsCount()>
+    
+    <cfelseif structKeyExists(url, "productId") AND (len(url.productId) NEQ 0) AND structKeyExists(session, "userid") AND structKeyExists(session, "roleid")>
         <cfset variables.createCartPrdQuery = application.modelUserPage.createCartProducts(productId = url.productId)>
         <cfif variables.createCartPrdQuery EQ "success">
             <cfset variables.displayCartDetails = application.modelUserPage.getCartProductsList()>
-           
-       </cfif>
+        </cfif>
        <cfset variables.getCartcountQuery = application.modelUserPage.getCartProductsCount()>
     <cfelse>
         <cfset session.productId = url.productId>
         <cflocation  url="../../view/Login.cfm" addtoken="false">
+    
     </cfif>
+    
     
 <cfcatch>
     <cfdump var="#cfcatch#">
@@ -61,7 +67,8 @@
 
         
         <div class="d-flex justify-content gap-2">
-             <p class="cartName">
+            <a href="UserProfile.cfm"><i class="fa-solid fa-user profile-icon"></i></a>
+            <a href = "#" class="cartNameAnchor"><p class="cartName">
                 Cart <span id="cart-count" class="count"><cfoutput>
                 <cfif structKeyExists(url, "productId")>
                     <cfif structKeyExists(variables, "getCartcountQuery")>
@@ -69,7 +76,7 @@
                     </cfif>
                 </cfif>
                 </cfoutput></span>
-            </p>
+            </p></a>
             <a href="../Login.cfm?logOut" class="btn btn-light">LogOut</a>
         </div>
 

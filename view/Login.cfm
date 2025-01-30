@@ -3,6 +3,7 @@
 	<cfset structDelete(session, "username")>
 	<cfset structDelete(session, "userid")>
     <cfset structDelete(session, "roleid")>
+    <cfset structDelete(session, "productId")>
 </cfif>
 
 <cftry>
