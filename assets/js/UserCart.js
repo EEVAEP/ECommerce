@@ -63,6 +63,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 $(document).ready(function() {
 	var addressId;
+	var editUserId;
 	$(document).on('click', '.increase', function() {
 		productId = $(this).data('id');
 		console.log(productId);
@@ -145,16 +146,16 @@ $(document).ready(function() {
 	$('#saveUserAddressButton').click(function(event) {
         event.preventDefault();
         
-        var firstName = $('#firstName');
-		var lastName = $('#lastName');
-		var addressLine1 = $('#addressLine1');
-		var addressLine2 = $('#addressLine2');
-		var city = $('#city');
-		var state = $('#state');
-		var pincode = $('#pincode');
-		var phoneNumber = $('#phoneNumber');
+        let firstName = $('#firstName');
+		let lastName = $('#lastName');
+		let addressLine1 = $('#addressLine1');
+		let addressLine2 = $('#addressLine2');
+		let city = $('#city');
+		let state = $('#state');
+		let pincode = $('#pincode');
+		let phoneNumber = $('#phoneNumber');
         
-        var formData = new FormData();
+        let formData = new FormData();
 		formData.append('firstName', firstName.val());
 		formData.append('lastName', lastName.val());
 		formData.append('addressLine1', addressLine1.val());
@@ -193,6 +194,7 @@ $(document).ready(function() {
 		});
 	});
 
+	/* Populate User Profle in Edit modal */
 	$(document).on('click', '.editAddress', function() {
 		document.getElementById('saveUserAddressButton').style.display="none";
 		document.getElementById("createUserAddressLabel").innerText = "Edit Address";
@@ -238,6 +240,7 @@ $(document).ready(function() {
 
 	});
 
+	/* Edit User Profile */
 	$('#editUserAddressButton').on('click',function(event){	
 		event.preventDefault();
 
@@ -277,6 +280,87 @@ $(document).ready(function() {
 				console.log(data);	
 			 	if(data.length === 0){
 			 		$('#createUserAddressModal').modal('hide');
+			 		location.reload();
+			 	}
+			 	else{
+			 		addOnError(data);
+			 	}
+				
+			 },
+			 error:function(){
+			 	console.log("Request Failed");
+			}
+		});
+
+	});
+
+	/* Populate User Details in Edit modal */
+	$(document).on('click', '.editUser', function() {
+		$('#errorMessages').empty();
+
+		editUserId = $(this).data('id');
+		console.log(editUserId);
+
+		$.ajax({
+			url:'../../model/UserPage.cfc?method=getUserDetailsById',
+			type:'POST',
+			data:{
+				editUserId:editUserId
+			},
+			success:function(response){
+                
+				let data = JSON.parse(response);
+				console.log(data);	
+				let firstName = data.DATA[0][1];
+				let lastName = data.DATA[0][2];
+				let email = data.DATA[0][3]
+				let phone = data.DATA[0][4];
+
+			 	$('#fname').val(firstName);
+				$('#lname').val(lastName);
+				$('#email').val(email);
+				$('#phone').val(phone);
+				
+			 },
+			 error:function(){
+			 	console.log("Request Failed");
+			}
+		});
+
+	});
+
+	/* Edit User Details */
+	$('#editUserDetailsButton').on('click',function(event){	
+		event.preventDefault();
+
+		var firstName = $('#fname');
+		var lastName = $('#lname');
+		var email = $('#email');
+		var phoneNumber = $('#phone');
+
+		var formData = new FormData();
+		formData.append('firstName', firstName.val());
+		formData.append('lastName', lastName.val());
+		formData.append('email', email.val());
+		formData.append('phone', phoneNumber.val());
+		formData.append('editUserId', editUserId);
+		
+		for (let [key, value] of formData.entries()) {
+            console.log(key + ':', value);
+        }
+        
+		$.ajax({
+			url:'../../model/UserPage.cfc?method=validateUserDetails',
+			type:'POST',
+			data:formData,
+			processData:false,
+			contentType:false,
+			success:function(response){
+                console.log(response);
+				let data = JSON.parse(response);
+				console.log(data);	
+			 	if(data.length === 0){
+			 		$('#editUserdetailsModal').modal('hide');
 			 		location.reload();
 			 	}
 			 	else{

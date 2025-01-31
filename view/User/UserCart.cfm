@@ -3,7 +3,7 @@
 
 
 <cfset variables.NavCategory = application.modelAdminCtg.getCategoryList()>
-
+<cfset variables.displayUserAddress = application.modelUserPage.getUserAddress()>
 <cftry>
     <cfif (len(url.productId) EQ 0) AND structKeyExists(session, "userid") AND structKeyExists(session, "roleid")>
         <cfset variables.displayCartDetails = application.modelUserPage.getCartProductsList()>
@@ -234,14 +234,95 @@
                         <strong>Total Price</strong>
                         <strong><i class="fa-solid fa-indian-rupee-sign"></i>#variables.cartTotalPrice#</strong>
                     </div>
-                    <button class="btn-checkout">Bought Together</button>
+                   
+                    <button 
+                        class="btn btn-checkout btn-sm me-2 orderNow"
+                        id="orderNowBtn"
+                        name="orderNowBtn"
+                        data-bs-toggle="modal" 
+                        data-bs-target="##selectAddressModal"
+                        data-id="#encryptedId#">
+                        Bought Together
+                    </button>
                 </div>
             </cfoutput>
+            <div class="modal fade" 
+                id="selectAddressModal"
+                data-bs-backdrop="static" 
+                data-bs-keyboard="false" 
+                tabindex="-1" 
+                aria-labelledby="selectAddressLabel" 
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title mx-auto d-block" id="selectAddressLabel">Select Addresses</h5>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post" id="selectAddressForm" action="">
+                                <div class="saved-addresses">
+                                    <h5>Saved Addresses</h5>
+                                    <cfoutput>
+                                        <cfloop query="variables.displayUserAddress">
+                                            <div class="address-option">
+                                                <input 
+                                                    type="radio" 
+                                                    name="selectedAddress" 
+                                                    value="#fldAddress_ID#" 
+                                                    id="address_#fldAddress_ID#"
+                                                    <cfif currentRow EQ 1>checked="checked"</cfif>
+                                                >
+                                                <label for="address_#fldAddress_ID#">
+                                                    <strong>#fldFirstName#</strong>  #fldphonenumber#
+                                                    <br>
+                                                    <span class="address-details">
+                                                        #fldAddressLine1#, #fldAddressLine2#, #fldCity#, #fldState#,
+                                                        <br>
+                                                        #fldPincode#
+                                                    </span>
+                                                </label>
+                                            </div>
+                                        </cfloop>
+                                    </cfoutput>
+                                </div>
+                            </form>
+                            <div class="modal-footer form-group pt-1 mt-3">
+                                <button type="button" class="btn btn-secondary mb-3" data-bs-dismiss="modal">Cancel</button> 
+                                <button class="btn btn-success addAdress mb-3"
+                                    id="createUserAddressBtn"
+                                    
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="##createUserAddressModal">
+                                    Add New Address
+                                </button> 
+                                <button type="button" name="selectPaymentButton" form="selectAddressForm" class="btn btn-success mb-3" id="selectPaymentButton">Payment Details</button>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <cfinclude template= "AddressModal.cfm">
         </div> 
     </cfif>
 
     <cfinclude template="footer.cfm">
 	
     <script src="../../assets/js/UserCart.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#createUserAddressBtn").click(function() {
+                openSecondModal = true;
+                $("#selectAddressModal").modal("hide"); 
+            });
+
+            $("#selectAddressModal").on("hidden.bs.modal", function () {
+                if (openSecondModal) {
+                    $("#createUserAddressModal").modal("show");
+                    openSecondModal = false;
+                }
+            });
+        });
+</script>
 </body>
 </html>

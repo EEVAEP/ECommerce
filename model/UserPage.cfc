@@ -123,6 +123,8 @@
 	            I.fldDefaultImage = 1
             AND
 	            C.fldQuantity >= 1
+            AND
+                C.fldUserId = <cfqueryparam value = "#session.userid#" cfsqltype = "cf_sql_integer">
              GROUP BY
                 P.fldProductName,
                 P.fldProduct_ID,
@@ -147,6 +149,8 @@
                         tblCart
                     WHERE
                         fldProductId = <cfqueryparam value="#local.decryptedId#" cfsqltype="cf_sql_integer">
+                    AND
+                        fldUserId = <cfqueryparam value = "#session.userid#" cfsqltype = "cf_sql_integer">
             </cfquery>
 			<cfset local.response = {status="success", message="Product deleted from cart successfully."}>
         	<cfreturn local.response>
@@ -214,6 +218,7 @@
     <cffunction name="getUserProfileDetails" access="public" returntype="any">
         <cfquery name="local.qryGetUserDetails" datasource="#application.datasource#">
             SELECT 
+                fldUser_ID,
                 fldFirstname, 
                 fldLastname,
                 fldEmail,
@@ -225,7 +230,6 @@
         </cfquery>
         <cfreturn local.qryGetUserDetails>
     </cffunction>
-
 
     <cffunction  name= "validateUserProfileDetails" access= "remote" returnformat="JSON">
         
@@ -375,12 +379,10 @@
         <cfreturn local.qryGetAddress>
     </cffunction>
 
-
     <cffunction name="getUserAddressById" access="remote" returntype="any" returnformat="JSON">	
 		<cfargument name="addressId" type="string" required="true">
 
 		<cfset local.decryptedId = application.modelAdminCtg.decryptId(arguments.addressId)>
-        
         <cfquery name="local.qryGetEachAddress" datasource = "#application.datasource#">
             SELECT 
                 fldAddress_ID,
@@ -420,6 +422,113 @@
         		<cfreturn local.response>
     		</cfcatch>
 		</cftry>
+    </cffunction>
+
+    <cffunction name="getUserDetailsById" access="remote" returntype="any" returnformat="JSON">	
+		<cfargument name="editUserId" type="string" required="true">
+
+		<cfset local.decryptedId = application.modelAdminCtg.decryptId(arguments.editUserId)>
+        <cfquery name="local.qryGetEachUserDetails" datasource = "#application.datasource#">
+            SELECT 
+                fldUser_ID,
+                fldFirstName,
+                fldLastName, 
+                fldEmail,
+                fldPhone
+            FROM 
+                tblUser
+            WHERE 
+                fldUser_ID= <cfqueryparam value=#local.decryptedId#  cfsqltype="cf_sql_integer">
+        </cfquery>
+        <cfreturn local.qryGetEachUserDetails> 
+    </cffunction>
+
+
+    <cffunction  name= "validateUserDetails" access= "remote" returnformat="JSON">
+        <cfargument name="firstName" type="string" required="true">
+        <cfargument name="lastName" type="string" required="true">
+        <cfargument name="email" type="string" required="true">
+        <cfargument name="phone" type="string" required="true">
+        <cfargument name="editUserId" type="string" required="true">
+
+        <cfset local.errors = []>
+        <!------- First Name ------->
+        <cfif trim(arguments.firstName) EQ "">
+        	<cfset arrayAppend(local.errors, "*First Name is required.")>
+    	<cfelseif not reFind("^[A-Za-z]+$", trim(arguments.firstName))>
+        	<cfset arrayAppend(local.errors, "*First Name cannot contain numbers or special characters.")>
+    	</cfif>
+
+        <!------- Last Name -------->
+        <cfif trim(arguments.lastName) EQ "">
+    			<cfset arrayAppend(local.errors, "*Last Name is required.")>
+		<cfelseif not reFind("^[A-Za-z]+(\s[A-Za-z]+)*$", trim(arguments.lastName))>
+    			<cfset arrayAppend(local.errors, "*Last Name cannot contain numbers or special characters.")>
+		</cfif>
+
+        <!------- Email -------->
+        <cfquery name="local.qryCheckUserEmail" datasource = "#application.datasource#">
+            SELECT *
+        	FROM 
+			    tblUser
+        	WHERE 
+				fldEmail = <cfqueryparam value="#arguments.email#" cfsqltype="cf_sql_varchar">
+            AND 
+                fldUser_ID <> <cfqueryparam value="#session.userid#" cfsqltype="cf_sql_integer">
+    	</cfquery>
+        <cfif len(trim(arguments.email)) EQ 0>
+            <cfset arrayAppend(local.errors, "*Email is required")>
+        <cfelseif NOT reFindNoCase("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", arguments.email)>
+            <cfset arrayAppend(local.errors, "*Enter a valid email")>
+        <cfelseif local.qryCheckUserEmail.recordCount GT 0>
+            <cfset arrayAppend(local.errors, "*Email is already registered.")>
+        </cfif>
+
+        <!-----   PhoneNumber    ---->
+
+        <cfquery name="local.qryCheckUserPhone" datasource = "#application.datasource#">
+            SELECT *
+        	FROM 
+			    tblUser
+        	WHERE
+				fldPhone  = <cfqueryparam value="#arguments.phone#" cfsqltype="cf_sql_varchar">
+			AND
+				fldUser_ID <> <cfqueryparam value="#session.userid#" cfsqltype="cf_sql_integer">
+    	</cfquery>
+        <cfif trim(arguments.phone) EQ "" OR not reFind("^\d{10}$", arguments.phone)>
+			<cfset arrayAppend(local.errors, "*Phone number must contain exactly 10 digits.")>
+        <cfelseif local.qryCheckUserPhone.recordCount GT 0>
+            <cfset arrayAppend(local.errors, "*Phone Number is already registered.")>
+		</cfif>
+
+        <cfif arrayLen(local.errors) EQ 0>
+            <cfset local.addCatogory=UpdateUserDetails(argumentCollection=arguments)>
+			<cfreturn local.errors>
+		<cfelse>
+		    <cfreturn local.errors>
+		</cfif>
+    </cffunction>
+
+    <cffunction name="UpdateUserDetails" access="public">
+        <cfargument name="firstName" type="string" required="true">
+        <cfargument name="lastName" type="string" required="true">
+        <cfargument name="email" type="string" required="true">
+        <cfargument name="phone" type="string" required="true">
+        <cfargument name="editUserId" type="string" required="true">
+        
+        <cfset local.decryptedId = application.modelAdminCtg.decryptId(arguments.editUserId)>
+        <cfquery datasource = "#application.datasource#">
+        	UPDATE tblUser
+			SET 
+                fldFirstName = <cfqueryparam value="#arguments.firstName#" cfsqltype="cf_sql_varchar">,
+                fldLastName = <cfqueryparam value="#arguments.lastName#" cfsqltype="cf_sql_varchar">,
+                fldEmail = <cfqueryparam value="#arguments.email#" cfsqltype="cf_sql_varchar">,
+                fldPhone = <cfqueryparam value="#arguments.phone#" cfsqltype="cf_sql_varchar">,
+                fldUpdatedById = <cfqueryparam value="#session.userid#" cfsqltype="cf_sql_varchar">,
+                fldUpdatedDate  = NOW()
+            WHERE
+                fldUser_ID = <cfqueryparam value="#local.decryptedId#" cfsqltype="cf_sql_integer">
+        </cfquery>
     </cffunction>
 
 </cfcomponent>

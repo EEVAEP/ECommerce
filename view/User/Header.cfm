@@ -43,8 +43,8 @@
         </div>
 
         <div class="d-flex align-items-center gap-2 profile">
-            <a href="UserProfile.cfm"><i class="fa-solid fa-user profile-icon"></i></a>
             <cfif structKeyExists(session, "userid") AND structKeyExists(session, "roleid")>
+                <a href="UserProfile.cfm"><i class="fa-solid fa-user profile-icon"></i></a>
                 <a href = "UserCart.cfm" class="cartNameAnchor"><p class="cartName">
                     Cart <span id="cart-count" class="count"><cfoutput>
                         <cfif structKeyExists(variables, "getCartcountQuery")>

@@ -498,5 +498,38 @@ h1 {
     gap: 20px;
 }
 
+/* Select Address modal */
+.saved-addresses {
+    font-family: Arial, sans-serif;
+    margin-top: 8px;
+}
+.saved-addresses h5 {
+    color:#28a745;
+    margin-bottom: 14px;
+}
+
+.address-option {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.address-option input {
+    margin-right: 10px;
+}
+
+.address-option label {
+    cursor: pointer;
+}
+
+.address-details {
+    color: gray;
+    font-size: 14px;
+}
+
+
 
 

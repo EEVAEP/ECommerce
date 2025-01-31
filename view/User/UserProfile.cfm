@@ -1,4 +1,5 @@
 <cfinclude template="Header.cfm">
+<cfinclude  template="AddressModal.cfm">
 <cfset variables.displayUserDetailsQry = application.modelUserPage.getUserProfileDetails()>
 <cfset variables.displayUserAddressQry = application.modelUserPage.getUserAddress()>
 
@@ -14,14 +15,64 @@
                 <i class="fa-solid fa-user"></i>
             </div>
             <div class="user-details">
-                <cfoutput>
-                    <p class="user-name">Hello, #variables.displayUserDetailsQry.fullname#</p>
-                    <p class="user-email">#variables.displayUserDetailsQry.fldEmail#</p>
+                <cfoutput query="variables.displayUserDetailsQry">
+                    <cfset encryptedUserId = encrypt(variables.displayUserDetailsQry.fldUser_ID, application.encryptionKey, "AES", "Hex")>
+                        <p class="user-name">Hello, #variables.displayUserDetailsQry.fullname#</p>
+                        <p class="user-email">#variables.displayUserDetailsQry.fldEmail#</p>
+                        <button 
+                            class="btn btn-sm btn-outline-success me-2 editUser"
+                            id="editUserBtn"
+                            data-bs-toggle="modal" 
+                            data-bs-target="##editUserdetailsModal"
+                            data-id="#encryptedUserId#">
+                            <i class="bi bi-pencil-fill"></i> 
+                        </button>
                 </cfoutput>
+                <div class="modal fade" 
+			        id="editUserdetailsModal"
+                    data-bs-backdrop="static" 
+			        data-bs-keyboard="false" 
+			        tabindex="-1" 
+			        aria-labelledby="editUserdetailsLabel" 
+			        aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title mx-auto d-block" id="editUserdetailsLabel">Edit Details</h5>
+                            </div>
+                            <div class="modal-body">
+                                <form method="post" id="editUserdetailsForm" action="">
+                                    <div class="form-group pt-1">
+                                        <label for="fname">First Name</label>
+                                        <input type="text" class="form-control" id="fname" name="fname" placeholder="Enter First Name">
+                                    </div>
+                                    <div class="form-group pt-2">
+                                        <label for="fname">Last Name</label>
+                                        <input type="text" class="form-control" id="lname" name="lname" placeholder="Enter Last Name">
+                                    </div>  
+                                    
+                                    <div class="form-group pt-2">
+                                        <label for="city">Email</label>
+                                        <input type="text" class="form-control" id="email" name="email" placeholder="Enter email">
+                                    </div>
+                                    <div class="form-group pt-2">
+                                        <label for="phone">Phone Number</label>
+                                        <input type="text" class="form-control" id="phone" name="phone" placeholder="Enter Phone Number">
+                                    </div>
+
+                                    <div class="form-group pt-1 mt-3">
+                                        <button type="button" class="btn btn-secondary mb-3" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="button" name="editUserDetailsButton" class="btn btn-success mb-3" id="editUserDetailsButton">Update</button>
+                                    </div>
+                                    <div id="errorMessages"></div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
     <div class="user-container">
         <div class="profile-section">  
             <h3>Profile Informations</h3>
@@ -44,14 +95,6 @@
                             #variables.displayUserAddressQry.fldState# - #variables.displayUserAddressQry.fldPincode#
                         </div>
                         <div class="address-buttons">
-                            <button 
-                                class="btn btn-sm btn-outline-primary me-2 editAddress"
-                                id="editAddressBtn"
-                                data-bs-toggle="modal" 
-                                data-bs-target="##createUserAddressModal"
-                                data-id="#encryptedId#">
-                                <i class="bi bi-pencil-fill"></i> 
-                            </button>
                             <button class="btn btn-sm btn-outline-danger me-2 deleteAddress"
                                 id="deleteAddressBtn"
                                 data-bs-toggle="modal" 
@@ -64,8 +107,6 @@
                 </cfoutput>
             </div>
         </div>
-
-    
         <div class="profile-actions">
             <button class="btn btn-outline-success addAdress"
                 id="createUserAddressBtn"
@@ -75,67 +116,6 @@
             </button>
 
              <button class="btn btn-outline-primary">Order Details</button>
-        </div>
-
-        <div class="modal fade" 
-			id="createUserAddressModal"
-            data-bs-backdrop="static" 
-			data-bs-keyboard="false" 
-			tabindex="-1" 
-			aria-labelledby="createUserAddressLabel" 
-			aria-hidden="true">
-    		<div class="modal-dialog">
-        	    <div class="modal-content">
-            		<div class="modal-header">
-                		<h5 class="modal-title mx-auto d-block" id="createUserAddressLabel">Add New Address</h5>
-                    </div>
-
-                    <div class="modal-body">
-                        <form method="post" id="userAddressForm" action="">
-                            <div class="form-group pt-1">
-                        		<label for="firstName">First Name</label>
-                        		<input type="text" class="form-control" id="firstName" name="firstName" placeholder="Enter First Name">
-                    		</div>
-                    		<div class="form-group pt-2">
-                        		<label for="lastName">Last Name</label>
-                        		<input type="text" class="form-control" id="lastName" name="lastName" placeholder="Enter Last Name">
-                    		</div>  
-                            <div class="form-group pt-2">
-                        		<label for="addressLine1">Address Line1</label>
-                        		<input type="text" class="form-control" id="addressLine1" name="addressLine1" placeholder="Enter Address Line1">
-                    		</div>   
-                            <div class="form-group pt-2">
-                        		<label for="addressLine2">Address Line2</label>
-                        		<input type="text" class="form-control" id="addressLine2" name="addressLine2" placeholder="Enter Address Line2">
-                    		</div> 
-                            <div class="form-group pt-2">
-                        		<label for="city">City</label>
-                        		<input type="text" class="form-control" id="city" name="city" placeholder="Enter City">
-                    		</div> 
-                            <div class="form-group pt-2">
-                        		<label for="city">State</label>
-                        		<input type="text" class="form-control" id="state" name="state" placeholder="Enter State">
-                    		</div>
-                            <div class="form-group pt-2">
-                        		<label for="city">Pincode</label>
-                        		<input type="number" class="form-control" id="pincode" name="pincode" placeholder="Enter pincode">
-                    		</div>
-                            <div class="form-group pt-2">
-                        		<label for="phoneNumber">Phone Number</label>
-                        		<input type="text" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="Enter Phone Number">
-                    		</div>
-
-                            <div class="form-group pt-1 mt-3">
-                                <button type="button" class="btn btn-secondary mb-3" data-bs-dismiss="modal">Cancel</button>
-                                <button type="button" name="saveUserAddressButton" class="btn btn-success mb-3" id="saveUserAddressButton">Submit</button>
-                                <button type="button" name="editUserAddressButton" class="btn btn-success mb-3" id="editUserAddressButton">Update</button>
-                            </div>
-                                        
-                            <div id="errorMessages"></div>
-                        </form>
-                    </div>
-            	</div>
-            </div>
         </div>
 
         
