@@ -20,7 +20,10 @@
         <cflocation  url="../../view/Login.cfm" addtoken="false">
     
     </cfif>
-    
+
+    <cfif structKeyExists(form, "selectPaymentButton")>
+        <cflocation url="PaymentDetailsPage.cfm?addressId=#form.selectedAddress#" addtoken="no">
+    </cfif>
     
 <cfcatch>
     <cfdump var="#cfcatch#">
@@ -264,11 +267,12 @@
                                     <h5>Saved Addresses</h5>
                                     <cfoutput>
                                         <cfloop query="variables.displayUserAddress">
+                                        <cfset encryptedAddressId = encrypt(variables.displayUserAddress.fldAddress_ID, application.encryptionKey, "AES", "Hex")>
                                             <div class="address-option">
                                                 <input 
                                                     type="radio" 
                                                     name="selectedAddress" 
-                                                    value="#fldAddress_ID#" 
+                                                    value="#encryptedAddressId#" 
                                                     id="address_#fldAddress_ID#"
                                                     <cfif currentRow EQ 1>checked="checked"</cfif>
                                                 >
@@ -295,7 +299,14 @@
                                     data-bs-target="##createUserAddressModal">
                                     Add New Address
                                 </button> 
-                                <button type="button" name="selectPaymentButton" form="selectAddressForm" class="btn btn-success mb-3" id="selectPaymentButton">Payment Details</button>
+                                <button type="submit" 
+                                    name="selectPaymentButton" 
+                                    form="selectAddressForm" 
+                                    class="btn btn-success mb-3" 
+                                    id="selectPaymentButton"
+                                    data-id="#encryptedId#">
+                                    Payment Details
+                                </button>
                             </div>
                             
                         </div>

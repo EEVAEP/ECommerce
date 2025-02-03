@@ -5,9 +5,10 @@
     <cfset variables.displaySingleProductQry = application.modelAdminCtg.getProductsList(productId = url.productId)>
     <cfset variables.displayProductImages = application.modelAdminCtg.getProductImages(productId = url.productId)>
 </cfif>
-
 <cfset variables.displayUserAddress = application.modelUserPage.getUserAddress()>
-
+<cfif structKeyExists(form, "selectPaymentButton")>
+    <cflocation url="PaymentDetailsPage.cfm?addressId=#form.selectedAddress#&productId=#form.productId#" addtoken="no">
+</cfif>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -87,11 +88,12 @@
                                             <h5>Saved Addresses</h5>
                                             <cfoutput>
                                                 <cfloop query="variables.displayUserAddress">
+                                                    <cfset encryptedAddressId = encrypt(variables.displayUserAddress.fldAddress_ID, application.encryptionKey, "AES", "Hex")>
                                                     <div class="address-option">
                                                         <input 
                                                             type="radio" 
                                                             name="selectedAddress" 
-                                                            value="#fldAddress_ID#" 
+                                                            value="#encryptedAddressId#" 
                                                             id="address_#fldAddress_ID#"
                                                             <cfif currentRow EQ 1>checked="checked"</cfif>
                                                         >
@@ -106,8 +108,10 @@
                                                         </label>
                                                     </div>
                                                 </cfloop>
+                                                <input type="hidden" name="productId" value="#encryptedId#">
                                             </cfoutput>
                                         </div>
+                                        
                                     </form>
                                     <div class="modal-footer form-group pt-1 mt-3">
                                         <button type="button" class="btn btn-secondary mb-3" data-bs-dismiss="modal">Cancel</button> 
@@ -118,7 +122,14 @@
                                             data-bs-target="##createUserAddressModal">
                                             Add New Address
                                         </button> 
-                                        <button type="button" name="selectPaymentButton" form="selectAddressForm" class="btn btn-success mb-3" id="selectPaymentButton">Payment Details</button>
+                                        <button type="submit" 
+                                            name="selectPaymentButton" 
+                                            form="selectAddressForm" 
+                                            class="btn btn-success mb-3" 
+                                            id="selectPaymentButton"
+                                            data-id="#encryptedId#">
+                                            Payment Details
+                                        </button>
                                     </div>
                                     
                                 </div>
@@ -130,7 +141,7 @@
             </cfoutput>
         </div>
     </div>
-    
+
 
     
     <cfinclude template="footer.cfm">

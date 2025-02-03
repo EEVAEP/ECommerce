@@ -357,6 +357,11 @@
     </cffunction>
 
     <cffunction name="getUserAddress" access="public" returntype="any">
+        <cfargument name="addressId" type="string" required="false">
+        <cfif structKeyExists(arguments, "addressId")>
+            <cfset local.decryptedId = application.modelAdminCtg.decryptId(arguments.addressId)>
+        </cfif>
+        
         <cfquery name="local.qryGetAddress" datasource="#application.datasource#">
             SELECT 
                 fldAddress_ID,
@@ -373,6 +378,9 @@
                 tblAddress
             WHERE 
                 fldUserId = <cfqueryparam value="#session.userid#" cfsqltype="cf_sql_integer">
+                <cfif structKeyExists(arguments, "addressId")>
+                    AND fldAddress_ID = <cfqueryparam value="#local.decryptedId#" cfsqltype="cf_sql_integer">
+                </cfif>
             AND 
                 fldActive = 1
         </cfquery>
@@ -529,6 +537,39 @@
             WHERE
                 fldUser_ID = <cfqueryparam value="#local.decryptedId#" cfsqltype="cf_sql_integer">
         </cfquery>
+    </cffunction>
+
+    <!--------------------------------------Payment Details function------------------------------------------------ ---->
+    
+    <cffunction  name= "validateCardDetails" access= "remote" returnformat="JSON">
+        <cfargument name="cardNumber" type="string" required="true">
+        <cfargument name="cvv" type="string" required="true">
+
+        <cfset local.errors = []>
+        <cfset local.cardCode = "12345678912">
+        <!-----   CardNumber     ---->
+        <cfif trim(arguments.cardNumber) EQ "" OR (NOT isNumeric(arguments.cardNumber))>
+			<cfset arrayAppend(local.errors, "*Card Number must be numeric")>
+		<cfelseif len(arguments.cardNumber) GT 11 OR len(arguments.cardNumber) LT 11>
+			<cfset arrayAppend(local.errors, "*Card Number length must be exact 11")>
+        <cfelseif arguments.cardNumber NEQ local.cardCode>
+            <cfset arrayAppend(local.errors, "*Enter a valid Card Number")>
+        <cfelse>
+            <cfset arguments['cardNumber'] = "7891">
+		</cfif>
+
+        <!-----   cvv    ---->
+        <cfif trim(arguments.cvv) EQ "" OR not reFind("^\d{3}$", arguments.cvv)>
+			<cfset arrayAppend(local.errors, "*CVV must contain exactly 3 digits.")>
+		</cfif>
+
+        <cfif arrayLen(local.errors) EQ 0>
+            <cfdump var="Entered" abort>
+            <cfset local.addCatogory=createOrUpdateProfileDetails(argumentCollection=arguments)>
+			<cfreturn local.errors>
+		<cfelse>
+		    <cfreturn local.errors>
+		</cfif>
     </cffunction>
 
 </cfcomponent>

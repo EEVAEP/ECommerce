@@ -530,6 +530,169 @@ h1 {
     font-size: 14px;
 }
 
+/* order summary Page */
+.orderContainer {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 20px;
+}
+
+
+.order-summary {
+    width: 500px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    justify-content: center;
+    align-items: center;
+}
+
+
+.order-header {
+    background-color: #2e7d32;
+    color: white;
+    padding: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 8px 8px 0 0;
+}
+
+
+.order-card {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 2px 5px 5px rgba(0,0,0,.2);
+    margin-top: 15px;
+}
+
+
+.order-section {
+    font-size: 14px;
+    color: #333;
+}
+
+.order-section p {
+    margin: 5px 0;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+
+.OrderProduct {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.OrderProduct img {
+    width: 80px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+
+.OrderAmount {
+    color: red;
+    font-size: 16px;
+    font-weight: bold;
+    margin-left: 100px;
+}
+
+
+.OrderQuantity {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 10px;
+    margin-bottom: 30px;
+}
+
+.OrderQuantity button {
+    padding: 5px 10px;
+    border: none;
+    background-color: #ddd;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.place-order {
+    width: 100%;
+    background-color: #2e7d32;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-top: 15px;
+}
+
+.place-order:hover {
+    background-color: #256c29;
+}
+
+/* for cart order summary */
+.order-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px; 
+    margin-top:15px;
+}
+
+.CartOrder-card {
+    background-color: #fff;
+    border: 1px solid #ddd; 
+    border-radius: 8px; 
+    box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1); 
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px; 
+}
+
+.CartOrder-card img {
+    width: 100px;
+    height: auto;
+    border-radius: 5px;
+}
+
+.CartOrderProduct-details {
+    flex: 1; 
+    font-size: 14px;
+}
+
+.Cartbold {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.CartOrderProduct {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.CartOrderAmount {
+    color: red;
+    font-size: 16px;
+    font-weight: bold;
+    margin-left: 100px;
+    margin-top: 20px;
+}
+
 
 
 
