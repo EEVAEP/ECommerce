@@ -54,12 +54,16 @@
                             
                             </div>
                         </div>
-
+                        <cfset variables.ActualPrice = variables.displayOrderedProducts.fldPrice +(variables.displayOrderedProducts.fldPrice * (variables.displayOrderedProducts.fldTax / 100))>
+                        <cfset variables.ActualTax = (variables.displayOrderedProducts.fldPrice * (variables.displayOrderedProducts.fldTax / 100))>
                         <div class="section OrderQuantity">
                             <button class="OrderDecrease">-</button>
                                 <span class="quantity">1</span>  
                             <button class="OrderIncrease">+</button>
                             <input type="hidden" class="productPrice" value="#variables.displayOrderedProducts.fldPrice#">
+                            <input type="hidden" class="actualPrice" value="#variables.ActualPrice#">
+                            <input type="hidden" class="actualTax" value="#variables.ActualTax#">
+                            <input type="hidden" class="unitTax" value="#variables.displayOrderedProducts.fldTax#">
                         </div>
                         <cfset variables.OrderTotalPrice = 0>
                         <cfset variables.OrderTotalPrice = variables.displayOrderedProducts.fldPrice +(variables.displayOrderedProducts.fldPrice * (variables.displayOrderedProducts.fldTax / 100))>
@@ -68,8 +72,7 @@
                     </cfoutput>
                 </div>
             </cfif>
-        <!-------------------------------------------------Cart Bought Together----------------------- --->
-        
+            <!-------------------------------------------------Cart Bought Together----------------------- --->
             <cfif structKeyExists(variables, "displayOrderCartAddress")>
                 <div class="order-container">
                     <cfoutput query="variables.displayOrderedCartProducts">
@@ -139,7 +142,12 @@
                                     <button type="button" class="btn btn-secondary mb-3" data-bs-dismiss="modal">Cancel</button>
                                     <button type="submit" name="payButton" class="btn btn-success mb-3" id="payButton">Pay</button>
                                 </div>
-                                
+                                <cfoutput>
+                                    <input type="hidden" name="addressId" value="#url.addressId#" id="addressId">
+                                    <cfif structKeyExists(url, "productId")>
+                                        <input type="hidden" name="productId" value="#url.productId#" id="productId">
+                                    </cfif>
+                                </cfoutput>
                                 <div id="errorMessages"></div>
                             </form>
                         </div>

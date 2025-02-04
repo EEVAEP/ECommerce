@@ -1,8 +1,14 @@
 
 $(document).ready(function () {
+    var totalAmount = parseFloat($(".actualPrice").val()) || 0; 
+    var totalTax = parseFloat($(".actualTax").val()) || 0;
+    var unitTax = parseFloat($(".unitTax").val()) || 0;
+    var unitPrice = parseFloat($(".productPrice").val()) || 0;
+    var currentQuantity = 1;
+    
     $(".OrderIncrease, .OrderDecrease").click(function () {
         let quantitySpan = $(this).siblings(".quantity");
-        let currentQuantity = parseInt(quantitySpan.text());
+        currentQuantity = parseInt(quantitySpan.text());
 
         if ($(this).hasClass("OrderIncrease")) {
             currentQuantity++;
@@ -16,11 +22,15 @@ $(document).ready(function () {
     function updatePayableAmount(button) {
         let quantity = parseInt(button.siblings(".quantity").text());
         let productPrice = parseFloat(button.closest(".section").find(".productPrice").val());
-        let totalAmount = quantity * productPrice;
+        let actualPrice = parseFloat(button.closest(".section").find(".actualPrice").val());
+        let actualTax = parseFloat(button.closest(".section").find(".actualTax").val());
+        totalTax = quantity * actualTax;
+        totalAmount = quantity * actualPrice;
         console.log(quantity);
         console.log(productPrice);
         console.log(totalAmount);
-
+        console.log(actualPrice);
+        console.log(totalTax);
         button.closest(".section").siblings(".OrderAmount").find(".payableAmount").text(totalAmount.toFixed(2)); 
     }
     $('#createPaymentBtn').on('click',function(){
@@ -34,9 +44,18 @@ $(document).ready(function () {
         event.preventDefault();
         var cardNumber = $('#cardNumber');
         var cvv = $('#cvv');
+        var addressId = $('#addressId');
+        var productId = $('#productId');
         var formData = new FormData();
 		formData.append('cardNumber', cardNumber.val());
         formData.append('cvv', cvv.val());
+        formData.append('totalPrice', totalAmount);
+        formData.append('totalTax', totalTax);
+        formData.append('unitTax', unitTax);
+        formData.append('unitPrice', unitPrice);
+        formData.append('quantity', currentQuantity);
+        formData.append('addressId', addressId.val());
+        formData.append('productId', productId.val());
         for (let [key, value] of formData.entries()) {
             console.log(key + ':', value);
         }
