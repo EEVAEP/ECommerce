@@ -48,7 +48,7 @@
                 P.fldPrice ,
                 P.fldTax,
                 O.fldTotalPrice,
-                O.fldTotalTax
+                O.fldTotalTax 
         </cfquery>
         <cfreturn local.qryOrderedProducts>
     </cffunction>
@@ -95,4 +95,73 @@
             </cfmail>
     </cfif>
     </cffunction>
+
+    <cffunction name="getOrderHistory" access="public" returntype="array">
+        <cfquery name="local.qryOrderHistory" datasource="#application.datasource#">
+            SELECT 
+                P.fldProductName,
+                P.fldProduct_ID AS idProduct,
+                OI.fldOrderId,
+                OI.fldQuantity,
+                P.fldPrice,
+                P.fldTax,
+                O.fldTotalPrice,
+                O.fldTotalTax,
+                A.fldAddressLine1,
+                A.fldAddressLine2,
+                A.fldCity,
+                A.fldState,
+                A.fldPincode,
+                A.fldPhonenumber,
+                O.fldOrderDate,
+                O.fldCardPart
+            FROM 
+                tblorderitems AS OI
+            INNER JOIN 
+                tblproduct AS P ON P.fldProduct_ID = OI.fldProductId
+            INNER JOIN 
+                tblOrder AS O ON O.fldOrder_ID = OI.fldOrderId
+            INNER JOIN 
+                shoppingcart.tblAddress AS A ON A.fldAddress_ID = O.fldAddressId
+            WHERE
+                O.fldOrderId = <cfqueryparam value="#session.userid#" cfsqltype="cf_sql_integer">
+            ORDER BY 
+                O.fldOrderDate DESC
+        </cfquery>
+
+        <cfset orderData = []>
+        <cfloop query="local.qryOrderHistory" group="fldOrderId">
+            <cfset productList = []> 
+            <cfloop>
+                <cfset productData = {
+                    "productName" = local.qryOrderHistory.fldProductName,
+                    "productId" = local.qryOrderHistory.idProduct,
+                    "quantity" = local.qryOrderHistory.fldQuantity,
+                    "price" = local.qryOrderHistory.fldPrice,
+                    "tax" = local.qryOrderHistory.fldTax
+                }>
+                <cfset arrayAppend(productList, productData)>
+                
+            </cfloop>
+
+            <cfset orderDetails = {
+                "orderId" = fldOrderId,
+                "orderDate" = fldOrderDate,
+                "totalPrice" = fldTotalPrice,
+                "totalTax" = fldTotalTax,
+                "address" = {
+                    "line1" = fldAddressLine1,
+                    "line2" = fldAddressLine2,
+                    "city" = fldCity,
+                    "state" = fldState,
+                    "pincode" = fldPincode,
+                    "phone" = fldPhonenumber
+                },
+                "products" = productList
+            }>
+            <cfset arrayAppend(orderData, orderDetails)>
+        </cfloop>
+        <cfreturn orderData>
+    </cffunction>
+    
 </cfcomponent>

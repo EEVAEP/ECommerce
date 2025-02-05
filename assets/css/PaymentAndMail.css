@@ -31,3 +31,53 @@
 .buttonSuccess:hover {
     background: #0056b3;
 }
+
+/* Order History */
+.historyContainer { 
+    width: 80%;
+    margin: auto;
+    padding: 20px; 
+}
+.historysearch-box {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.historySearch-box input {
+    padding: 10px;
+    width: 60%;
+}
+.historySearch-box button {
+    padding: 10px; background: green;
+    color: white; border: none; cursor: pointer;
+ }
+.orderHistory-card {
+    background: white; padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 5px gray;
+ }
+.orderHistory-header {
+    background: #218838;
+    color: white;
+    padding: 10px;
+    font-size: 18px;
+    border-radius: 5px;
+}
+.orderHistory-details {
+    display: flex;
+    margin-top: 10px; 
+}
+.orderHistory-image {
+    width: 120px;
+    height: auto; 
+}
+.orderHistory-info {
+    margin-left: 20px; 
+}
+.historyTotal-cost {
+    font-weight: bold;
+    color: red; 
+}
+.shipping {
+    margin-top: 10px; 
+}

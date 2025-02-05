@@ -71,7 +71,7 @@ $(document).ready(function () {
 				console.log(data);	
 			 	if(data.length === 0){
 			 		$('#createPaymentModal').modal('hide');
-                    window.location.href = "PaymentAndMail.cfm"
+                    window.location.href = "PaymentSuccessful.cfm"
 	            }
 			 	else{
 			 		addOnError(data);
