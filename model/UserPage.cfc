@@ -559,7 +559,7 @@
         <cfelseif arguments.cardNumber NEQ local.cardCode>
             <cfset arrayAppend(local.errors, "*Enter a valid Card Number")>
         <cfelse>
-            <cfset arguments['cardNumber'] = "7891">
+            <cfset arguments['cardNumber'] = "8912">
 		</cfif>
 
         <!-----   cvv    ---->
@@ -598,55 +598,69 @@
             <cfset local.totalPrice = local.getCartProducts.priceWithTax>
             <cfset local.totalTax = local.getCartProducts.totalTax>
         </cfif>
-        <cfquery name="local.qryInsertOrderDetails" result="local.createOrderTableResult" datasource = "#application.datasource#">
-            INSERT INTO tblOrder 
-                (fldOrder_ID,
-                fldOrderId,
-                fldAddressId,
-                fldTotalPrice,
-                fldTotalTax,
-                fldPhonenumber,
-                fldOrderDate,
-                fldCardPart)
-            VALUES 
-                (
-                    <cfqueryparam value="# local.Order_ID#" cfsqltype="cf_sql_varchar">,
-                    <cfqueryparam value="#session.userid#" cfsqltype="cf_sql_integer">,
-                    <cfqueryparam value="#local.decryptedId#" cfsqltype="cf_sql_varchar" >,
+        <cftry>
+            <cftransaction action="begin">
+                <cfquery name="local.qryInsertOrderDetails" result="local.createOrderTableResult" datasource = "#application.datasource#">
+                    INSERT INTO tblOrder 
+                        (fldOrder_ID,
+                        fldOrderId,
+                        fldAddressId,
+                        fldTotalPrice,
+                        fldTotalTax,
+                        fldPhonenumber,
+                        fldOrderDate,
+                        fldCardPart)
+                    VALUES 
+                        (
+                            <cfqueryparam value="# local.Order_ID#" cfsqltype="cf_sql_varchar">,
+                            <cfqueryparam value="#session.userid#" cfsqltype="cf_sql_integer">,
+                            <cfqueryparam value="#local.decryptedId#" cfsqltype="cf_sql_varchar" >,
+                            <cfif structKeyExists(arguments, "productId") AND structKeyExists(arguments, "quantity") AND NOT arguments.productId EQ "undefined">
+                                <cfqueryparam value="#arguments.totalPrice#" cfsqltype="cf_sql_varchar" >,
+                                <cfqueryparam value="#arguments.totalTax#" cfsqltype="cf_sql_varchar" >,
+                            <cfelse>
+                                <cfqueryparam value="#local.totalPrice#" cfsqltype="cf_sql_varchar" >,
+                                <cfqueryparam value="#local.totalTax#" cfsqltype="cf_sql_varchar" >,
+                            </cfif>
+                            <cfqueryparam value="#local.phoneNumber#" cfsqltype="cf_sql_varchar" >,
+                            <cfqueryparam value = "#now()#" cfsqltype = "cf_sql_date" >,
+                            <cfqueryparam value="#arguments.cardNumber#" cfsqltype="cf_sql_varchar" >
+                        )
+                </cfquery>
+                <cfif local.createOrderTableResult.recordCount EQ 1>
                     <cfif structKeyExists(arguments, "productId") AND structKeyExists(arguments, "quantity") AND NOT arguments.productId EQ "undefined">
-                        <cfqueryparam value="#arguments.totalPrice#" cfsqltype="cf_sql_varchar" >,
-                        <cfqueryparam value="#arguments.totalTax#" cfsqltype="cf_sql_varchar" >,
-                    <cfelse>
-                        <cfqueryparam value="#local.totalPrice#" cfsqltype="cf_sql_varchar" >,
-                        <cfqueryparam value="#local.totalTax#" cfsqltype="cf_sql_varchar" >,
+                        <cfset local.orderAddResult = addOrderItems(
+                            orderId = local.Order_ID,
+                            productId = arguments.productId,
+                            quantity = arguments.quantity,
+                            unitPrice = arguments.unitPrice,
+                            unitTax = arguments.unitTax
+                        )>
+                    <cfelse>    
+                        <cfset local.orderAddResult = addOrderItems(
+                            orderId = local.Order_ID
+                        )>
+                        <cfif local.orderAddResult EQ "success">
+                            <cfquery datasource = "#application.datasource#">
+                                DELETE 
+                                FROM tblCart
+                                WHERE
+                                    fldUserId = <cfqueryparam value="#session.userid#" cfsqltype="cf_sql_integer">
+                            </cfquery>
+                        </cfif>
                     </cfif>
-                    <cfqueryparam value="#local.phoneNumber#" cfsqltype="cf_sql_varchar" >,
-                    <cfqueryparam value = "#now()#" cfsqltype = "cf_sql_date" >,
-                    <cfqueryparam value="#arguments.cardNumber#" cfsqltype="cf_sql_varchar" >
-                )
-        </cfquery>
-        <cfif local.createOrderTableResult.recordCount EQ 1>
-            <cfif structKeyExists(arguments, "productId") AND structKeyExists(arguments, "quantity") AND NOT arguments.productId EQ "undefined">
-                <cfset local.orderAddResult = addOrderItems(
-                    orderId = local.Order_ID,
-                    productId = arguments.productId,
-                    quantity = arguments.quantity,
-                    unitPrice = arguments.unitPrice,
-                    unitTax = arguments.unitTax
-                )>
-            <cfelse>    
-                <cfset local.orderAddResult = addOrderItems(
-                    orderId = local.Order_ID
-                )>
-            </cfif>
-        </cfif>
-            
-                
-                
-    
+                    <cfset local.sendMail = application.modelOrderPage.sendMailToUserAddress(orderId = local.Order_ID)>
+                </cfif>
+            <cftransaction action="commit">
+            <cfcatch>
+                <cftransaction action="rollback">
+                <cfset local.errorMessage = "Error occurred: " & cfcatch.message>
+                <cflog file="payment_errors" type="error" text="#local.errorMessage#">
+            </cfcatch>
+          </cftry>
     </cffunction>
 
-    <cffunction name="addOrderItems" access="public">
+    <cffunction name="addOrderItems" access="public" returntype="any">
         <cfargument name="orderId" type="string" required="true">
         <cfargument name="productId" type="string" required="false">
         <cfargument name="quantity" type="numeric" required="false">
@@ -673,6 +687,7 @@
             </cfquery>
         <cfelse>
             <cfset local.getCartProducts = application.modelUserPage.getCartProductsList()>
+            
             <cfloop query="local.getCartProducts">
                 <cfquery name="local.qryOrderCartItemsTable" datasource = "#application.datasource#" >
                     INSERT INTO tblorderItems
@@ -691,16 +706,8 @@
                         )
                 </cfquery>
             </cfloop>
-            <!---<cfif local.qryOrderCartItemsTable.recordCount GT 0>
-                <cfquery datasource = "#application.datasource#">
-        			DELETE 
-				    FROM tblCart
-                    WHERE
-                        fldUserId = <cfqueryparam value="#session.userid#" cfsqltype="cf_sql_integer">
-                </cfquery>
-            </cfif>--->
+            <cfreturn "success">
         </cfif>
-            
     </cffunction>
 
 </cfcomponent>

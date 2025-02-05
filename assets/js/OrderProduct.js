@@ -71,8 +71,8 @@ $(document).ready(function () {
 				console.log(data);	
 			 	if(data.length === 0){
 			 		$('#createPaymentModal').modal('hide');
-			 		location.reload();
-			 	}
+                    window.location.href = "PaymentAndMail.cfm"
+	            }
 			 	else{
 			 		addOnError(data);
 			 	}

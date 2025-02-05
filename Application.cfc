@@ -12,6 +12,7 @@
         <cfset application.userLoginService = createObject("component","model.registerAndLogin")>
 		<cfset application.modelAdminCtg = createObject("component","model.AdminCategory")>
 		<cfset application.modelUserPage = createObject("component","model.UserPage")>
+        <cfset application.modelOrderPage = createObject("component","model.OrderPage")>
         <cfset application.datasource = "shoppingcart">         
         <cfreturn true>
     </cffunction>
