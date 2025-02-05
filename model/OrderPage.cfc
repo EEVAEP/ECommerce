@@ -1,5 +1,4 @@
 <cfcomponent>
-
     <cffunction  name="getOrderedProductsDetails" access="public" returntype="query">
         <cfargument name="orderId" type="string" required="true">
 
@@ -27,7 +26,7 @@
                 tblorderitems AS OI
             INNER JOIN 
                 tblproduct AS P
-             ON 
+            ON 
                 P.fldProduct_ID = OI.fldProductId
             INNER JOIN 
                 tblOrder AS O 
@@ -35,7 +34,7 @@
                 O.fldOrder_ID  = OI.fldOrderId
             INNER JOIN 
                 shoppingcart.tblAddress AS A
-             ON 
+            ON 
                 A.fldAddress_ID = O.fldAddressId
             WHERE
                 O.fldOrderId  = <cfqueryparam value = "#session.userid#" cfsqltype = "cf_sql_integer">
@@ -61,11 +60,9 @@
         <cfset local.userDetails = application.modelUserPage.getUserProfileDetails()>
         <cfset local.userMail = local.userDetails.fldEmail>
         <cfset local.payableAmount = local.displayOrderedItems.fldTotalTax  + local.displayOrderedItems.fldTotalPrice>
-       
         <cfif local.displayOrderedItems.recordCount GT 0>
             <cfset local.orderTotal = local.displayOrderedItems.fldTotalPrice>
             <cfset local.orderTax = local.displayOrderedItems.fldTotalTax>
-            
             <cfset local.emailBody = "<h2>Thank you for your purchase!</h2>">
             <cfset local.emailBody &= "<p>Order Date: <strong>#local.displayOrderedItems.fldOrderDate#</strong></p>">
             <cfset local.emailBody &= "<p>Your Order ID: <strong>#local.displayOrderedItems.fldOrderId#</strong></p>">
@@ -87,20 +84,15 @@
                                             <td>#local.displayOrderedItems.fldTax#</td>
                                         </tr>">
             </cfloop>
-
             <cfset local.emailBody &= "</table>">
             <cfset local.emailBody &= "<p><strong>Total Price:</strong> #local.displayOrderedItems.fldTotalPrice#</p>">
             <cfset local.emailBody &= "<p><strong>Total Tax:</strong> #local.displayOrderedItems.fldTotalTax#</p>">
             <cfset local.emailBody &= "<p><strong>Payable Amount:</strong> #local.payableAmount#</p>">
             <cfset local.emailBody &= "<p>We appreciate your business!</p>">
             
-            
             <cfmail to="#local.userMail#" from="eevaparayil7@gmail.com" subject="Your Order Confirmation - #local.displayOrderedItems.fldOrderId#" type="html">
                 #local.emailBody#
             </cfmail>
     </cfif>
     </cffunction>
-
-
-
 </cfcomponent>
