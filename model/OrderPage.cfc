@@ -59,7 +59,7 @@
         <cfset local.displayOrderedItems = application.modelOrderPage.getOrderedProductsDetails(orderId = arguments.orderId)>
         <cfset local.userDetails = application.modelUserPage.getUserProfileDetails()>
         <cfset local.userMail = local.userDetails.fldEmail>
-        <cfset local.payableAmount = local.displayOrderedItems.fldTotalTax  + local.displayOrderedItems.fldTotalPrice>
+        <cfset local.payableAmount = local.displayOrderedItems.fldTotalPrice>
         <cfif local.displayOrderedItems.recordCount GT 0>
             <cfset local.orderTotal = local.displayOrderedItems.fldTotalPrice>
             <cfset local.orderTax = local.displayOrderedItems.fldTotalTax>
@@ -85,8 +85,6 @@
                                         </tr>">
             </cfloop>
             <cfset local.emailBody &= "</table>">
-            <cfset local.emailBody &= "<p><strong>Total Price:</strong> #local.displayOrderedItems.fldTotalPrice#</p>">
-            <cfset local.emailBody &= "<p><strong>Total Tax:</strong> #local.displayOrderedItems.fldTotalTax#</p>">
             <cfset local.emailBody &= "<p><strong>Payable Amount:</strong> #local.payableAmount#</p>">
             <cfset local.emailBody &= "<p>We appreciate your business!</p>">
             
@@ -113,18 +111,34 @@
                 A.fldState,
                 A.fldPincode,
                 A.fldPhonenumber,
+                A.fldFirstName,
                 O.fldOrderDate,
-                O.fldCardPart
+                O.fldCardPart,
+                I.fldImageFileName
             FROM 
                 tblorderitems AS OI
             INNER JOIN 
-                tblproduct AS P ON P.fldProduct_ID = OI.fldProductId
+                tblproduct AS P 
+            ON 
+                P.fldProduct_ID = OI.fldProductId
             INNER JOIN 
-                tblOrder AS O ON O.fldOrder_ID = OI.fldOrderId
+                tblOrder AS O 
+            ON
+                O.fldOrder_ID = OI.fldOrderId
             INNER JOIN 
-                shoppingcart.tblAddress AS A ON A.fldAddress_ID = O.fldAddressId
+                tblAddress AS A 
+            ON 
+                A.fldAddress_ID = O.fldAddressId
+            INNER JOIN 
+                tblproductimages AS I 
+            ON 
+                I.fldProductId = OI.fldProductId
             WHERE
                 O.fldOrderId = <cfqueryparam value="#session.userid#" cfsqltype="cf_sql_integer">
+            AND 
+                I.fldDefaultImage = 1
+            AND 
+                I.fldActive = 1
             ORDER BY 
                 O.fldOrderDate DESC
         </cfquery>
@@ -138,18 +152,19 @@
                     "productId" = local.qryOrderHistory.idProduct,
                     "quantity" = local.qryOrderHistory.fldQuantity,
                     "price" = local.qryOrderHistory.fldPrice,
-                    "tax" = local.qryOrderHistory.fldTax
+                    "tax" = local.qryOrderHistory.fldTax,
+                    "productImage" = local.qryOrderHistory.fldImageFileName,
+                    "quantity" =  local.qryOrderHistory.fldQuantity
                 }>
                 <cfset arrayAppend(productList, productData)>
-                
             </cfloop>
-
             <cfset orderDetails = {
                 "orderId" = fldOrderId,
                 "orderDate" = fldOrderDate,
                 "totalPrice" = fldTotalPrice,
                 "totalTax" = fldTotalTax,
                 "address" = {
+                    "fname" = fldFirstName,
                     "line1" = fldAddressLine1,
                     "line2" = fldAddressLine2,
                     "city" = fldCity,
@@ -163,5 +178,4 @@
         </cfloop>
         <cfreturn orderData>
     </cffunction>
-    
 </cfcomponent>

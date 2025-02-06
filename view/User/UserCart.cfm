@@ -1,14 +1,11 @@
 
 <cfparam name="url.productId" default="">
-
-
 <cfset variables.NavCategory = application.modelAdminCtg.getCategoryList()>
 <cfset variables.displayUserAddress = application.modelUserPage.getUserAddress()>
 <cftry>
     <cfif (len(url.productId) EQ 0) AND structKeyExists(session, "userid") AND structKeyExists(session, "roleid")>
         <cfset variables.displayCartDetails = application.modelUserPage.getCartProductsList()>
         <cfset variables.getCartcountQuery = application.modelUserPage.getCartProductsCount()>
-    
     <cfelseif structKeyExists(url, "productId") AND (len(url.productId) NEQ 0) AND structKeyExists(session, "userid") AND structKeyExists(session, "roleid")>
         <cfset variables.createCartPrdQuery = application.modelUserPage.createCartProducts(productId = url.productId)>
         <cfif variables.createCartPrdQuery EQ "success">
@@ -18,16 +15,13 @@
     <cfelse>
         <cfset session.productId = url.productId>
         <cflocation  url="../../view/Login.cfm" addtoken="false">
-    
     </cfif>
-
     <cfif structKeyExists(form, "selectPaymentButton")>
         <cflocation url="PaymentDetailsPage.cfm?addressId=#form.selectedAddress#" addtoken="no">
     </cfif>
-    
-<cfcatch>
-    <cfdump var="#cfcatch#">
-</cfcatch>
+    <cfcatch>
+        <cfdump var="#cfcatch#">
+    </cfcatch>
 </cftry>
 
 

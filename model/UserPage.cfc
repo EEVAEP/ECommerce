@@ -97,10 +97,10 @@
                 I.fldDefaultImage,
                 I.fldImageFileName,
                 C.fldQuantity,
-                ((P.fldPrice + (P.fldPrice * (P.fldTax / 100))) * C.fldQuantity) AS priceWithTax,
+                (P.fldPrice + (P.fldPrice * (P.fldTax / 100))) * C.fldQuantity AS priceWithTax,
                 SUM(P.fldPrice * C.fldQuantity) AS actualPrice,
-                SUM((fldPrice * (fldTax / 100)) * C.fldQuantity) AS totalTax,
-                SUM((P.fldPrice + (P.fldPrice * (P.fldTax / 100))) * C.fldQuantity) AS totalPrice
+                fldPrice * (fldTax / 100) * C.fldQuantity AS totalTax,
+                P.fldPrice + (P.fldPrice * (P.fldTax / 100)) * C.fldQuantity AS totalPrice
             FROM 
                 tblproduct AS P
             INNER JOIN 
@@ -595,8 +595,12 @@
         <cfset local.Order_ID = createUUID()>
         <cfif arguments.productId EQ "undefined">
             <cfset local.getCartProducts = application.modelUserPage.getCartProductsList()>
-            <cfset local.totalPrice = local.getCartProducts.priceWithTax>
-            <cfset local.totalTax = local.getCartProducts.totalTax>
+            <cfset local.totalPrice = 0>
+            <cfset local.totalTax = 0>
+            <cfloop query="local.getCartProducts">
+                <cfset local.totalPrice =  local.totalPrice + local.getCartProducts.totalPrice>
+                <cfset local.totalTax = local.totalTax + local.getCartProducts.totalTax>
+            </cfloop>
         </cfif>
         <cftry>
             <cftransaction action="begin">

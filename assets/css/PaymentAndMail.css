@@ -33,51 +33,99 @@
 }
 
 /* Order History */
-.historyContainer { 
+.historyContainer {
     width: 80%;
-    margin: auto;
-    padding: 20px; 
+    margin: 20px auto;
+    background: #d5dfcc;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
-.historysearch-box {
-    text-align: center;
-    margin-bottom: 20px;
-}
-.historySearch-box input {
-    padding: 10px;
-    width: 60%;
-}
-.historySearch-box button {
-    padding: 10px; background: green;
-    color: white; border: none; cursor: pointer;
- }
 .orderHistory-card {
-    background: white; padding: 20px;
+    background: #e8f5e9;
+    padding: 15px;
     margin-bottom: 20px;
     border-radius: 8px;
-    box-shadow: 0px 0px 5px gray;
- }
+}
 .orderHistory-header {
-    background: #218838;
-    color: white;
-    padding: 10px;
-    font-size: 18px;
+   
+    font-size: 16px;
+}
+.productHistory-card {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+}
+.productHistory-card img {
+    width: 100px;
+    height: auto;
+    margin-right: 15px;
+    border-radius: 8px;
+}
+.productHistory-info {
+    flex-grow: 1;
+    
+}
+.productHistory-info p{
+   
+    font-size: 9px;
+}
+.priceHistory {
+    color: red;
+    
+}
+.totalHistory-price {
+    font-size: 17px;
+    font-weight: bold;
+    text-align: right;
+    margin-top: 10px;
+    color: red;
+}
+.searchHistory-bar {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+.searchHistory-bar input {
+    padding: 8px;
+    width: 250px;
+    border: 1px solid #ddd;
     border-radius: 5px;
 }
-.orderHistory-details {
-    display: flex;
-    margin-top: 10px; 
+.searchHistory-bar button {
+    padding: 8px 15px;
+    background: green;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    margin-left: 5px;
+    cursor: pointer;
 }
-.orderHistory-image {
-    width: 120px;
-    height: auto; 
+
+.fa-file-pdf {
+    color: red;
+    font-size: 18px; 
+    
 }
-.orderHistory-info {
-    margin-left: 20px; 
+.btn-outline-danger {
+    margin-left: 250px;
+    color: red;
+    background: transparent;
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
 }
-.historyTotal-cost {
-    font-weight: bold;
-    color: red; 
+
+.btn-outline-danger:hover {
+    background: rgb(214, 183, 183);
+    color: white;
 }
-.shipping {
-    margin-top: 10px; 
+
+.fa-indian-rupee-sign {
+    
+    font-size: 13px; 
+    
 }

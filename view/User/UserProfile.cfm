@@ -3,12 +3,9 @@
 <cfset variables.displayUserDetailsQry = application.modelUserPage.getUserProfileDetails()>
 <cfset variables.displayUserAddressQry = application.modelUserPage.getUserAddress()>
 
-
 <!DOCTYPE html>
 <html lang="en">
-
 <body>
-
     <div class="user-container">
         <div class="user-header">
             <div class="user-icon">
@@ -115,10 +112,11 @@
                 Add New Address
             </button>
 
-             <button class="btn btn-outline-primary">Order Details</button>
+            <button class="btn btn-outline-primary"
+                onclick="window.location.href='OrderHistory.cfm'">
+                Order Details
+            </button>
         </div>
-
-        
         <div class="modal fade" 
 			id="deleteAddressConfirmModal" 
             data-bs-backdrop="static" 
@@ -144,13 +142,6 @@
 		</div>
     </div>
     
-
-
-           
-        
-    
-
-
     <cfinclude template="footer.cfm">
 </body>
 </html>
