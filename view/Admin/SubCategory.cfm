@@ -62,12 +62,12 @@
 
                                 <div class="modal-body">
                                     <form method="post" id="subCategoryForm" action="">
-                                        <cfset categoryNameQuery = application.modelAdminCtg.getCategoryName()>
+                                        <cfset categoryNameQuery = application.modelAdminCtg.getCategoryList()>
                                         <label for="categoryName">Category Name</label>
                         				<select class="form-control" id="categoryName" name="categoryName">
                                             
                             				<cfoutput query="categoryNameQuery">
-                        						<option value="#categoryNameQuery.fldCategory_ID#">#categoryNameQuery.fldCategoryName#</option>
+                        						<option value="#categoryNameQuery.idCategory#">#categoryNameQuery.fldCategoryName#</option>
 											</cfoutput>
                         				</select>
                                         <div class="form-group pt-1 ">
@@ -80,7 +80,7 @@
                                             <button type="button" name="saveSubCategoryButton" class="btn btn-success mb-3" id="saveSubCategoryButton">Submit</button>
                                             <button type="button" name="editSubCategoryButton" class="btn btn-success mb-3" id="editSubCategoryButton">Update</button>
                                         </div>
-                                        <input type="hidden" id="categoryId" name="categoryId">
+                                        
                                         <div id="errorMessages"></div>
                                     </form>
                                 </div>
@@ -94,8 +94,7 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-									
-                        <cfoutput><th style="border: none;">#subCategoryListQuery.fldCategoryName#</th></cfoutput>
+						<cfoutput><th style="border: none;">#subCategoryListQuery.fldCategoryName#</th></cfoutput>
                     </tr>
                 </thead>
                 <tbody>
@@ -156,13 +155,8 @@
         		</div>
     		</div>
 		</div>
-
-
     </div>
     
-       
-    
-
     <script src="../../assets/js/jquery.js"></script>
     
     <script src="../../assets/js/bootstrap.min.js"></script>

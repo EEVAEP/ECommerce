@@ -11,6 +11,7 @@
         <cfif structKeyExists(user, "username") AND user.username EQ form.username>
 		    <cfset session.username = user.username>
 		    <cfset session.userid = user.userid>
+            <cfset session.roleid = user.role>
             <cflocation url="dashboard.cfm" addtoken="false">
             
 		<cfelse>

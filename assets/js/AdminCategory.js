@@ -1,8 +1,6 @@
 $(document).ready(function() {
-
 	var categoryId;
 	
-
 	$('#createCategoryBtn').on('click',function(){
 		document.getElementById("createCategoryLabel").innerText = "Add Categories";
 		$('#categoryForm').trigger('reset');

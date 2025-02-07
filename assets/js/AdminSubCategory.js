@@ -60,7 +60,6 @@ $(document).ready(function() {
 		subCategoryId = $(this).data('id');
 		console.log(subCategoryId);
 
-        
         $.ajax({
 			url:'../../model/AdminCategory.cfc?method=getSubCategoryById',
 			type:'POST',
@@ -198,8 +197,9 @@ $(document).on("click", ".view", function () {
     const subCategoryId = $(this).data("id");
     
     if (subCategoryId) {
-        window.location.href = `productPage.cfm?categoryId=${encodeURIComponent(subCategoryId)}`;
+        window.location.href = `ProductPage.cfm?subCategoryId=${encodeURIComponent(subCategoryId)}`;
     } else {
         alert("Category ID is missing.");
     }
 });
+
