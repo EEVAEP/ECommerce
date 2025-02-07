@@ -7,30 +7,24 @@
     </cfcatch>
 </cftry>
  
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Admin - Dashboard</title>
-
         <link href="https://fonts.googleapis.com/css2?family=Pacifico&amp;display=swap" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" 
             integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" 
             crossorigin="anonymous" referrerpolicy="no-referrer"/>
-
-    
-    
         <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
         <link rel="stylesheet" href="../../assets/css/LoginStyle.css">
         <link rel="stylesheet" href="../../assets/css/AdminStyle.css">
         <link rel="stylesheet" href="../../assets/css/AdminDashboard.css">
     </head>
     <body>
-
         <header class="d-flex align-items-center bg-dark text-white py-3 px-4">
             <i class="fas fa-shopping-cart logo-icon me-2"></i>
             <span class="brand fs-4">QuickCart</span>
@@ -42,19 +36,16 @@
         <div class="container mt-1">
             <h3 class="text-center custom-title">Admin Dashboard</h3>
         </div>
-
         <div class="container d-flex justify-content-center">
             <div class="card shadow-lg p-4 mb-5 mt-1" style="width: 50rem;">
                 <div class="d-flex justify-content-between align-items-center mb-1">
                     <h4>Product</h4>
-
                     <button class="btn btn-success text-white add"
                         id="createProductBtn"
                         data-bs-toggle="modal" 
                         data-bs-target="#createProductModal">
                         <i class="bi bi-plus-circle"></i>
                     </button>
-
                     <div class="modal fade" 
 				        id="createProductModal"
                         data-bs-backdrop="static" 
@@ -67,7 +58,6 @@
             					<div class="modal-header">
                 					<h5 class="modal-title mx-auto d-block" id="createProductLabel">Add Product</h5>
                                 </div>
-
                                 <div class="modal-body">
                                     <form method="post" id="productForm" action="" enctype="multipart/form-data">
                                         <div class="form-group pt-1 ">
@@ -89,12 +79,10 @@
 											    </cfoutput>
                         				    </select>
                                         </div>
-
                                         <div class="form-group pt-1 ">
                                             <label for="productName" class="form-label">Product Name</label>
                         					<input type="text" class="form-control" id="productName" name="productName" placeholder="ProductName">
                                         </div>
-
                                         <div class="form-group pt-1 ">
                                             <cfset brandNameQuery = application.modelAdminCtg.getProductBrandName ()>
                                             <label for="productBrand" class="form-label">productBrand</label>
@@ -104,39 +92,31 @@
 											    </cfoutput>
                         				    </select>
                                         </div>
-
                                         <div class="form-group pt-1 ">
                                             <label for="productDescription" class="form-label">Product Description</label>
                         					<input type="text" class="form-control" id="productDescription" name="productDescription" placeholder="productDescription">
                                         </div>
-
                                         <div class="form-group pt-1 ">
                                             <label for="productPrice" class="form-label">Product Price</label>
                         					<input type="number" class="form-control" id="productPrice" name="productPrice" placeholder="productPrice">
                                         </div>
-
                                         <div class="form-group pt-1 ">
                                             <label for="productPrice" class="form-label">Product Tax</label>
                         					<input type="number" class="form-control" id="productTax" name="productTax" placeholder="productTax">
                                         </div>
-
                                         <div class="form-group col-md-6 pt-2">
                         					<label for="productImg">Product Image</label>
                         					<input type="file" class="form-control-file" id="productImg" name="productImg[]" multiple>
                     					</div>
-
-
                                         <div class = "row mb-3 mt-3" id = "product-img-container">
                                             <ul class ='product-image-list' id = "img-list"></ul>
                                             
                                         </div>
-
                                         <div class="form-group pt-1 mt-3">
                                             <button type="button" class="btn btn-secondary mb-3" data-bs-dismiss="modal">Cancel</button>
                                             <button type="button" name="saveProductButton" class="btn btn-success mb-3" id="saveProductButton">Submit</button>
                                             <button type="button" name="editProductButton" class="btn btn-success mb-3" id="editProductButton">Update</button>
                                         </div>
-                                        
                                         <div id="errorMessages"></div>
                                     </form>
                                 </div>
@@ -144,7 +124,6 @@
                         </div>
                     </div>
                 </div>
-        
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
@@ -161,7 +140,6 @@
 									        alt="Photo"		
 									        width="30" height="30">
         					        </td>
-
                                     <td>#productListQuery.fldProductName#</td>
                                     <td>#productListQuery.fldBrandName#</td>
                                     <td>#productListQuery.fldPrice#</td>
@@ -194,7 +172,6 @@
                         </tbody>
                     </table>
                 </div>
-
                 <div class="modal fade" 
 			        id="deleteProductConfirmModal" 
                     data-bs-backdrop="static" 
@@ -218,8 +195,7 @@
         		    </div>
     		    </div>
             </div>
-		    
-            <div class="modal fade" 
+		    <div class="modal fade" 
                 id="viewProductModal"
      	        data-bs-backdrop="static" 
                 data-bs-keyboard="false" 
@@ -261,23 +237,15 @@
                             			<div class="col-6 value" id="viewProductTax"></div>
                         			</div>	
                 				</div>
-            					
-        				    </div>
-
+            				</div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    
-
         <script src="../../assets/js/jquery.js"></script>
-    
         <script src="../../assets/js/bootstrap.min.js"></script>
 	    <script src="../../assets/js/bootstrap.bundle.min.js"></script>
         <script src="../../assets/js/AdminProduct.js"></script>
-        
-    
-
-    </body>
+</body>
 </html>

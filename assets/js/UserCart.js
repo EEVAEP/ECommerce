@@ -11,8 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
 				}
 		});
 	});
-
-    document.getElementById("confirmDeleteButton").addEventListener("click", function () {
+	document.getElementById("confirmDeleteButton").addEventListener("click", function () {
 		const productId = this.getAttribute("data-product-id");
 		console.log("Product ID from confirm button:", productId);
 
@@ -20,19 +19,15 @@ document.addEventListener("DOMContentLoaded", function () {
 				alert("Error: No product ID available for deletion.");
 				return;
 		}
-
 		$.ajax({
 			type: "POST",
 			url: "../../model/UserPage.cfc?method=deleteCartProduct",
     		data: { productId: productId },
 			dataType: "json",
-
 			success: function (response) {
 				console.log("AJAX response:", response);
 				if (response.STATUS == "success") {	
 					console.log("Deleting contact...");
-		
-				
 					const deleteModalElement = document.getElementById("deleteConfirmModal");
 					const deleteModal = bootstrap.Modal.getInstance(deleteModalElement);
 					if (deleteModal) {
@@ -51,16 +46,11 @@ document.addEventListener("DOMContentLoaded", function () {
             		} else {
                 		console.log("Cart item not found for deletion");
             		}
-				
 				} 
-			
 			}
 		});
-
 	});
-	
 });
-
 $(document).ready(function() {
 	var addressId;
 	var editUserId;
@@ -131,9 +121,7 @@ $(document).ready(function() {
 			 	console.log("Request Failed");
 			}
 		});
-
 	});
-
 	$('#createUserAddressBtn').on('click',function(){
 		document.getElementById("createUserAddressLabel").innerText = "Add New Address";
 		$('#userAddressForm').trigger('reset');
@@ -145,7 +133,6 @@ $(document).ready(function() {
 
 	$('#saveUserAddressButton').click(function(event) {
         event.preventDefault();
-        
         let firstName = $('#firstName');
 		let lastName = $('#lastName');
 		let addressLine1 = $('#addressLine1');
@@ -164,12 +151,10 @@ $(document).ready(function() {
 		formData.append('state', state.val());
 		formData.append('pincode', pincode.val());
 		formData.append('phoneNumber', phoneNumber.val());
-
-        for (let [key, value] of formData.entries()) {
+		for (let [key, value] of formData.entries()) {
             console.log(key + ':', value);
         }
-
-       $.ajax({
+		$.ajax({
 			url:'../../model/UserPage.cfc?method=validateUserProfileDetails',
 			type:'POST',
 			data:formData,
@@ -193,17 +178,14 @@ $(document).ready(function() {
 			}
 		});
 	});
-
 	/* Populate User Profle in Edit modal */
 	$(document).on('click', '.editAddress', function() {
 		document.getElementById('saveUserAddressButton').style.display="none";
 		document.getElementById("createUserAddressLabel").innerText = "Edit Address";
 		$('#editUserAddressButton').show();
 		$('#errorMessages').empty();
-
 		addressId = $(this).data('id');
 		console.log(addressId);
-
 		$.ajax({
 			url:'../../model/UserPage.cfc?method=getUserAddressById',
 			type:'POST',
@@ -211,8 +193,7 @@ $(document).ready(function() {
 				addressId:addressId
 			},
 			success:function(response){
-                
-				let data = JSON.parse(response);
+                let data = JSON.parse(response);
 				console.log(data);	
 				let firstName = data.DATA[0][1];
 				let lastName = data.DATA[0][2];
@@ -239,11 +220,9 @@ $(document).ready(function() {
 		});
 
 	});
-
 	/* Edit User Profile */
 	$('#editUserAddressButton').on('click',function(event){	
 		event.preventDefault();
-
 		var firstName = $('#firstName');
 		var lastName = $('#lastName');
 		var addressLine1 = $('#addressLine1');
@@ -263,12 +242,10 @@ $(document).ready(function() {
 		formData.append('pincode', pincode.val());
 		formData.append('phoneNumber', phoneNumber.val());
 		formData.append('addressId', addressId);
-		
 		for (let [key, value] of formData.entries()) {
             console.log(key + ':', value);
         }
-        
-		$.ajax({
+        $.ajax({
 			url:'../../model/UserPage.cfc?method=validateUserProfileDetails',
 			type:'POST',
 			data:formData,
@@ -291,16 +268,13 @@ $(document).ready(function() {
 			 	console.log("Request Failed");
 			}
 		});
-
 	});
 
 	/* Populate User Details in Edit modal */
 	$(document).on('click', '.editUser', function() {
 		$('#errorMessages').empty();
-
 		editUserId = $(this).data('id');
 		console.log(editUserId);
-
 		$.ajax({
 			url:'../../model/UserPage.cfc?method=getUserDetailsById',
 			type:'POST',
@@ -308,8 +282,7 @@ $(document).ready(function() {
 				editUserId:editUserId
 			},
 			success:function(response){
-                
-				let data = JSON.parse(response);
+                let data = JSON.parse(response);
 				console.log(data);	
 				let firstName = data.DATA[0][1];
 				let lastName = data.DATA[0][2];
@@ -320,19 +293,16 @@ $(document).ready(function() {
 				$('#lname').val(lastName);
 				$('#email').val(email);
 				$('#phone').val(phone);
-				
-			 },
+			},
 			 error:function(){
 			 	console.log("Request Failed");
 			}
 		});
 
 	});
-
 	/* Edit User Details */
 	$('#editUserDetailsButton').on('click',function(event){	
 		event.preventDefault();
-
 		var firstName = $('#fname');
 		var lastName = $('#lname');
 		var email = $('#email');
@@ -383,7 +353,6 @@ function addOnError(errors) {
         	$('#errorMessages').append('<div class="alert alert-danger">' + error + '</div>');
  	});
 }
-
 document.querySelectorAll(".deleteAddress").forEach(function(button) {
 	button.addEventListener("click", function() {
 			var addressId = this.getAttribute("data-id");
@@ -398,49 +367,44 @@ document.querySelectorAll(".deleteAddress").forEach(function(button) {
 });
 document.addEventListener("DOMContentLoaded", function () {
 	document.getElementById("confirmAddressDeleteButton").addEventListener("click", function () {
-	const addressId = this.getAttribute("data-address-id");
-	console.log("Address ID from confirm button:", addressId);
-
-	if (!addressId) {
-			alert("Error: No Address ID available for deletion.");
-			return;
-	}
-
-	$.ajax({
-		type: "POST",
-		url: "../../model/UserPage.cfc?method=deleteUserAddress",
-		data: { addressId: addressId },
-		dataType: "json",
-
-		success: function (response) {
-			console.log("AJAX response:", response);
-			if (response.STATUS == "success") {	
-				console.log("Deleting contact...");
-	
-			
-				const deleteModalElement = document.getElementById("deleteAddressConfirmModal");
-				const deleteModal = bootstrap.Modal.getInstance(deleteModalElement);
-				if (deleteModal) {
-						deleteModal.hide();
-				}
-				document.body.classList.remove('modal-open');
-				const backdrop = document.querySelector('.modal-backdrop');
-				if (backdrop) {
-					backdrop.remove();
-				}
-				const AddressItemToDelete = document.querySelector(`.address-card .deleteAddress[data-id="${addressId}"]`).closest('.address-card');
-            	if (AddressItemToDelete) {
-                	AddressItemToDelete.remove();
-                	console.log("Address item deleted:", AddressItemToDelete);
-					
-            	} else {
-                		console.log("Address item not found for deletion");
-            	}
-			
-			} 
-		
+		const addressId = this.getAttribute("data-address-id");
+		console.log("Address ID from confirm button:", addressId);
+		if (!addressId) {
+				alert("Error: No Address ID available for deletion.");
+				return;
 		}
+		$.ajax({
+			type: "POST",
+			url: "../../model/UserPage.cfc?method=deleteUserAddress",
+			data: { addressId: addressId },
+			dataType: "json",
+
+			success: function (response) {
+				console.log("AJAX response:", response);
+				if (response.STATUS == "success") {	
+					console.log("Deleting contact...");
+					const deleteModalElement = document.getElementById("deleteAddressConfirmModal");
+					const deleteModal = bootstrap.Modal.getInstance(deleteModalElement);
+					if (deleteModal) {
+							deleteModal.hide();
+					}
+					document.body.classList.remove('modal-open');
+					const backdrop = document.querySelector('.modal-backdrop');
+					if (backdrop) {
+						backdrop.remove();
+					}
+					const AddressItemToDelete = document.querySelector(`.address-card .deleteAddress[data-id="${addressId}"]`).closest('.address-card');
+					if (AddressItemToDelete) {
+						AddressItemToDelete.remove();
+						console.log("Address item deleted:", AddressItemToDelete);
+					} else {
+							console.log("Address item not found for deletion");
+					}
+				
+				} 
+			
+			}
+		});
 	});
-});
 
 });

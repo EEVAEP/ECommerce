@@ -208,20 +208,13 @@
         </cftry>
     </cffunction>
 <!---------------------------------User Profile Page functions------------------------------------------------------------- --->
-
+    
+    <!------ Stored Procedure ------>
     <cffunction name="getUserProfileDetails" access="public" returntype="any">
-        <cfquery name="local.qryGetUserDetails" datasource="#application.datasource#">
-            SELECT 
-                fldUser_ID,
-                fldFirstname, 
-                fldLastname,
-                fldEmail,
-                CONCAT(fldFirstname, ' ', fldLastname) AS fullname
-            FROM 
-                tblUser
-            WHERE 
-                fldUser_ID = <cfqueryparam value="#session.userid#" cfsqltype="cf_sql_integer">
-        </cfquery>
+        <cfstoredproc procedure="getUserProfileDetails" datasource="#application.datasource#">
+            <cfprocparam type="In" value="#session.userid#" cfsqltype="cf_sql_integer">
+            <cfprocresult name="local.qryGetUserDetails">
+        </cfstoredproc>
         <cfreturn local.qryGetUserDetails>
     </cffunction>
 
