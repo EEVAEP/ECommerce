@@ -1,4 +1,3 @@
-
 <cfif structKeyExists(url, "logOut")>
 	<cfset structDelete(session, "username")>
 	<cfset structDelete(session, "userid")>
@@ -16,8 +15,11 @@
             <cfif session.roleid EQ "1">
                 <cflocation url="../view/Admin/dashboard.cfm" addtoken="false">
             <cfelseif session.roleid EQ "2">
-                <cfif structKeyExists(session, "productId")>
+                <cfif structKeyExists(session, "productId") AND structKeyExists(session, "action") AND len(session.action) NEQ 0>
+                    <cfset structDelete(session, "action")>
                     <cflocation url="../view/User/UserCart.cfm?productId=#session.productId#" addtoken="false">
+                <cfelseif structKeyExists(session, "productId") AND NOT structKeyExists(session, "action")>
+                    <cflocation url="../view/User/UserProduct.cfm?productId=#session.productId#" addtoken="false">
                 <cfelse>
                     <cflocation url="../view/User/UserHome.cfm" addtoken="false">
                 </cfif>

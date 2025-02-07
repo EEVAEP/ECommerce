@@ -29,6 +29,7 @@
         <cfset local.hasRole = structKeyExists(session, 'roleid')>
         <cfset local.isUser = structKeyExists(session, 'userid')>
         <cfset local.productId = structKeyExists(url,"productId") ? url.productId : "">
+        <cfset local.action = structKeyExists(url,"action") ? url.action : "">
 
         <cfif (!local.hasRole AND !local.isUser AND (arrayFindNoCase(local.adminPages, local.currentPage) 
                 OR arrayFindNoCase(local.userPages, local.currentPage))) 
@@ -36,6 +37,9 @@
                 OR (!local.hasRole AND arrayFindNoCase(local.userPages, local.currentPage))>
             <cfif len(local.productId)>
                 <cfset session.productId = local.productId>
+            </cfif>
+            <cfif len(local.action)>
+                <cfset session.action = local.action>
             </cfif>
             <cflocation url = "../Login.cfm" addToken = "false">
         </cfif>

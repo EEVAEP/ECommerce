@@ -55,7 +55,7 @@
                     </div>
                     <cfset encryptedId = encrypt(variables.displaySingleProductQry.idProduct, application.encryptionKey, "AES", "Hex")>
                    <div class="product-item d-flex gap-2">
-                        <a href="UserCart.cfm?productId=#encryptedId#" class="btn btn-info btn-sm">Add To Cart</a>
+                        <a href="UserCart.cfm?action=buyToCart&productId=#encryptedId#" class="btn btn-info btn-sm">Add To Cart</a>
                         <button 
                             class="btn btn-success btn-sm me-2 orderNow"
                             id="orderNowBtn"
@@ -136,7 +136,7 @@
         </div>
     </div>
     <cfinclude template="footer.cfm">
-    
+
 	<script>
         $(document).ready(function() {
             $("#createUserAddressBtn").click(function() {

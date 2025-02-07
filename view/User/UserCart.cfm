@@ -14,6 +14,9 @@
        <cfset variables.getCartcountQuery = application.modelUserPage.getCartProductsCount()>
     <cfelse>
         <cfset session.productId = url.productId>
+        <cfif structKeyExists(url, "action")>
+            <cfset session.action = url.action>
+        </cfif>
         <cflocation  url="../../view/Login.cfm" addtoken="false">
     </cfif>
     <cfif structKeyExists(form, "selectPaymentButton")>
