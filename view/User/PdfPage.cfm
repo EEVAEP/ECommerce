@@ -13,10 +13,8 @@
             <cfheader name="Content-Disposition" value="attachment; filename=Order_#matchingOrder.orderId#.pdf">
             <cfheader name="Content-Type" value="application/pdf">
             <cfcontent type="application/pdf" reset="true">
-
             <cfdocument format="PDF" orientation="portrait">
                 <h1 style="text-align: center;">Order Details</h1>
-
                 <cfoutput>
                     <h2>Order ID: #matchingOrder.orderId#</h2>
                     <p><strong>Ordered On:</strong> #DateFormat(matchingOrder.orderDate, "mmm d yyyy")#</p>

@@ -24,7 +24,7 @@
         </cfif>
 
 		<cfset local.adminPages = ["dashboard.cfm", "productPage.cfm", "SubCategory.cfm"]>
-        <cfset local.userPages = ['UserCart.cfm','userOrder.cfm','userProfile.cfm']>
+        <cfset local.userPages = ['UserCart.cfm', 'UserProfile.cfm', 'PaymentDetailsPage.cfm', 'PaymentSuccessful.cfm']>
         <cfset local.currentPage = listLast(CGI.SCRIPT_NAME, '/')>
         <cfset local.hasRole = structKeyExists(session, 'roleid')>
         <cfset local.isUser = structKeyExists(session, 'userid')>

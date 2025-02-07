@@ -31,7 +31,6 @@
 .buttonSuccess:hover {
     background: #0056b3;
 }
-
 /* Order History */
 .historyContainer {
     width: 80%;
@@ -48,7 +47,6 @@
     border-radius: 8px;
 }
 .orderHistory-header {
-   
     font-size: 16px;
 }
 .productHistory-card {
@@ -65,15 +63,12 @@
 }
 .productHistory-info {
     flex-grow: 1;
-    
 }
 .productHistory-info p{
-   
     font-size: 9px;
 }
 .priceHistory {
     color: red;
-    
 }
 .totalHistory-price {
     font-size: 17px;
@@ -102,7 +97,6 @@
     margin-left: 5px;
     cursor: pointer;
 }
-
 .fa-file-pdf {
     color: red;
     font-size: 18px; 
@@ -118,14 +112,10 @@
     cursor: pointer;
     transition: 0.3s ease-in-out;
 }
-
 .btn-outline-danger:hover {
     background: rgb(214, 183, 183);
     color: white;
 }
-
-.fa-indian-rupee-sign {
-    
-    font-size: 13px; 
-    
+.fa-indian-rupee-sign { 
+    font-size: 13px;   
 }

@@ -37,7 +37,6 @@
         </cfcatch>
         </cftry>
     </cfif>
-    
     <cfinclude template="footer.cfm">
 </body>
 </html>

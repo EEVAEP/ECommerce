@@ -75,7 +75,6 @@
                                                 <th>Price</th>
                                                 <th>Tax</th>
                                             </tr>">
-            
             <cfloop query="local.displayOrderedItems">
                 <cfset local.emailBody &= "<tr>
                                             <td>#local.displayOrderedItems.fldProductName#</td>
@@ -87,7 +86,6 @@
             <cfset local.emailBody &= "</table>">
             <cfset local.emailBody &= "<p><strong>Payable Amount:</strong> #local.payableAmount#</p>">
             <cfset local.emailBody &= "<p>We appreciate your business!</p>">
-            
             <cfmail to="#local.userMail#" from="eevaparayil7@gmail.com" subject="Your Order Confirmation - #local.displayOrderedItems.fldOrderId#" type="html">
                 #local.emailBody#
             </cfmail>

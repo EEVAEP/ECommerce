@@ -1,15 +1,13 @@
 <cfinclude template = "Header.cfm">
+
 <cfif structKeyExists(url, "productId") AND structKeyExists(url, "addressId")>
     <cfset variables.displayOrderAddress = application.modelUserPage.getUserAddress(url.addressId)>
     <cfset variables.displayOrderedProducts = application.modelAdminCtg.getProductsList(productId = url.productId)>
 </cfif>
-
 <cfif structKeyExists(url, "addressId") AND NOT structKeyExists(url, "productId")>
     <cfset variables.displayOrderedCartProducts = application.modelUserPage.getCartProductsList()>
     <cfset variables.displayOrderCartAddress = application.modelUserPage.getUserAddress(url.addressId)>
 </cfif>
-
-
 <div class="orderContainer">
     <div class="order-summary">
         <div class="order-header">ORDER SUMMARY</div>
@@ -40,7 +38,6 @@
                     </cfoutput>
                 </cfif>
             </div>
-
             <cfif structKeyExists(variables, "displayOrderAddress")>
                 <div class="order-card">
                     <cfoutput query="variables.displayOrderedProducts">
@@ -68,11 +65,10 @@
                         <cfset variables.OrderTotalPrice = 0>
                         <cfset variables.OrderTotalPrice = variables.displayOrderedProducts.fldPrice +(variables.displayOrderedProducts.fldPrice * (variables.displayOrderedProducts.fldTax / 100))>
                         <p class="OrderAmount">Payable amount: <i class="fa-solid fa-indian-rupee-sign"></i><span class="payableAmount">#variables.OrderTotalPrice#</p>
-                        
                     </cfoutput>
                 </div>
             </cfif>
-            <!-------------------------------------------------Cart Bought Together----------------------- --->
+            <!---------------------------------------------------Cart Bought Together----------------------- --->
             <cfif structKeyExists(variables, "displayOrderCartAddress")>
                 <div class="order-container">
                     <cfoutput query="variables.displayOrderedCartProducts">
@@ -92,13 +88,11 @@
                     <cfset variables.cartActualPrice = 0>
                     <cfset variables.cartTotalTax = 0>
                     <cfset variables.cartTotalPrice = 0>
-
                     <cfoutput query="variables.displayOrderedCartProducts">
                         <cfset variables.itemActualPrice =variables.displayOrderedCartProducts.fldPrice *variables.displayOrderedCartProducts.fldQuantity>
                         <cfset variables.itemTotalTax = (variables.displayOrderedCartProducts.fldPrice * (variables.displayOrderedCartProducts.fldTax / 100)) *variables.displayOrderedCartProducts.fldQuantity>
                         <cfset variables.itemTotalPrice = variables.itemActualPrice + variables.itemTotalTax>
-
-                    <cfset variables.cartTotalPrice += variables.itemTotalPrice>
+                        <cfset variables.cartTotalPrice += variables.itemTotalPrice>
                     </cfoutput>
                     <cfoutput>
                         <p class="CartOrderAmount">Payable amount: <i class="fa-solid fa-indian-rupee-sign"></i>#variables.cartTotalPrice#</p>
@@ -120,43 +114,42 @@
         tabindex="-1" 
         aria-labelledby="createPaymentLabel" 
         aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title mx-auto d-block" id="createPaymentLabel">Payment Details</h5>
-                        </div>
-                        <div class="modal-body">
-                            <h6 class="fw-bold text-center">Card Details</h6>
-                            <form method="post" id="paymentForm" action="">
-                                <div class="border p-3 rounded">
-                                    <div class="mb-3">
-                                        <label for="cardNumber" class="form-label">Card Number</label>
-                                        <input type="number" name= "cardNumber" class="form-control" id="cardNumber" placeholder="000-000-000-00">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="cvv" class="form-label">CVV</label>
-                                        <input type="password" name= "cvv" class="form-control" id="cvv" placeholder="000">
-                                    </div>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title mx-auto d-block" id="createPaymentLabel">Payment Details</h5>
+                    </div>
+                    <div class="modal-body">
+                        <h6 class="fw-bold text-center">Card Details</h6>
+                        <form method="post" id="paymentForm" action="">
+                            <div class="border p-3 rounded">
+                                <div class="mb-3">
+                                    <label for="cardNumber" class="form-label">Card Number</label>
+                                    <input type="number" name= "cardNumber" class="form-control" id="cardNumber" placeholder="000-000-000-00">
                                 </div>
-                                <div class="form-group pt-1 mt-3">
-                                    <button type="button" class="btn btn-secondary mb-3" data-bs-dismiss="modal">Cancel</button>
-                                    <button type="submit" name="payButton" class="btn btn-success mb-3" id="payButton">Pay</button>
+                                <div class="mb-3">
+                                    <label for="cvv" class="form-label">CVV</label>
+                                    <input type="password" name= "cvv" class="form-control" id="cvv" placeholder="000">
                                 </div>
-                                <cfoutput>
-                                    <input type="hidden" name="addressId" value="#url.addressId#" id="addressId">
-                                    <cfif structKeyExists(url, "productId")>
-                                        <input type="hidden" name="productId" value="#url.productId#" id="productId">
-                                    </cfif>
-                                </cfoutput>
-                                <div id="errorMessages"></div>
-                            </form>
-                        </div>
+                            </div>
+                            <div class="form-group pt-1 mt-3">
+                                <button type="button" class="btn btn-secondary mb-3" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" name="payButton" class="btn btn-success mb-3" id="payButton">Pay</button>
+                            </div>
+                            <cfoutput>
+                                <input type="hidden" name="addressId" value="#url.addressId#" id="addressId">
+                                <cfif structKeyExists(url, "productId")>
+                                    <input type="hidden" name="productId" value="#url.productId#" id="productId">
+                                </cfif>
+                            </cfoutput>
+                            <div id="errorMessages"></div>
+                        </form>
                     </div>
                 </div>
             </div>
+        </div>
     </div>
 </div>
-
 <cfinclude template="footer.cfm">
 
 

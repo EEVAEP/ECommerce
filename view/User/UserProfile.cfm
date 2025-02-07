@@ -81,13 +81,11 @@
                             <strong>#variables.displayUserAddressQry.fldFirstName#</strong>, 
                             <span>#variables.displayUserAddressQry.fldPhonenumber#</span>
                         </div>
-                
                         <div class="address-line">
                             #variables.displayUserAddressQry.fldAddressLine1#,
                             #variables.displayUserAddressQry.fldAddressLine2#,
                             #variables.displayUserAddressQry.fldCity#
                         </div>
-                
                         <div class="address-line">
                             #variables.displayUserAddressQry.fldState# - #variables.displayUserAddressQry.fldPincode#
                         </div>
@@ -111,7 +109,6 @@
                 data-bs-target="#createUserAddressModal">
                 Add New Address
             </button>
-
             <button class="btn btn-outline-primary"
                 onclick="window.location.href='OrderHistory.cfm'">
                 Order Details
@@ -141,7 +138,6 @@
     		</div>
 		</div>
     </div>
-    
     <cfinclude template="footer.cfm">
 </body>
 </html>

@@ -43,14 +43,11 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 <body>
-
     <header class="d-flex align-items-center bg-dark text-white py-3 px-3">
         <i class="fas fa-shopping-cart logo-icon me-2"></i>
         <a href="UserHome.cfm" class="text-decoration-none">
             <span class="brand fs-4" style="color:rgb(248, 248, 248); cursor: pointer;">QuickCart</span>
         </a>
-
-
         <div class="ms-3 flex-grow-1">
             <form action="SearchResults.cfm" method="get">
                 <div class="input-group">
@@ -61,8 +58,6 @@
                 </div>
             </form>
         </div>
-
-        
         <div class="d-flex justify-content gap-2">
             <a href="UserProfile.cfm"><i class="fa-solid fa-user profile-icon"></i></a>
             <a href = "#" class="cartNameAnchor"><p class="cartName">
@@ -76,9 +71,7 @@
             </p></a>
             <a href="../Login.cfm?logOut" class="btn btn-light">LogOut</a>
         </div>
-
     </header>
-
     <nav class="navbar navbar-expand-lg navbar-custom py-1 px-1">
         <div class="container-fluid">
             <div class="collapse navbar-collapse" id="navbarNav">
@@ -102,8 +95,6 @@
                             </cfif>
                         </ul>
                     </div>
-
-
                     <cfset count = 1>
                     <cfoutput query = "variables.NavCategory">
                         <div class="dropdown">
@@ -132,7 +123,6 @@
             </div>
         </div>
     </nav>
-
     <cfif structKeyExists(variables, "displayCartDetails")>
        <div class="cart-container">
             <h1>Cart</h1>
@@ -144,7 +134,6 @@
                             <div class="product-image">
                                 <img src="/uploads/#variables.displayCartDetails.fldImageFileName#" alt="Product Image" style="width: 100%; height: 100%; object-fit: cover;">
                             </div>
-                    
                             <div class="product-info">
                                 <p><strong>#variables.displayCartDetails.fldProductName#</strong></p>
                                 <p>Brand:#variables.displayCartDetails.fldBrandName#</p>
@@ -201,22 +190,17 @@
         		    </div>
     		    </div>
 		    </div>
-
             <cfset variables.cartActualPrice = 0>
             <cfset variables.cartTotalTax = 0>
             <cfset variables.cartTotalPrice = 0>
-
             <cfoutput query="variables.displayCartDetails">
                 <cfset variables.itemActualPrice = variables.displayCartDetails.fldPrice * variables.displayCartDetails.fldQuantity>
                 <cfset variables.itemTotalTax = (variables.displayCartDetails.fldPrice * (variables.displayCartDetails.fldTax / 100)) * variables.displayCartDetails.fldQuantity>
                 <cfset variables.itemTotalPrice = variables.itemActualPrice + variables.itemTotalTax>
-
-                <!-- Sum calculation -->
                 <cfset variables.cartActualPrice += variables.itemActualPrice>
                 <cfset variables.cartTotalTax += variables.itemTotalTax>
                 <cfset variables.cartTotalPrice += variables.itemTotalPrice>
             </cfoutput>
-
             <cfoutput>    
                 <div class="price-details">
                     <div class="price-row">
@@ -231,7 +215,6 @@
                         <strong>Total Price</strong>
                         <strong><i class="fa-solid fa-indian-rupee-sign"></i>#variables.cartTotalPrice#</strong>
                     </div>
-                   
                     <button 
                         class="btn btn-checkout btn-sm me-2 orderNow"
                         id="orderNowBtn"

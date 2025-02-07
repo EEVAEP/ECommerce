@@ -2,7 +2,6 @@
     margin:0;
     padding:0;
     box-sizing: border-box;
-
 }
 .navbar-custom {
     background-color: green;
@@ -15,7 +14,6 @@
 }
 .dropdown-menu {
     background-color: green;
-    
 }
 .category-list-btn{
     color: white;
@@ -128,7 +126,6 @@
 .product-price {
     font-size: 1rem;
     color: #f33e08;
-   
 }
 .product-link {
     text-decoration: none; 
@@ -161,7 +158,6 @@
     max-height: 250px;
     border-radius: 4px; 
     max-width: fit-content;
-
 }
 .subproduct-card:hover {
     transform: scale(1.05); 
@@ -219,7 +215,6 @@
         margin-bottom: 8px;
     }
 }
-
 .modal-lg {
 	max-width: 800px; 
 }
@@ -234,7 +229,6 @@
     	font-weight: bold;
     	color: #343a40; 
 }
-
 /* UserCart Page */
 .cartName{
     position: relative;
@@ -313,7 +307,6 @@ h1 {
     margin: 0;
     font-size: 16px;
 }
-
 /* Product Pricing Section */
 .product-pricing {
     text-align: right;
@@ -334,7 +327,6 @@ h1 {
 .btn-remove:hover {
     background-color: #e60000;
 }
-
 /* Price Details Section */
 .price-details {
     margin-top: 20px;
@@ -356,7 +348,6 @@ h1 {
 .price-row strong {
     font-size: 16px;
 }
-
 /* Buttons */
 .btn-checkout,
 .btn-cart {
@@ -373,7 +364,6 @@ h1 {
 .btn-cart:hover {
     background-color: #45a049;
 }
-
 /* Cart page product increase, decrease*/
 .decrease, .increase {
     background-color: #007bff; 
@@ -392,7 +382,6 @@ h1 {
 .decrease:active, .increase:active {
     transform: scale(1); 
 }
-
 /* Profile button*/
 .profile-icon {
     position: relative;
@@ -411,7 +400,6 @@ h1 {
 .profile-icon:active {
     transform: scale(1); 
 }
-
 /* Profile Page*/
 .user-container {
     margin-top: 20px;
@@ -449,7 +437,6 @@ h1 {
     font-size: 15px;
     color: gray;
 }
-
 /* User Address */
 .address-card strong {
     display: block;
@@ -497,7 +484,6 @@ h1 {
     display: flex;
     gap: 20px;
 }
-
 /* Select Address modal */
 .saved-addresses {
     font-family: Arial, sans-serif;
@@ -507,7 +493,6 @@ h1 {
     color:#28a745;
     margin-bottom: 14px;
 }
-
 .address-option {
     padding: 10px;
     border: 1px solid #ccc;
@@ -516,20 +501,16 @@ h1 {
     display: flex;
     align-items: center;
 }
-
 .address-option input {
     margin-right: 10px;
 }
-
 .address-option label {
     cursor: pointer;
 }
-
 .address-details {
     color: gray;
     font-size: 14px;
 }
-
 /* order summary Page */
 .orderContainer {
     font-family: Arial, sans-serif;
@@ -541,7 +522,6 @@ h1 {
     padding: 20px;
 }
 
-
 .order-summary {
     width: 500px;
     background-color: white;
@@ -551,8 +531,6 @@ h1 {
     justify-content: center;
     align-items: center;
 }
-
-
 .order-header {
     background-color: #2e7d32;
     color: white;
@@ -562,8 +540,6 @@ h1 {
     text-align: center;
     border-radius: 8px 8px 0 0;
 }
-
-
 .order-card {
     background-color: #fff;
     padding: 15px;
@@ -571,28 +547,21 @@ h1 {
     box-shadow: 2px 5px 5px rgba(0,0,0,.2);
     margin-top: 15px;
 }
-
-
 .order-section {
     font-size: 14px;
     color: #333;
 }
-
 .order-section p {
     margin: 5px 0;
 }
-
 .bold {
     font-weight: bold;
 }
-
-
 .OrderProduct {
     display: flex;
     align-items: center;
     gap: 15px;
 }
-
 .OrderProduct img {
     width: 80px;
     height: 100px;
@@ -600,16 +569,12 @@ h1 {
     border-radius: 5px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
-
-
 .OrderAmount {
     color: red;
     font-size: 16px;
     font-weight: bold;
     margin-left: 100px;
 }
-
-
 .OrderQuantity {
     display: flex;
     align-items: center;
@@ -618,7 +583,6 @@ h1 {
     margin-top: 10px;
     margin-bottom: 30px;
 }
-
 .OrderQuantity button {
     padding: 5px 10px;
     border: none;
@@ -626,7 +590,6 @@ h1 {
     cursor: pointer;
     border-radius: 4px;
 }
-
 .place-order {
     width: 100%;
     background-color: #2e7d32;
@@ -639,11 +602,9 @@ h1 {
     border-radius: 4px;
     margin-top: 15px;
 }
-
 .place-order:hover {
     background-color: #256c29;
 }
-
 /* for cart order summary */
 .order-container {
     display: flex;
@@ -651,7 +612,6 @@ h1 {
     gap: 5px; 
     margin-top:15px;
 }
-
 .CartOrder-card {
     background-color: #fff;
     border: 1px solid #ddd; 
@@ -662,29 +622,24 @@ h1 {
     align-items: center;
     gap: 10px; 
 }
-
 .CartOrder-card img {
     width: 100px;
     height: auto;
     border-radius: 5px;
 }
-
 .CartOrderProduct-details {
     flex: 1; 
     font-size: 14px;
 }
-
 .Cartbold {
     font-weight: bold;
     font-size: 16px;
 }
-
 .CartOrderProduct {
     display: flex;
     align-items: center;
     gap: 15px;
 }
-
 .CartOrderAmount {
     color: red;
     font-size: 16px;

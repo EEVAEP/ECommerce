@@ -1,5 +1,4 @@
 <cfcomponent>
-
     <cffunction  name="getRandomProducts" access="public" returntype="query">
        <cfquery name="local.qryRandomProducts" datasource = "#application.datasource#">
             SELECT 
@@ -36,7 +35,6 @@
         <cfreturn local.qryRandomProducts>
     </cffunction>
 
-
     <cffunction name="createCartProducts" access="public" returntype="any">
         <cfargument name="productId" type="string" required="true">
 
@@ -67,7 +65,6 @@
         <cfreturn "success">
     </cffunction>
 
-
     <cffunction name="getCartProductsCount" access="public" returntype="any">
        <cfquery name="local.qryCartCount" datasource = "#application.datasource#">
             SELECT 
@@ -84,7 +81,6 @@
             <cfreturn 0>
         </cfif>
     </cffunction>
-
 
     <cffunction  name="getCartProductsList" access="public" returntype="query">
        <cfquery name="local.qryDisplayCartProducts" datasource = "#application.datasource#">
@@ -161,7 +157,6 @@
 		</cftry>
     </cffunction>
 
-
     <cffunction name="increaseOrDecreaseCartProduct" access="remote" returnformat = "JSON">
     	<cfargument name="productId" type="string" required="true">
         <cfargument name="mode" type="string" required="true">
@@ -212,8 +207,7 @@
     		</cfcatch>
         </cftry>
     </cffunction>
-
-    <!---------------------------------User Profile Page functions------------------------------------------------------------- --->
+<!---------------------------------User Profile Page functions------------------------------------------------------------- --->
 
     <cffunction name="getUserProfileDetails" access="public" returntype="any">
         <cfquery name="local.qryGetUserDetails" datasource="#application.datasource#">
@@ -232,7 +226,6 @@
     </cffunction>
 
     <cffunction  name= "validateUserProfileDetails" access= "remote" returnformat="JSON">
-        
         <cfargument name="firstName" type="string" required="true">
         <cfargument name="lastName" type="string" required="true">
         <cfargument name="addressLine1" type="string" required="true">
@@ -250,46 +243,38 @@
     	<cfelseif not reFind("^[A-Za-z]+$", trim(arguments.firstName))>
         	<cfset arrayAppend(local.errors, "*First Name cannot contain numbers or special characters.")>
     	</cfif>
-
         <!------- Last Name -------->
         <cfif trim(arguments.lastName) EQ "">
     			<cfset arrayAppend(local.errors, "*Last Name is required.")>
 		<cfelseif not reFind("^[A-Za-z]+(\s[A-Za-z]+)*$", trim(arguments.lastName))>
     			<cfset arrayAppend(local.errors, "*Last Name cannot contain numbers or special characters.")>
 		</cfif>
-
         <!-----   Address Line1      ---->
         <cfif trim(arguments.addressLine1) EQ "">
 			<cfset arrayAppend(local.errors, "*AddressLine1 is required.")>
 		</cfif>
-
         <!-----   Address Line2      ---->
         <cfif trim(arguments.addressLine2) EQ "">
 			<cfset arrayAppend(local.errors, "*AddressLine2 is required.")>
 		</cfif>
-
         <!-----   City      ---->
         <cfif trim(arguments.city) EQ "">
 			<cfset arrayAppend(local.errors, "*City is required.")>
 		</cfif>
-
         <!-----   State      ---->
         <cfif trim(arguments.state) EQ "">
 			<cfset arrayAppend(local.errors, "*State is required.")>
 		</cfif>
-
         <!-----   Pincode     ---->
         <cfif trim(arguments.pincode) EQ "" OR (NOT isNumeric(arguments.pincode))>
 			<cfset arrayAppend(local.errors, "*pincode must be numeric")>
 		<cfelseif len(arguments.pincode) GT 8>
 			<cfset arrayAppend(local.errors, "*pincode length must be less than 9")>
 		</cfif>
-
-         <!-----   PhoneNumber    ---->
+        <!-----   PhoneNumber    ---->
         <cfif trim(arguments.phoneNumber) EQ "" OR not reFind("^\d{10}$", arguments.phoneNumber)>
 			<cfset arrayAppend(local.errors, "*Phone number must contain exactly 10 digits.")>
 		</cfif>
-
         <cfif arrayLen(local.errors) EQ 0>
             <cfset local.addCatogory=createOrUpdateProfileDetails(argumentCollection=arguments)>
 			<cfreturn local.errors>
@@ -358,10 +343,10 @@
 
     <cffunction name="getUserAddress" access="public" returntype="any">
         <cfargument name="addressId" type="string" required="false">
+
         <cfif structKeyExists(arguments, "addressId")>
             <cfset local.decryptedId = application.modelAdminCtg.decryptId(arguments.addressId)>
         </cfif>
-        
         <cfquery name="local.qryGetAddress" datasource="#application.datasource#">
             SELECT 
                 fldAddress_ID,
@@ -377,12 +362,13 @@
             FROM 
                 tblAddress
             WHERE 
-                fldUserId = <cfqueryparam value="#session.userid#" cfsqltype="cf_sql_integer">
+                fldActive = 1
+                <cfif structKeyExists(session, "userid")>
+                    AND  fldUserId = <cfqueryparam value="#session.userid#" cfsqltype="cf_sql_integer">
+                </cfif>
                 <cfif structKeyExists(arguments, "addressId")>
                     AND fldAddress_ID = <cfqueryparam value="#local.decryptedId#" cfsqltype="cf_sql_integer">
                 </cfif>
-            AND 
-                fldActive = 1
         </cfquery>
         <cfreturn local.qryGetAddress>
     </cffunction>
@@ -412,9 +398,9 @@
 
     <cffunction name="deleteUserAddress" access="remote" returnformat = "JSON">
     	<cfargument name="addressId" type="string" required="true">
+
 		<cfset local.decryptedId = application.modelAdminCtg.decryptId(arguments.addressId)>
-    
-    	<cftry>
+        <cftry>
 			<cfquery datasource = "#application.datasource#">
         		UPDATE tblAddress
 				SET 
@@ -451,7 +437,6 @@
         <cfreturn local.qryGetEachUserDetails> 
     </cffunction>
 
-
     <cffunction  name= "validateUserDetails" access= "remote" returnformat="JSON">
         <cfargument name="firstName" type="string" required="true">
         <cfargument name="lastName" type="string" required="true">
@@ -466,14 +451,12 @@
     	<cfelseif not reFind("^[A-Za-z]+$", trim(arguments.firstName))>
         	<cfset arrayAppend(local.errors, "*First Name cannot contain numbers or special characters.")>
     	</cfif>
-
         <!------- Last Name -------->
         <cfif trim(arguments.lastName) EQ "">
     			<cfset arrayAppend(local.errors, "*Last Name is required.")>
 		<cfelseif not reFind("^[A-Za-z]+(\s[A-Za-z]+)*$", trim(arguments.lastName))>
     			<cfset arrayAppend(local.errors, "*Last Name cannot contain numbers or special characters.")>
 		</cfif>
-
         <!------- Email -------->
         <cfquery name="local.qryCheckUserEmail" datasource = "#application.datasource#">
             SELECT *
@@ -491,9 +474,7 @@
         <cfelseif local.qryCheckUserEmail.recordCount GT 0>
             <cfset arrayAppend(local.errors, "*Email is already registered.")>
         </cfif>
-
         <!-----   PhoneNumber    ---->
-
         <cfquery name="local.qryCheckUserPhone" datasource = "#application.datasource#">
             SELECT *
         	FROM 
@@ -508,7 +489,6 @@
         <cfelseif local.qryCheckUserPhone.recordCount GT 0>
             <cfset arrayAppend(local.errors, "*Phone Number is already registered.")>
 		</cfif>
-
         <cfif arrayLen(local.errors) EQ 0>
             <cfset local.addCatogory=UpdateUserDetails(argumentCollection=arguments)>
 			<cfreturn local.errors>
@@ -538,8 +518,7 @@
                 fldUser_ID = <cfqueryparam value="#local.decryptedId#" cfsqltype="cf_sql_integer">
         </cfquery>
     </cffunction>
-
-    <!--------------------------------------Payment Details function------------------------------------------------ ---->
+<!--------------------------------------Payment Details function------------------------------------------------ ---->
     
     <cffunction  name= "validateCardDetails" access= "remote" returnformat="JSON">
         <cfargument name="cardNumber" type="string" required="true">
@@ -561,7 +540,6 @@
         <cfelse>
             <cfset arguments['cardNumber'] = "8912">
 		</cfif>
-
         <!-----   cvv    ---->
         <cfset local.cvvCode = "123">
         <cfif trim(arguments.cvv) EQ "" OR not reFind("^\d{3}$", arguments.cvv)>
@@ -569,7 +547,6 @@
         <cfelseif arguments.cvv NEQ local.cvvcode>
             <cfset arrayAppend(local.errors, "*Enter a valid CVV.")>
 		</cfif>
-
         <cfif arrayLen(local.errors) EQ 0>
             
             <cfset local.addCatogory=createOrUpdateCardDetails(argumentCollection=arguments)>
@@ -578,6 +555,7 @@
 		    <cfreturn local.errors>
 		</cfif>
     </cffunction>
+
     <cffunction name="createOrUpdateCardDetails" access="public">
         <cfargument name="cardNumber" type="string" required="true">
         <cfargument name="cvv" type="string" required="true">
@@ -691,7 +669,6 @@
             </cfquery>
         <cfelse>
             <cfset local.getCartProducts = application.modelUserPage.getCartProductsList()>
-            
             <cfloop query="local.getCartProducts">
                 <cfquery name="local.qryOrderCartItemsTable" datasource = "#application.datasource#" >
                     INSERT INTO tblorderItems
@@ -713,5 +690,4 @@
             <cfreturn "success">
         </cfif>
     </cffunction>
-
 </cfcomponent>
