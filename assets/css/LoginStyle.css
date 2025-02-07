@@ -1,9 +1,10 @@
-header, footer {
+header{
     background: linear-gradient(90deg, #4caf50, #2e7d32);
 }
 .brand {
     font-family: 'Pacifico', cursive;
     font-size: 2rem;
+    cursor: pointer;
 }
 .logo-icon {
     color: white;
@@ -46,4 +47,10 @@ header, footer {
     margin-top: 1px;
     margin-bottom: 10px;
     display: block;
+}
+footer {
+    background: linear-gradient(90deg, #4caf50, #2e7d32);
+    padding: 70px;
+    margin-top: 130px;
+    
 }

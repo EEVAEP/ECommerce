@@ -1,4 +1,3 @@
-
 <cfparam name="url.subCategoryId" default="">
 <cftry>
     <cfset productListQuery = application.modelAdminCtg.listProducts(url.subCategoryId)>
@@ -45,7 +44,7 @@
         </div>
 
         <div class="container d-flex justify-content-center">
-            <div class="card shadow-lg p-4 mt-1" style="width: 50rem;">
+            <div class="card shadow-lg p-4 mb-5 mt-1" style="width: 50rem;">
                 <div class="d-flex justify-content-between align-items-center mb-1">
                     <h4>Product</h4>
 

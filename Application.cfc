@@ -12,13 +12,16 @@
 		<cfset application.encryptionKey = generateSecretKey("AES")>
 		<cfset application.userService = createObject("component","controller.userLogin")>
 		<cfset application.CntrlProduct = createObject("component","controller.AdminProduct")>
+
 		<cfset application.modelService = createObject("component","model.registerAndLogin")>
 		<cfset application.modelAdminCtg = createObject("component","model.AdminCategory")>
+		<cfset application.modelUserPage = createObject("component","model.UserPage")>
+
 		<cfreturn true>
     </cffunction>
 
     <cffunction name="onRequestStart" returnType="void">
-        <cfargument name="requestname" required="true">
+       <!--- <cfargument name="requestname" required="true">
         <cfif structKeyExists(url,"reload") AND url.reload EQ 1>
             <cfset onApplicationStart()>
         </cfif>
@@ -32,8 +35,26 @@
             		(structKeyExists(session, "roleid") AND session.roleid NEQ 1)
         		)
     		)>
-    		<cflocation url="../../view/Admin/Login.cfm" addToken="no">
-		</cfif>
+    		<cflocation url="../Login.cfm" addToken="no">
+		</cfif> --->
+
+
+		
+		<cfset local.adminPages = ["dashboard.cfm", "productPage.cfm", "SubCategory.cfm"]>
+        <cfset local.userPages = ['UserCart.cfm','userOrder.cfm','userProfile.cfm']>
+        <cfset local.authenticationPages = ["Login.cfm","SignUp.cfm"]>
+
+
+        <cfif NOT structKeyExists(session, "roleid") AND session.roleid EQ 1 AND arrayFindNoCase(local.adminPages, listLast(CGI.SCRIPT_NAME, '/'))>
+        	<cflocation url = "../Login.cfm" addToken = "false">
+        <cfelseif structKeyExists(session, "roleid") AND session.roleid NEQ 1 AND arrayFindNoCase(local.adminPages, listLast(CGI.SCRIPT_NAME, '/'))>
+        	<cflocation url = "../Login.cfm" addToken = "false">
+
+        <cfelseif structKeyExists(session, "roleid") AND session.roleid NEQ 2 AND session.roleid NEQ 1
+            AND arrayFindNoCase(local.userPages, listLast(CGI.SCRIPT_NAME, '/'))>
+        	<cflocation url = "../Login.cfm" addToken = "false">
+        </cfif>
+		
 
     </cffunction>
 	

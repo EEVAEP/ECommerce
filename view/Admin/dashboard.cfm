@@ -32,7 +32,7 @@
         <span class="brand fs-4">QuickCart</span>
     
         <div class="ms-auto">
-            <a href="Login.cfm?logOut" class="btn btn-light">LogOut</a> 
+            <a href="../Login.cfm?logOut" class="btn btn-light">LogOut</a> 
         </div>
     </header>
     <div class="container mt-1">

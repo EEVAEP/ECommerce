@@ -14,9 +14,8 @@
         <cfargument name="email" required="true" type="string">
         <cfargument name="phone" required="true" type="string">
     	<cfargument name="password" required="true" type="string">
-		<cfargument name="roleId" required="true" type="numeric">
-
-		<cfset local.errors = []>
+		
+        <cfset local.errors = []>
 
         <cfif len(trim(arguments.fname)) EQ 0>
             <cfset arrayAppend(local.errors, "*First Name is required")>
