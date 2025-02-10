@@ -1,13 +1,13 @@
 <cfcomponent> 
     <cffunction name="getRoleName" access="public" returntype="query">
-        	<cfquery name="local.RoleName" datasource = "#application.datasource#">
-            		SELECT 
-				            fldRole_ID,
-                            fldRoleName
-			        FROM 
-				            tblroles
-        	</cfquery>
-        	<cfreturn local.RoleName>
+        <cfquery name="local.RoleName" datasource="#application.datasource#">
+            SELECT 
+				fldRole_ID,
+                fldRoleName
+			FROM 
+				tblroles
+        </cfquery>
+        <cfreturn local.RoleName>
     </cffunction>
 
     <cffunction name="hashPassword" access="private">
@@ -24,23 +24,20 @@
         <cfargument name="email" required="true" type="string">
         <cfargument name="phone" required="true" type="string">
     	<cfargument name="password" required="true" type="string">
-		
-        <cfset local ={}>
-		<cfquery name="local.qryCheckUser" datasource = "#application.datasource#">
+		<cfset local ={}>
+		<cfquery name="local.qryCheckUser" datasource="#application.datasource#">
             SELECT *
         	FROM 
 			    tblUser
         	WHERE 
 				fldFirstname = <cfqueryparam value="#arguments.fname#" cfsqltype="cf_sql_varchar">
-			OR 
-				fldPhone  = <cfqueryparam value="#arguments.phone#" cfsqltype="cf_sql_varchar">
-			AND
-				fldEmail = <cfqueryparam value="#arguments.email#" cfsqltype="cf_sql_varchar">
+				OR fldPhone  = <cfqueryparam value="#arguments.phone#" cfsqltype="cf_sql_varchar">
+				AND fldEmail = <cfqueryparam value="#arguments.email#" cfsqltype="cf_sql_varchar">
     	</cfquery>
 		<cfif local.qryCheckUser.recordCount EQ 0>
 			<cfset local.salt = generateSecretKey("AES")>
 			<cfset local.hashedPassword = hashPassword(arguments.password, local.salt)>
-			<cfquery datasource = "#application.datasource#">
+			<cfquery datasource="#application.datasource#">
         		INSERT INTO tblUser(
 									fldFirstname,
 								 	fldLastname,
@@ -71,8 +68,7 @@
     <cffunction name="validateUserLogin" access="public" returntype="struct">
     	<cfargument name="username" required="true" type="string">
     	<cfargument name="password" required="true" type="string">
-		
-		<cfquery name="local.qryLogin" datasource = "#application.datasource#">
+		<cfquery name="local.qryLogin" datasource="#application.datasource#">
         	SELECT 
 				fldUser_ID AS userid,
 				fldEmail,
@@ -84,8 +80,7 @@
 				tblUser
         	WHERE 
 				fldEmail = <cfqueryparam value="#arguments.username#" cfsqltype="cf_sql_varchar">
-            OR
-                fldPhone = <cfqueryparam value="#arguments.username#" cfsqltype="cf_sql_varchar">
+           	 	OR fldPhone = <cfqueryparam value="#arguments.username#" cfsqltype="cf_sql_varchar">
         </cfquery>
         <cfif local.qryLogin.recordCount EQ 1>
 			<cfset local.salt = local.qryLogin.fldUserSaltString>

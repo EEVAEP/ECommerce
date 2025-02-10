@@ -1,5 +1,4 @@
 <cfinclude template="header.cfm">
-
 <cfparam name="url.productId" default="">
 <cfif structKeyExists(url, "productId")>
     <cfset variables.displaySingleProductQry = application.modelAdminCtg.getProductsList(productId = url.productId)>

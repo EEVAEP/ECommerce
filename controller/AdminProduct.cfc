@@ -1,20 +1,17 @@
 <cfcomponent>
-    
     <cffunction name="getProductById" access="remote" returntype="any" returnformat="JSON">	
 	    <cfargument name="productId" type="string" required="true">
 		<cfset local.productData = application.modelAdminCtg.getProductsList(productId = arguments.productId)>
         <cfset local.productImages = application.modelAdminCtg.getProductImages(productId = arguments.productId)>
-            
         <cfset local.productArr = []>
         <cfloop query = "local.productImages" >
             <cfset local.imgData = {
                 'imageId' : local.productImages.fldProductImage_ID,
                 'imageFile' : local.productImages.fldImageFileName,
                 'defaultValue' : local.productImages.fldDefaultImage
-                }>
+            }>
             <cfset arrayAppend(local.productArr, local.imgData)>
         </cfloop> 
-
         <cfset local.productDataById = {
             'categoryId': local.productData.fldCategoryId,
             'subCategoryId': local.productData.fldSubCategory_ID,
@@ -28,11 +25,9 @@
         <cfreturn local.productArr>
     </cffunction>
 
-
     <cffunction  name="deleteImage" access = "remote" returntype = "any" returnformat = "json">
         <cfargument  name="imageId" type = "integer" required = "true">
         <cfargument  name="productId" type = "string" required = "true">
-
         <cfset local.errors = []>
         <cfset local.deleteImageResult = application.modelAdminCtg.deleteImage(
                                                                                 imageId = arguments.imageId,
@@ -45,5 +40,4 @@
             <cfreturn local.errors>
         </cfif>
     </cffunction>
-
 </cfcomponent>

@@ -1,6 +1,6 @@
 <cfcomponent>
     <cffunction  name="getRandomProducts" access="public" returntype="query">
-       <cfquery name="local.qryRandomProducts" datasource = "#application.datasource#">
+       <cfquery name="local.qryRandomProducts" datasource="#application.datasource#">
             SELECT 
                 P.fldProductName,
                 P.fldProduct_ID AS idProduct,
@@ -12,23 +12,12 @@
                 I.fldImageFileName
             FROM 
                 tblproduct AS P
-            INNER JOIN 
-                tblsubcategory AS SC
-             ON 
-                SC.fldSubCategory_ID =  P.fldSubCategoryId
-            INNER JOIN 
-                tblbrands AS B
-            ON 
-               B.fldBrand_ID =  P.fldBrandId
-            INNER JOIN 
-                tblproductImages AS I
-            ON 
-                I.fldProductId = P.fldProduct_ID
+                INNER JOIN tblsubcategory AS SC ON SC.fldSubCategory_ID =  P.fldSubCategoryId
+                INNER JOIN tblbrands AS B ON B.fldBrand_ID =  P.fldBrandId
+                INNER JOIN tblproductImages AS I ON I.fldProductId = P.fldProduct_ID
             WHERE 
                 P.fldActive = 1
-            AND
-	            I.fldDefaultImage = 1
-
+                AND I.fldDefaultImage = 1
             ORDER BY RAND()
             LIMIT 4
         </cfquery>
@@ -37,27 +26,25 @@
 
     <cffunction name="createCartProducts" access="public" returntype="any">
         <cfargument name="productId" type="string" required="true">
-
         <cfset local.decryptedId = application.modelAdminCtg.decryptId(arguments.productId)>
-         <cfquery name="local.qryCheckProduct" datasource="#application.datasource#">
+        <cfquery name="local.qryCheckProduct" datasource="#application.datasource#">
             SELECT 
                 COUNT(*) AS ProductCount
             FROM 
                 tblcart
             WHERE 
                 fldUserId = <cfqueryparam value="#session.userid#" cfsqltype="cf_sql_integer">
-            AND 
-                fldProductId = <cfqueryparam value="#local.decryptedId#" cfsqltype="cf_sql_varchar">
+                AND fldProductId = <cfqueryparam value="#local.decryptedId#" cfsqltype="cf_sql_varchar">
         </cfquery>
         <cfif local.qryCheckProduct.ProductCount EQ 0>
-            <cfquery name="local.qryInsertProductIntoCart" result="local.insertProductIntoCart" datasource = "#application.datasource#">
+            <cfquery name="local.qryInsertProductIntoCart" result="local.insertProductIntoCart" datasource="#application.datasource#">
                 INSERT INTO tblcart
                     (fldUserId, fldProductId, fldQuantity, fldCreatedDate)
                 VALUES 
                     (
                         <cfqueryparam value="#session.userid#" cfsqltype="cf_sql_integer">,
                         <cfqueryparam value="#local.decryptedId#" cfsqltype="cf_sql_varchar" >,
-                        <cfqueryparam value = "1" cfsqltype = "cf_sql_integer">,
+                        1,
                         <cfqueryparam value = "#now()#" cfsqltype = "cf_sql_date" >
                     )
             </cfquery>
@@ -66,7 +53,7 @@
     </cffunction>
 
     <cffunction name="getCartProductsCount" access="public" returntype="any">
-       <cfquery name="local.qryCartCount" datasource = "#application.datasource#">
+       <cfquery name="local.qryCartCount" datasource="#application.datasource#">
             SELECT 
                 fldCart_ID
             FROM 
@@ -74,7 +61,6 @@
             WHERE
                 fldUserId = <cfqueryparam value = "#session.userid#" cfsqltype = "cf_sql_integer">
         </cfquery>
-
         <cfif local.qryCartCount.recordCount GT 0>
             <cfreturn local.qryCartCount.recordCount>
         <cfelse>
@@ -83,7 +69,7 @@
     </cffunction>
 
     <cffunction  name="getCartProductsList" access="public" returntype="query">
-       <cfquery name="local.qryDisplayCartProducts" datasource = "#application.datasource#">
+       <cfquery name="local.qryDisplayCartProducts" datasource="#application.datasource#">
             SELECT 
                 P.fldProductName,
                 P.fldProduct_ID AS idProduct,
@@ -99,29 +85,16 @@
                 P.fldPrice + (P.fldPrice * (P.fldTax / 100)) * C.fldQuantity AS totalPrice
             FROM 
                 tblproduct AS P
-            INNER JOIN 
-                tblcart AS C
-             ON 
-                C.fldProductId =  P.fldProduct_ID
-            INNER JOIN 
-                tblbrands AS B
-            ON 
-               B.fldBrand_ID =  P.fldBrandId
-            INNER JOIN 
-                tblproductImages AS I
-            ON 
-                I.fldProductId = P.fldProduct_ID
+                INNER JOIN tblcart AS C ON C.fldProductId =  P.fldProduct_ID
+                INNER JOIN tblbrands AS B ON B.fldBrand_ID =  P.fldBrandId
+                INNER JOIN tblproductImages AS I ON I.fldProductId = P.fldProduct_ID
             WHERE 
-               P.fldActive = 1
-            AND 
-                I.fldActive = 1
-            AND
-	            I.fldDefaultImage = 1
-            AND
-	            C.fldQuantity >= 1
-            AND
-                C.fldUserId = <cfqueryparam value = "#session.userid#" cfsqltype = "cf_sql_integer">
-             GROUP BY
+                P.fldActive = 1
+                AND I.fldActive = 1
+                AND I.fldDefaultImage = 1
+                AND C.fldQuantity >= 1
+                AND C.fldUserId = <cfqueryparam value = "#session.userid#" cfsqltype = "cf_sql_integer">
+            GROUP BY
                 P.fldProductName,
                 P.fldProduct_ID,
                 B.fldBrandName,
@@ -136,17 +109,15 @@
 
     <cffunction name="deleteCartProduct" access="remote" returnformat = "JSON">
     	<cfargument name="productId" type="string" required="true">
-
-		<cfset local.decryptedId = application.modelAdminCtg.decryptId(arguments.productId)>
+        <cfset local.decryptedId = application.modelAdminCtg.decryptId(arguments.productId)>
         <cftry>
-			<cfquery datasource = "#application.datasource#">
-        			DELETE 
-				    FROM 
-                        tblCart
-                    WHERE
-                        fldProductId = <cfqueryparam value="#local.decryptedId#" cfsqltype="cf_sql_integer">
-                    AND
-                        fldUserId = <cfqueryparam value = "#session.userid#" cfsqltype = "cf_sql_integer">
+			<cfquery datasource="#application.datasource#">
+        		DELETE 
+				FROM 
+                    tblCart
+                WHERE
+                    fldProductId = <cfqueryparam value="#local.decryptedId#" cfsqltype="cf_sql_integer">
+                    AND fldUserId = <cfqueryparam value = "#session.userid#" cfsqltype = "cf_sql_integer">
             </cfquery>
 			<cfset local.response = {status="success", message="Product deleted from cart successfully."}>
         	<cfreturn local.response>
@@ -160,8 +131,7 @@
     <cffunction name="increaseOrDecreaseCartProduct" access="remote" returnformat = "JSON">
     	<cfargument name="productId" type="string" required="true">
         <cfargument name="mode" type="string" required="true">
-
-		<cfset local.decryptedId = application.modelAdminCtg.decryptId(arguments.productId)>
+        <cfset local.decryptedId = application.modelAdminCtg.decryptId(arguments.productId)>
         <cftry>
             <cfquery name="local.qryGetProductQuantity" datasource="#application.datasource#">
                 SELECT 
@@ -228,7 +198,6 @@
         <cfargument name="pincode" type="string" required="true">
         <cfargument name="phoneNumber" type="string" required="true">
         <cfargument name="addressId" type="string" required="false">
-
         <cfset local.errors = []>
         <!------- First Name ------->
         <cfif trim(arguments.firstName) EQ "">
@@ -286,10 +255,9 @@
         <cfargument name="pincode" type="string" required="true">
         <cfargument name="phoneNumber" type="string" required="true">
         <cfargument name="addressId" type="string" required="false">
-        
         <cfif StructKeyExists(arguments, "addressId") AND arguments.addressId NEQ "">
             <cfset local.decryptedId = application.modelAdminCtg.decryptId(arguments.addressId)>
-            <cfquery datasource = "#application.datasource#">
+            <cfquery datasource="#application.datasource#">
         		UPDATE tblAddress
 				SET 
                     fldFirstName = <cfqueryparam value="#arguments.firstName#" cfsqltype="cf_sql_varchar">,
@@ -305,7 +273,7 @@
                     fldAddress_ID = <cfqueryparam value="#local.decryptedId#" cfsqltype="cf_sql_integer">
             </cfquery>
         <cfelse>
-            <cfquery name="local.qryInsertUserDetails" datasource = "#application.datasource#">
+            <cfquery name="local.qryInsertUserDetails" datasource="#application.datasource#">
                 INSERT INTO tbladdress 
                     (fldUserId,
                     fldFirstName,
@@ -336,7 +304,6 @@
 
     <cffunction name="getUserAddress" access="public" returntype="any">
         <cfargument name="addressId" type="string" required="false">
-
         <cfif structKeyExists(arguments, "addressId")>
             <cfset local.decryptedId = application.modelAdminCtg.decryptId(arguments.addressId)>
         </cfif>
@@ -368,9 +335,8 @@
 
     <cffunction name="getUserAddressById" access="remote" returntype="any" returnformat="JSON">	
 		<cfargument name="addressId" type="string" required="true">
-
-		<cfset local.decryptedId = application.modelAdminCtg.decryptId(arguments.addressId)>
-        <cfquery name="local.qryGetEachAddress" datasource = "#application.datasource#">
+        <cfset local.decryptedId = application.modelAdminCtg.decryptId(arguments.addressId)>
+        <cfquery name="local.qryGetEachAddress" datasource="#application.datasource#">
             SELECT 
                 fldAddress_ID,
                 fldFirstName,
@@ -391,10 +357,9 @@
 
     <cffunction name="deleteUserAddress" access="remote" returnformat = "JSON">
     	<cfargument name="addressId" type="string" required="true">
-
-		<cfset local.decryptedId = application.modelAdminCtg.decryptId(arguments.addressId)>
+        <cfset local.decryptedId = application.modelAdminCtg.decryptId(arguments.addressId)>
         <cftry>
-			<cfquery datasource = "#application.datasource#">
+			<cfquery datasource="#application.datasource#">
         		UPDATE tblAddress
 				SET 
                     fldActive = <cfqueryparam value="0" cfsqltype="cf_sql_integer">,
@@ -413,9 +378,8 @@
 
     <cffunction name="getUserDetailsById" access="remote" returntype="any" returnformat="JSON">	
 		<cfargument name="editUserId" type="string" required="true">
-
-		<cfset local.decryptedId = application.modelAdminCtg.decryptId(arguments.editUserId)>
-        <cfquery name="local.qryGetEachUserDetails" datasource = "#application.datasource#">
+        <cfset local.decryptedId = application.modelAdminCtg.decryptId(arguments.editUserId)>
+        <cfquery name="local.qryGetEachUserDetails" datasource="#application.datasource#">
             SELECT 
                 fldUser_ID,
                 fldFirstName,
@@ -436,7 +400,6 @@
         <cfargument name="email" type="string" required="true">
         <cfargument name="phone" type="string" required="true">
         <cfargument name="editUserId" type="string" required="true">
-
         <cfset local.errors = []>
         <!------- First Name ------->
         <cfif trim(arguments.firstName) EQ "">
@@ -451,7 +414,7 @@
     			<cfset arrayAppend(local.errors, "*Last Name cannot contain numbers or special characters.")>
 		</cfif>
         <!------- Email -------->
-        <cfquery name="local.qryCheckUserEmail" datasource = "#application.datasource#">
+        <cfquery name="local.qryCheckUserEmail" datasource="#application.datasource#">
             SELECT *
         	FROM 
 			    tblUser
@@ -468,7 +431,7 @@
             <cfset arrayAppend(local.errors, "*Email is already registered.")>
         </cfif>
         <!-----   PhoneNumber    ---->
-        <cfquery name="local.qryCheckUserPhone" datasource = "#application.datasource#">
+        <cfquery name="local.qryCheckUserPhone" datasource="#application.datasource#">
             SELECT *
         	FROM 
 			    tblUser
@@ -496,9 +459,8 @@
         <cfargument name="email" type="string" required="true">
         <cfargument name="phone" type="string" required="true">
         <cfargument name="editUserId" type="string" required="true">
-        
         <cfset local.decryptedId = application.modelAdminCtg.decryptId(arguments.editUserId)>
-        <cfquery datasource = "#application.datasource#">
+        <cfquery datasource="#application.datasource#">
         	UPDATE tblUser
 			SET 
                 fldFirstName = <cfqueryparam value="#arguments.firstName#" cfsqltype="cf_sql_varchar">,
@@ -520,7 +482,6 @@
         <cfargument name="productId" type="string" required="false">
         <cfargument name="totalPrice" type="numeric" required="false">
         <cfargument name="totalTax" type="numeric" required="false">
-
         <cfset local.errors = []>
         <cfset local.cardCode = "12345678912">
         <!-----   CardNumber     ---->
@@ -541,7 +502,6 @@
             <cfset arrayAppend(local.errors, "*Enter a valid CVV.")>
 		</cfif>
         <cfif arrayLen(local.errors) EQ 0>
-            
             <cfset local.addCatogory=createOrUpdateCardDetails(argumentCollection=arguments)>
 			<cfreturn local.errors>
 		<cfelse>
@@ -559,7 +519,6 @@
         <cfargument name="quantity" type="numeric" required="false">
         <cfargument name="addressId" type="string" required="true">
         <cfargument name="productId" type="string" required="false">
-        
         <cfset local.addressDetails = application.modelUserPage.getUserAddress(addressId = addressId)>
         <cfset local.phoneNumber = local.addressDetails.fldPhonenumber>
         <cfset local.decryptedId = application.modelAdminCtg.decryptId(arguments.addressId)>
@@ -575,7 +534,7 @@
         </cfif>
         <cftry>
             <cftransaction action="begin">
-                <cfquery name="local.qryInsertOrderDetails" result="local.createOrderTableResult" datasource = "#application.datasource#">
+                <cfquery name="local.qryInsertOrderDetails" result="local.createOrderTableResult" datasource="#application.datasource#">
                     INSERT INTO tblOrder 
                         (fldOrder_ID,
                         fldOrderId,
@@ -616,7 +575,7 @@
                             orderId = local.Order_ID
                         )>
                         <cfif local.orderAddResult EQ "success">
-                            <cfquery datasource = "#application.datasource#">
+                            <cfquery datasource="#application.datasource#">
                                 DELETE 
                                 FROM tblCart
                                 WHERE
@@ -641,10 +600,9 @@
         <cfargument name="quantity" type="numeric" required="false">
         <cfargument name="unitPrice" type="numeric" required="false">
         <cfargument name="unitTax" type="numeric" required="false">
-        
         <cfif structKeyExists(arguments, "productId") AND structKeyExists(arguments, "quantity") AND NOT arguments.productId EQ "undefined">
             <cfset local.decryptedId = application.modelAdminCtg.decryptId(arguments.productId)>
-            <cfquery name="local.qryOrderSingleItemsTable" datasource = "#application.datasource#">
+            <cfquery name="local.qryOrderSingleItemsTable" datasource="#application.datasource#">
                 INSERT INTO tblorderItems
                     (fldOrderId,
                     fldProductId,

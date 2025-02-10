@@ -1,8 +1,7 @@
 <cfcomponent>
     <cffunction  name="getOrderedProductsDetails" access="public" returntype="query">
         <cfargument name="orderId" type="string" required="true">
-
-        <cfquery name="local.qryOrderedProducts" datasource = "#application.datasource#">
+        <cfquery name="local.qryOrderedProducts" datasource="#application.datasource#">
             SELECT 
                 P.fldProductName,
                 P.fldProduct_ID AS idProduct,
@@ -24,22 +23,12 @@
                 O.fldCardPart
             FROM 
                 tblorderitems AS OI
-            INNER JOIN 
-                tblproduct AS P
-            ON 
-                P.fldProduct_ID = OI.fldProductId
-            INNER JOIN 
-                tblOrder AS O 
-            ON 
-                O.fldOrder_ID  = OI.fldOrderId
-            INNER JOIN 
-                shoppingcart.tblAddress AS A
-            ON 
-                A.fldAddress_ID = O.fldAddressId
+            INNER JOIN tblproduct AS P ON P.fldProduct_ID = OI.fldProductId
+            INNER JOIN tblOrder AS O ON O.fldOrder_ID  = OI.fldOrderId
+            INNER JOIN shoppingcart.tblAddress AS A ON A.fldAddress_ID = O.fldAddressId
             WHERE
                 O.fldOrderId  = <cfqueryparam value = "#session.userid#" cfsqltype = "cf_sql_integer">
-            AND
-				O.fldOrder_ID  = <cfqueryparam value = "#arguments.orderId#" cfsqltype = "cf_sql_varchar">
+                AND O.fldOrder_ID  = <cfqueryparam value = "#arguments.orderId#" cfsqltype = "cf_sql_varchar">
             GROUP BY 
                 P.fldProductName,
                 P.fldProduct_ID,
@@ -55,7 +44,6 @@
 
     <cffunction name="sendMailToUserAddress" access="public" returntype="void">
         <cfargument name= "orderId" type="string" required="true">
-
         <cfset local.displayOrderedItems = application.modelOrderPage.getOrderedProductsDetails(orderId = arguments.orderId)>
         <cfset local.userDetails = application.modelUserPage.getUserProfileDetails()>
         <cfset local.userMail = local.userDetails.fldEmail>
@@ -115,32 +103,17 @@
                 I.fldImageFileName
             FROM 
                 tblorderitems AS OI
-            INNER JOIN 
-                tblproduct AS P 
-            ON 
-                P.fldProduct_ID = OI.fldProductId
-            INNER JOIN 
-                tblOrder AS O 
-            ON
-                O.fldOrder_ID = OI.fldOrderId
-            INNER JOIN 
-                tblAddress AS A 
-            ON 
-                A.fldAddress_ID = O.fldAddressId
-            INNER JOIN 
-                tblproductimages AS I 
-            ON 
-                I.fldProductId = OI.fldProductId
+            INNER JOIN tblproduct AS P ON P.fldProduct_ID = OI.fldProductId
+            INNER JOIN tblOrder AS O  ON O.fldOrder_ID = OI.fldOrderId
+            INNER JOIN tblAddress AS A ON A.fldAddress_ID = O.fldAddressId
+            INNER JOIN tblproductimages AS I ON I.fldProductId = OI.fldProductId
             WHERE
                 O.fldOrderId = <cfqueryparam value="#session.userid#" cfsqltype="cf_sql_integer">
-            AND 
-                I.fldDefaultImage = 1
-            AND 
-                I.fldActive = 1
+                AND I.fldDefaultImage = 1
+                AND I.fldActive = 1
             ORDER BY 
                 O.fldOrderDate DESC
         </cfquery>
-
         <cfset orderData = []>
         <cfloop query="local.qryOrderHistory" group="fldOrderId">
             <cfset productList = []> 

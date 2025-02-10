@@ -22,19 +22,14 @@
         <cfif structKeyExists(url,"reload") AND url.reload EQ 1>
             <cfset onApplicationStart()>
         </cfif>
-
-		<cfset local.adminPages = ["dashboard.cfm", "productPage.cfm", "SubCategory.cfm"]>
+        <cfset local.adminPages = ["dashboard.cfm", "productPage.cfm", "SubCategory.cfm"]>
         <cfset local.userPages = ['UserCart.cfm', 'UserProfile.cfm', 'PaymentDetailsPage.cfm', 'PaymentSuccessful.cfm']>
         <cfset local.currentPage = listLast(CGI.SCRIPT_NAME, '/')>
-        <cfset local.hasRole = structKeyExists(session, 'roleid')>
-        <cfset local.isUser = structKeyExists(session, 'userid')>
         <cfset local.productId = structKeyExists(url,"productId") ? url.productId : "">
         <cfset local.action = structKeyExists(url,"action") ? url.action : "">
-
-        <cfif (!local.hasRole AND !local.isUser AND (arrayFindNoCase(local.adminPages, local.currentPage) 
-                OR arrayFindNoCase(local.userPages, local.currentPage))) 
-                OR (local.hasRole AND session.roleid NEQ 1 AND arrayFindNoCase(local.adminPages, local.currentPage))
-                OR (!local.hasRole AND arrayFindNoCase(local.userPages, local.currentPage))>
+        <cfif (NOT structKeyExists(session, 'roleid')  AND (arrayFindNoCase(local.adminPages, local.currentPage) 
+                OR arrayFindNoCase(local.userPages, local.currentPage)))
+                OR (structKeyExists(session, 'roleid') AND session.roleid NEQ 1 AND arrayFindNoCase(local.adminPages, local.currentPage))>
             <cfif len(local.productId)>
                 <cfset session.productId = local.productId>
             </cfif>

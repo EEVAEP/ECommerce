@@ -1,5 +1,4 @@
 <cfinclude template = "Header.cfm">
-
 <cfif structKeyExists(url, "productId") AND structKeyExists(url, "addressId")>
     <cfset variables.displayOrderAddress = application.modelUserPage.getUserAddress(url.addressId)>
     <cfset variables.displayOrderedProducts = application.modelAdminCtg.getProductsList(productId = url.productId)>
@@ -48,7 +47,6 @@
                                 <p>Brand: #variables.displayOrderedProducts.fldBrandName#</p>
                                 <p>Actual Price: #variables.displayOrderedProducts.fldPrice#</p>
                                 <p>Tax: #variables.displayOrderedProducts.fldTax#%</p>
-                            
                             </div>
                         </div>
                         <cfset variables.ActualPrice = variables.displayOrderedProducts.fldPrice +(variables.displayOrderedProducts.fldPrice * (variables.displayOrderedProducts.fldTax / 100))>
