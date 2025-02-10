@@ -1,12 +1,12 @@
 <cfcomponent output="false">
-	<cfset this.name = "ECommerceAuthentication"> 
+    <cfset this.name = "ECommerceAuthentication"> 
     <cfset this.applicationTimeout = createTimeSpan(1, 0, 0, 0)> 
     <cfset this.sessionManagement = true> 
     <cfset this.sessionTimeout = createTimeSpan(0, 0, 30, 0)> >
     <cfset this.setClientCookies = true>
 	
     <cffunction name="onApplicationStart" returnType="boolean">
-		<cfset application.encryptionKey = generateSecretKey("AES")>
+	    <cfset application.encryptionKey = generateSecretKey("AES")>
 		<cfset application.userLogin = createObject("component","controller.userLogin")>
 		<cfset application.CntrlProduct = createObject("component","controller.AdminProduct")>
         <cfset application.userLoginService = createObject("component","model.registerAndLogin")>
