@@ -8,11 +8,16 @@
     <cfif structKeyExists(form, "submit")>
         <cfset user = application.modelService.validateUserLogin(form.username,
 									                    form.password)>
+       
         <cfif structKeyExists(user, "username") AND user.username EQ form.username>
 		    <cfset session.username = user.username>
 		    <cfset session.userid = user.userid>
             <cfset session.roleid = user.role>
-            <cflocation url="dashboard.cfm" addtoken="false">
+            <cfif session.roleid EQ "1">
+                <cflocation url="../view/Admin/dashboard.cfm" addtoken="false">
+            <cfelseif session.roleid EQ "2">
+                <cflocation url="../view/User/UserHome.cfm" addtoken="false">
+            </cfif>
             
 		<cfelse>
         	<cfset errorMessage = "Invalid Username or Password">
@@ -35,8 +40,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     
-    <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../../assets/css/LoginStyle.css">
+    <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../assets/css/LoginStyle.css">
 </head>
 <body>
 
@@ -48,8 +53,8 @@
     </header>
 
     
-    <div class="container my-3">
-        <h2 class="text-center custom-title">ADMIN LOGIN</h2>
+    <div class="container my-4">
+        <h2 class="text-center custom-title">LOGIN</h2>
     </div>
 
     
@@ -76,13 +81,13 @@
                 
             </form>
             <div class="register-link">
-                <p>Don't have an account? <a href="./signUp.cfm">Register Here</a></p>
+                <p>Don't have an account? <a href="./SignUp.cfm">SignUp</a></p>
             </div>
         </div>
     </div>
 
     
-    <footer class="text-white text-center py-5 mt-5">
+    <footer class="text-white text-center ">
         <p>&copy; 2025 Shopping Cart. All Rights Reserved.</p>
     </footer>
 

@@ -556,8 +556,11 @@
 
     <cffunction  name="listProducts" access="public">
         <cfargument name="subCategoryId" type="string" required="true">
+        <cfargument name="sortOrder" type="string" required="false">
+        <cfargument name="minPrice" type="numeric" required="false">
+        <cfargument name="maxPrice" type="numeric" required="false">
 
-        <cfset local.decryptedId = decryptId(arguments.subCategoryId)>
+       <cfset local.decryptedId = decryptId(arguments.subCategoryId)>
         <cfquery name="local.getProductList">
             SELECT 
                 P.fldProductName,
@@ -588,37 +591,26 @@
                 P.fldActive = <cfqueryparam value="1" cfsqltype="cf_sql_integer">
             AND
 	            I.fldDefaultImage = <cfqueryparam value="1" cfsqltype="cf_sql_integer">
+
+            <cfif structKeyExists(arguments, "minPrice") AND structKeyExists(arguments, "maxPrice")>
+                AND P.fldPrice  BETWEEN <cfqueryparam value="#arguments.minPrice#" cfsqltype="cf_sql_integer">
+                AND <cfqueryparam value="#arguments.maxPrice#" cfsqltype="cf_sql_integer"> 
+            </cfif>
+
+            <cfif structKeyExists(arguments, "sortOrder") AND arguments.sortOrder EQ "asc">
+                ORDER By
+                    P.fldPrice ASC
+            </cfif>
+
+            <cfif structKeyExists(arguments, "sortOrder") AND arguments.sortOrder EQ "desc">
+                ORDER By
+                    P.fldPrice DESC
+            </cfif>
+            
         </cfquery>
         
         <cfreturn local.getProductList>
 
-    </cffunction>
-
-
-    <cffunction name="getProductById" access="public" returntype="query">	
-		<cfargument name="productId" type="string" required="true">
-		<cfset local.decryptedId = decryptId(arguments.productId)>
-        
-        <cfquery name="local.getEachProductId">
-            SELECT 
-                P.fldProduct_ID,
-                SC.fldCategoryId,
-                SC.fldSubCategory_ID,
-                P.fldProductName,
-                P.fldBrandId,
-                P.fldDescription,
-                P.fldPrice,
-                P.fldTax
-            FROM 
-                tblproduct AS P
-            INNER JOIN 
-                tblSubCategory AS SC
-             ON 
-                SC.fldSubCategory_ID = P.fldSubCategoryId
-            WHERE 
-                P.fldProduct_ID= <cfqueryparam value=#local.decryptedId#  cfsqltype="cf_sql_integer">
-        </cfquery>
-        <cfreturn local.getEachProductId> 
     </cffunction>
 
 
@@ -644,6 +636,62 @@
                 <cfreturn "Failed">
             </cfif>
             
+    </cffunction>
+
+     <cffunction name="getProductById" access="public" returntype="query">	
+		<cfargument name="productId" type="string" required="false">
+        <cfargument name="searchText" type="string" required="false">
+
+        <cfif structKeyExists(arguments, "productId")>
+            <cfset local.decryptedId = decryptId(arguments.productId)>
+        </cfif>
+		
+        
+        <cfquery name="local.getEachProductId">
+            SELECT 
+                P.fldProduct_ID,
+                SC.fldCategoryId,
+                SC.fldSubCategory_ID,
+                P.fldProductName,
+                P.fldBrandId,
+                P.fldDescription,
+                P.fldPrice,
+                P.fldTax,
+                B.fldBrandName,
+                I.fldImageFileName
+            FROM 
+                tblproduct AS P
+            INNER JOIN 
+                tblSubCategory AS SC
+            ON 
+                SC.fldSubCategory_ID = P.fldSubCategoryId
+            INNER JOIN 
+                tblproductImages AS I
+            ON 
+                I.fldProductId = P.fldProduct_ID
+            INNER JOIN 
+                tblbrands AS B
+            ON 
+               B.fldBrand_ID =  P.fldBrandId
+            WHERE
+                 P.fldActive = <cfqueryparam value="1" cfsqltype="cf_sql_integer">
+            <cfif structKeyExists(arguments, "productId")>
+                AND
+                    P.fldProduct_ID = <cfqueryparam value=#local.decryptedId#  cfsqltype="cf_sql_integer">
+            </cfif>
+            <cfif structKeyExists(arguments, "searchText") AND len(arguments.searchText)>
+                AND (P.fldDescription LIKE "%#arguments.searchText#%" 
+                OR B.fldBrandName LIKE "%#arguments.searchText#%" 
+                OR P.fldProductName LIKE "%#arguments.searchText#%"
+                OR SC.fldSubCategoryName LIKE "%#arguments.searchText#%")
+            </cfif>
+            
+            AND
+	            I.fldDefaultImage = <cfqueryparam value="1" cfsqltype="cf_sql_integer">
+            AND
+                I.fldActive = <cfqueryparam value="1" cfsqltype="cf_sql_integer">
+        </cfquery>
+        <cfreturn local.getEachProductId> 
     </cffunction>
     
 
