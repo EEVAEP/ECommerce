@@ -6,6 +6,7 @@ BEGIN
         fldFirstname, 
         fldLastname,
         fldEmail,
+        fldPhone,
         CONCAT(fldFirstname, ' ', fldLastname) AS fullname
     FROM 
         tblUser

@@ -19,9 +19,11 @@
 <body>
     <header class="d-flex align-items-center bg-dark text-white py-3 px-4">
         <i class="fas fa-shopping-cart logo-icon me-2"></i>
-        <span class="brand fs-4">QuickCart</span>
+         <a href="dashboard.cfm" class="text-decoration-none">
+            <span class="brand fs-4" style="color:rgb(248, 248, 248); cursor: pointer;">QuickCart</span>
+        </a>
         <div class="ms-auto">
-            <a href="Login.cfm?logOut" class="btn btn-light">LogOut</a> 
+            <a href="../Login.cfm?logOut" class="btn btn-light">LogOut</a> 
         </div>
     </header>
     <div class="container mt-1">

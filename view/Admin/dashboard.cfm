@@ -23,8 +23,10 @@
     <header class="d-flex align-items-center bg-dark text-white py-3 px-4">
         <i class="fas fa-shopping-cart logo-icon me-2"></i>
         <span class="brand fs-4">QuickCart</span>
-    
         <div class="ms-auto">
+            <button class="btn btn-outline-light" type="submit" onclick="window.location.href='../User/UserHome.cfm'">
+               Home
+            </button>
             <a href="../../view/Login.cfm?logOut" class="btn btn-light">LogOut</a> 
         </div>
     </header>

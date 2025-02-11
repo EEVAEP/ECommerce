@@ -1,7 +1,6 @@
 <cfparam name="url.subCategoryId" default="">
 <cftry>
     <cfset productListQuery = application.modelAdminCtg.getProductsList(url.subCategoryId)>
-    
     <cfcatch>
         <cfdump  var="#cfcatch#">
     </cfcatch>
@@ -27,10 +26,11 @@
     <body>
         <header class="d-flex align-items-center bg-dark text-white py-3 px-4">
             <i class="fas fa-shopping-cart logo-icon me-2"></i>
-            <span class="brand fs-4">QuickCart</span>
-    
+             <a href="dashboard.cfm" class="text-decoration-none">
+                <span class="brand fs-4" style="color:rgb(248, 248, 248); cursor: pointer;">QuickCart</span>
+            </a>
             <div class="ms-auto">
-                <a href="Login.cfm?logOut" class="btn btn-light">LogOut</a> 
+                <a href="../Login.cfm?logOut" class="btn btn-light">LogOut</a> 
             </div>
         </header>
         <div class="container mt-1">
@@ -60,6 +60,7 @@
                                 </div>
                                 <div class="modal-body">
                                     <form method="post" id="productForm" action="" enctype="multipart/form-data">
+                                        <div id="errorMessages"></div>
                                         <div class="form-group pt-1 ">
                                             <cfset categoryNameQuery = application.modelAdminCtg.getCategoryList()>
                                             <label for="categoryName">Category Name</label>
@@ -117,7 +118,7 @@
                                             <button type="button" name="saveProductButton" class="btn btn-success mb-3" id="saveProductButton">Submit</button>
                                             <button type="button" name="editProductButton" class="btn btn-success mb-3" id="editProductButton">Update</button>
                                         </div>
-                                        <div id="errorMessages"></div>
+                                        
                                     </form>
                                 </div>
             				</div>

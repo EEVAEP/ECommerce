@@ -6,7 +6,7 @@
 												phone=form.phone, 
 												password=form.password)>
 	    <cfif structKeyExists(variables, "validationErrors") AND arrayLen(validationErrors) EQ 0>
-		    <cfset result = application.modelService.registerUser(form.fname,
+		    <cfset result = application.userLoginService.registerUser(form.fname,
  												form.lname,
                                                 form.email,
 												form.phone, 
@@ -16,7 +16,7 @@
 		    <cfelse>
 			    <cfset errorMessage = result.message>
 		    </cfif>
-	    </cfif>
+        </cfif>
     </cfif>     
     <cfcatch>
         <cfdump  var="#cfcatch#">
@@ -45,6 +45,15 @@
     </div>
     <div class="container d-flex justify-content-center">
         <div class="card shadow-lg p-4" style="width: 30rem;">
+            <cfif structKeyExists(variables, "validationErrors") AND arrayLen(validationErrors) GT 0>
+                <cfoutput>
+                    <div id="signUpError" class="alert alert-danger">
+                        <cfloop array="#variables.validationErrors#" index="error">
+                            <div>#error#</div>
+                        </cfloop>
+                    </div>
+                </cfoutput>
+            </cfif>
             <form method="POST" action="">
                 <div class="mb-2">
                     <label for="fname" class="form-label">First Name</label>
@@ -78,6 +87,9 @@
                     </span>
                 </cfif>
             </form>
+            <div class="register-link">
+                <p>LoginHere: <a href="./Login.cfm">Login</a></p>
+            </div>
         </div>
     </div>
     <footer class="text-white text-center py-3 mt-4">

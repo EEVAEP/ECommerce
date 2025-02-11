@@ -45,6 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		});
 	});
 });
+
 $(document).ready(function () {
 	var addressId;
 	var editUserId;
@@ -137,7 +138,7 @@ $(document).ready(function () {
 	});
 	/* Populate User Details in Edit modal */
 	$(document).on('click', '.editUser', function () {
-		$('#errorMessages').empty();
+		$('#errorMessages1').empty();
 		editUserId = $(this).data('id');
 		console.log(editUserId);
 		$.ajax({
@@ -194,13 +195,21 @@ $(document).ready(function () {
 			}
 		});
 	});
+
+	function addOnError(errors) {
+		let errorContainer = $('#errorMessages1');
+		errorContainer.empty();
+		if (errors.length > 0) {
+			let errorHTML = '<div class="alert alert-danger">';
+			errors.forEach(function (error) {
+				errorHTML += '<div>' + error + '</div>';
+			});
+			errorHTML += '</div>';
+			errorContainer.append(errorHTML);
+		}
+	}
 });
-function addOnError(errors) {
-	$('#errorMessages').empty();
-	errors.forEach(function (error) {
-		$('#errorMessages').append('<div class="alert alert-danger">' + error + '</div>');
-	});
-}
+
 document.querySelectorAll(".deleteAddress").forEach(function (button) {
 	button.addEventListener("click", function () {
 		var addressId = this.getAttribute("data-id");

@@ -288,8 +288,8 @@
         <cfargument name="productName" type="string" required="true">
         <cfargument name="productBrand" type="numeric" required="true">
         <cfargument name="productDescription" type="string" required="true">
-        <cfargument name="productPrice" type="numeric" required="true">
-        <cfargument name="productTax" type="numeric" required="true">
+        <cfargument name="productPrice" type="string" required="true">
+        <cfargument name="productTax" type="string" required="true">
         <cfargument name="productImg" type="any" required="false">
         <cfargument name="productId" type="string" required="false">
         <cfset local.errors = []>
@@ -326,11 +326,11 @@
             <cfset arrayAppend(local.errors, "*The product Description should not be empty")>
         </cfif>
         <!--- Product Price validation--->
-        <cfif trim(arguments.productPrice) EQ "">
+        <cfif trim(arguments.productPrice) EQ "" OR (NOT isNumeric(arguments.productPrice))>
             <cfset arrayAppend(local.errors, "*The product Price should not be empty")>
         </cfif>
         <!--- Product Tax validation--->
-        <cfif trim(arguments.productTax) EQ "">
+        <cfif trim(arguments.productTax) EQ "" OR (NOT isNumeric(arguments.productTax))>
             <cfset arrayAppend(local.errors, "*The product Tax should not be empty")>
         </cfif>
         <!--- Product Image validation--->

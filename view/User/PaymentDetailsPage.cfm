@@ -120,6 +120,7 @@
                     <div class="modal-body">
                         <h6 class="fw-bold text-center">Card Details</h6>
                         <form method="post" id="paymentForm" action="">
+                            <div id="errorMessages"></div>
                             <div class="border p-3 rounded">
                                 <div class="mb-3">
                                     <label for="cardNumber" class="form-label">Card Number</label>
@@ -140,7 +141,6 @@
                                     <input type="hidden" name="productId" value="#url.productId#" id="productId">
                                 </cfif>
                             </cfoutput>
-                            <div id="errorMessages"></div>
                         </form>
                     </div>
                 </div>

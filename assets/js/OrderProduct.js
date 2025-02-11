@@ -31,20 +31,29 @@ $(document).ready(function () {
     });
     $('#payButton').click(function (event) {
         event.preventDefault();
+        var cardNumber = $('#cardNumber');
+        var cvv = $('#cvv');
+        var addressId = $('#addressId');
+        var productId = $('#productId');
+        var formData = new FormData();
+		formData.append('cardNumber', cardNumber.val());
+        formData.append('cvv', cvv.val());
+        formData.append('totalPrice', totalAmount);
+        formData.append('totalTax', totalTax);
+        formData.append('unitTax', unitTax);
+        formData.append('unitPrice', unitPrice);
+        formData.append('quantity', currentQuantity);
+        formData.append('addressId', addressId.val());
+        formData.append('productId', productId.val());
+        for (let [key, value] of formData.entries()) {
+            console.log(key + ':', value);
+        }
         $.ajax({
-            url: '../../model/UserPage.cfc?method=validateCardDetails',
-            type: 'POST',
-            data: {
-                cardNumber: $('#cardNumber').val(),
-                cvv: $('#cvv').val(),
-                totalPrice: totalAmount,
-                totalTax: totalTax,
-                unitTax: unitTax,
-                unitPrice: unitPrice,
-                quantity: currentQuantity,
-                addressId: $('#addressId').val(),
-                productId: $('#productId').val(),
-            },
+			url:'../../model/UserPage.cfc?method=validateCardDetails',
+			type:'POST',
+			data:formData,
+			processData:false,
+			contentType:false,
             success: function (response) {
                 console.log(response);
                 let data = JSON.parse(response);
@@ -64,10 +73,16 @@ $(document).ready(function () {
     });
 });
 function addOnError(errors) {
-    $('#errorMessages').empty();
-    errors.forEach(function (error) {
-        $('#errorMessages').append('<div class="alert alert-danger">' + error + '</div>');
-    });
+    let errorContainer = $('#errorMessages');
+    errorContainer.empty();
+    if (errors.length > 0) {
+        let errorHTML = '<div class="alert alert-danger">';
+        errors.forEach(function (error) {
+            errorHTML += '<div>' + error + '</div>';
+        });
+        errorHTML += '</div>';
+        errorContainer.append(errorHTML);
+    }
 }
 
 
