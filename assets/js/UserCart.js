@@ -209,7 +209,6 @@ $(document).ready(function () {
 		}
 	}
 });
-
 document.querySelectorAll(".deleteAddress").forEach(function (button) {
 	button.addEventListener("click", function () {
 		var addressId = this.getAttribute("data-id");
