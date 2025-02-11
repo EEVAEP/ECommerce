@@ -181,10 +181,11 @@
     
     <!------ Stored Procedure ------>
     <cffunction name="getUserProfileDetails" access="public" returntype="any">
-        <cfstoredproc procedure="getUserProfileDetails" datasource="#application.datasource#">
-            <cfprocparam type="In" value="#session.userid#" cfsqltype="cf_sql_integer">
-            <cfprocresult name="local.qryGetUserDetails">
-        </cfstoredproc>
+        <cfquery name="local.qryGetUserDetails" datasource="#application.datasource#">
+            CALL getUserProfileDetails(
+                <cfqueryparam value="#session.userid#" cfsqltype="cf_sql_integer">
+            )
+        </cfquery>
         <cfreturn local.qryGetUserDetails>
     </cffunction>
 

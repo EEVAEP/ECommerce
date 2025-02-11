@@ -81,6 +81,7 @@
     </cffunction>
 
     <cffunction name="getOrderHistory" access="public" returntype="array">
+        <cfargument name="orderId" type="string" required="false">
         <cfquery name="local.qryOrderHistory" datasource="#application.datasource#">
             SELECT 
                 P.fldProductName,
@@ -111,6 +112,9 @@
                 O.fldOrderId = <cfqueryparam value="#session.userid#" cfsqltype="cf_sql_integer">
                 AND I.fldDefaultImage = 1
                 AND I.fldActive = 1
+                <cfif structKeyExists(arguments, "orderId") AND len(trim(arguments.orderId)) GT 0>
+                    AND O.fldOrder_ID = <cfqueryparam value="#arguments.orderId#" cfsqltype="cf_sql_varchar">
+                </cfif>
             ORDER BY 
                 O.fldOrderDate DESC
         </cfquery>
@@ -124,8 +128,7 @@
                     "quantity" = local.qryOrderHistory.fldQuantity,
                     "price" = local.qryOrderHistory.fldPrice,
                     "tax" = local.qryOrderHistory.fldTax,
-                    "productImage" = local.qryOrderHistory.fldImageFileName,
-                    "quantity" =  local.qryOrderHistory.fldQuantity
+                    "productImage" = local.qryOrderHistory.fldImageFileName
                 }>
                 <cfset arrayAppend(productList, productData)>
             </cfloop>
