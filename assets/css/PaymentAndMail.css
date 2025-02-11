@@ -1,0 +1,33 @@
+.successContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 500px;
+    background-color: #f4f4f4;
+    font-family: Arial, sans-serif;
+}
+.cardSuccess {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 400px;
+}
+.cardSuccess h2 {
+    color: #28a745;
+}
+.buttonSuccess {
+    background: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 15px;
+    cursor: pointer;
+}
+.buttonSuccess:hover {
+    background: #0056b3;
+}

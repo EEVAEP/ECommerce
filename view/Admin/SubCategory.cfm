@@ -41,10 +41,10 @@
             <h4> Sub Categories</h4>
 
             <button class="btn btn-success text-white add"
-                    id="createSubCategoryBtn"
-                    data-bs-toggle="modal" 
-                    data-bs-target="#createSubCategoryModal">
-                    <i class="bi bi-plus-circle"></i>
+                id="createSubCategoryBtn"
+                data-bs-toggle="modal" 
+                data-bs-target="#createSubCategoryModal">
+                <i class="bi bi-plus-circle"></i>
             </button>
 
             <div class="modal fade" 

@@ -3,16 +3,16 @@
 <cfparam name="url.SubCategoryId" default="">
 <cftry>
     <cfif structKeyExists(url, "SubCategoryId")>
-        <cfset variables.subCategoryQry = application.modelAdminCtg.listProducts(subCategoryId = url.SubCategoryId)>
+        <cfset variables.subCategoryQry = application.modelAdminCtg.getProductsList(subCategoryId = url.SubCategoryId)>
     </cfif>
     <cfif structKeyExists(url, "sortOrder")>
-        <cfset variables.sortProductsQuery = application.modelAdminCtg.listProducts(
+        <cfset variables.sortProductsQuery = application.modelAdminCtg.getProductsList(
                                                                 subCategoryId = url.subCategoryId,
                                                                 sortOrder = url.sortOrder)>
         
     </cfif>
     <cfif structKeyExists(form, "applyFilterBtn")>
-        <cfset variables.filterProductsQuery = application.modelAdminCtg.listProducts(
+        <cfset variables.filterProductsQuery = application.modelAdminCtg.getProductsList(
                                                                 subCategoryId = url.subCategoryId,
                                                                 minPrice = form.minPrice,
                                                                 maxPrice = form.maxPrice)>
@@ -100,7 +100,7 @@
                     <div class="product-item">
                         <a href="UserProduct.cfm?productId=#encryptedId#" class="product-link">
                             <div class="card product-card">
-                                <img src="../../uploads/#variables.subcategoryQry.fldImageFileName#" class="card-img-top" alt="Product">
+                                <img src="/uploads/#variables.subcategoryQry.fldImageFileName#" class="card-img-top" alt="Product">
                                 <div class="card-body text-center">
                                     <h6 class="product-name">#variables.subcategoryQry.fldProductName#</h6>
                                     <p class="product-price"><i class="fa-solid fa-indian-rupee-sign"></i>#variables.subcategoryQry.fldPrice#</p>
@@ -117,7 +117,7 @@
                     <div class="product-item">
                         <a href="UserProduct.cfm?productId=#encryptedId#" class="product-link">
                             <div class="card product-card">
-                                <img src="../../uploads/#variables.sortProductsQuery.fldImageFileName#" class="card-img-top" alt="Product">
+                                <img src="/uploads/#variables.sortProductsQuery.fldImageFileName#" class="card-img-top" alt="Product">
                                 <div class="card-body text-center">
                                     <h6 class="product-name">#variables.sortProductsQuery.fldProductName#</h6>
                                     <p class="product-price"><i class="fa-solid fa-indian-rupee-sign"></i>#variables.sortProductsQuery.fldPrice#</p>
@@ -135,7 +135,7 @@
                         <div class="product-item">
                             <a href="UserProduct.cfm?productId=#encryptedId#" class="product-link">
                                 <div class="card product-card">
-                                    <img src="../../uploads/#variables.filterProductsQuery.fldImageFileName#" class="card-img-top" alt="Product">
+                                    <img src="/uploads/#variables.filterProductsQuery.fldImageFileName#" class="card-img-top" alt="Product">
                                     <div class="card-body text-center">
                                         <h6 class="product-name">#variables.filterProductsQuery.fldProductName#</h6>
                                         <p class="product-price"><i class="fa-solid fa-indian-rupee-sign"></i>#variables.filterProductsQuery.fldPrice#</p>
@@ -153,19 +153,7 @@
         </cfif>
     </div>
     
-    <footer class="text-white text-center">
-        <p>&copy; 2025 Shopping Cart. All Rights Reserved.</p>
-    </footer>
-    
-
-    <script src="../../assets/js/jquery.js"></script>
-    
-    <script src="../../assets/js/bootstrap.min.js"></script>
+   <cfinclude template="footer.cfm">
      
-	
-    
-        
-    
-
 </body>
 </html>

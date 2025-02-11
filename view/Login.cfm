@@ -2,11 +2,13 @@
 <cfif structKeyExists(url, "logOut")>
 	<cfset structDelete(session, "username")>
 	<cfset structDelete(session, "userid")>
+    <cfset structDelete(session, "roleid")>
+    <cfset structDelete(session, "productId")>
 </cfif>
 
 <cftry>
     <cfif structKeyExists(form, "submit")>
-        <cfset user = application.modelService.validateUserLogin(form.username,
+        <cfset user = application.userLoginService.validateUserLogin(form.username,
 									                    form.password)>
        
         <cfif structKeyExists(user, "username") AND user.username EQ form.username>
@@ -16,7 +18,11 @@
             <cfif session.roleid EQ "1">
                 <cflocation url="../view/Admin/dashboard.cfm" addtoken="false">
             <cfelseif session.roleid EQ "2">
-                <cflocation url="../view/User/UserHome.cfm" addtoken="false">
+                <cfif structKeyExists(session, "productId")>
+                    <cflocation url="../view/User/UserCart.cfm?productId=#session.productId#" addtoken="false">
+                <cfelse>
+                    <cflocation url="../view/User/UserHome.cfm" addtoken="false">
+                </cfif>
             </cfif>
             
 		<cfelse>

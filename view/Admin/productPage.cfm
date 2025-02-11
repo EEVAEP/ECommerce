@@ -1,6 +1,6 @@
 <cfparam name="url.subCategoryId" default="">
 <cftry>
-    <cfset productListQuery = application.modelAdminCtg.listProducts(url.subCategoryId)>
+    <cfset productListQuery = application.modelAdminCtg.getProductsList(url.subCategoryId)>
     
     <cfcatch>
         <cfdump  var="#cfcatch#">
@@ -157,7 +157,7 @@
                                 <cfset encryptedId = encrypt(productListQuery.idProduct, application.encryptionKey, "AES", "Hex")>
                                 <tr data-id="#encryptedId#">
                                     <td>
-            					        <img src="../../uploads/#productListQuery.fldImageFileName#" 
+            					        <img src="/uploads/#productListQuery.fldImageFileName#" 
 									        alt="Photo"		
 									        width="30" height="30">
         					        </td>

@@ -123,7 +123,7 @@ $(document).ready(function() {
                         
 					var spanImg = $('<span>', { class: 'image-container' }).append(
                     	$('<img>', { 
-                        	src: `../../uploads/${data[i].imageFile}`, 
+                        	src: `/uploads/${data[i].imageFile}`, 
                         	alt: 'prodimg' ,
                         	width : 30,
                         	height : 30
@@ -265,7 +265,7 @@ $(document).ready(function() {
 				let viewProductDescription= data.DATA[0][8];
 				
 				
-				let basePath = "../../uploads/";
+				let basePath = "/uploads/";
 				let viewPhotoSrc = basePath + data.DATA[0][7];
 				$('#viewPhoto').attr('src', viewPhotoSrc);
 
