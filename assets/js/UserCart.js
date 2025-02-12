@@ -102,7 +102,7 @@ $(document).ready(function () {
 		$('#userAddressForm').trigger('reset');
 		$('#saveCategoryButton').show();
 		$('#editUserAddressButton').hide();
-		$('#errorMessages').empty();
+		$('#errorAddressMessages').empty();
 	});
 	$('#saveUserAddressButton').click(function (event) {
 		event.preventDefault();
@@ -163,7 +163,6 @@ $(document).ready(function () {
 				console.log("Request Failed");
 			}
 		});
-
 	});
 	/* Edit User Details */
 	$('#editUserDetailsButton').on('click', function (event) {
@@ -187,7 +186,7 @@ $(document).ready(function () {
 					location.reload();
 				}
 				else {
-					addOnError(data);
+					addOnErrorUser(data);
 				}
 			},
 			error: function () {
@@ -195,8 +194,7 @@ $(document).ready(function () {
 			}
 		});
 	});
-
-	function addOnError(errors) {
+	function addOnErrorUser(errors) {
 		let errorContainer = $('#errorMessages1');
 		errorContainer.empty();
 		if (errors.length > 0) {
@@ -208,7 +206,21 @@ $(document).ready(function () {
 			errorContainer.append(errorHTML);
 		}
 	}
+	function addOnError(errors) {
+		console.log("entered");
+		let errorContainer = $('#errorAddressMessages');
+		errorContainer.empty();
+		if (errors.length > 0) {
+			let errorHTML = '<div class="alert alert-danger">';
+			errors.forEach(function (error) {
+				errorHTML += '<div>' + error + '</div>';
+			});
+			errorHTML += '</div>';
+			errorContainer.append(errorHTML);
+		}
+	}
 });
+
 document.querySelectorAll(".deleteAddress").forEach(function (button) {
 	button.addEventListener("click", function () {
 		var addressId = this.getAttribute("data-id");

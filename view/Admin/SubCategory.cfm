@@ -107,7 +107,8 @@
                                     </button>
                                     <button class="btn btn-sm btn-outline-info view"
                                         id="viewSubCategoryBtn"
-                                        data-id="#encryptedId#">
+                                        data-id="#encryptedId#"
+                                        data-category-id="#url.categoryId#">
                                         <i class="bi bi-chevron-right"></i> 
                                     </button>
                                 </td>

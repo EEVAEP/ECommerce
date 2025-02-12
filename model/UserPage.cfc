@@ -108,24 +108,24 @@
     </cffunction>
 
     <cffunction name="deleteCartProduct" access="remote" returnformat = "JSON">
-    	<cfargument name="productId" type="string" required="true">
+        <cfargument name="productId" type="string" required="true">
         <cfset local.decryptedId = application.modelAdminCtg.decryptId(arguments.productId)>
         <cftry>
-			<cfquery datasource="#application.datasource#">
-        		DELETE 
-				FROM 
+            <cfquery datasource="#application.datasource#">
+                DELETE 
+                FROM 
                     tblCart
                 WHERE
                     fldProductId = <cfqueryparam value="#local.decryptedId#" cfsqltype="cf_sql_integer">
                     AND fldUserId = <cfqueryparam value = "#session.userid#" cfsqltype = "cf_sql_integer">
             </cfquery>
-			<cfset local.response = {status="success", message="Product deleted from cart successfully."}>
-        	<cfreturn local.response>
-    		<cfcatch>
-				<cfset local.response = {status="error", message="An error occurred while deleting the product."}>
-        		<cfreturn local.response>
-    		</cfcatch>
-		</cftry>
+            <cfset local.response = {status="success", message="Product deleted from cart successfully."}>
+            <cfreturn local.response>
+            <cfcatch>
+                <cfset local.response = {status="error", message="An error occurred while deleting the product."}>
+                <cfreturn local.response>
+            </cfcatch>
+        </cftry>
     </cffunction>
 
     <cffunction name="increaseOrDecreaseCartProduct" access="remote" returnformat = "JSON">
@@ -148,33 +148,27 @@
                     <cfset local.newQuantity = local.qryGetProductQuantity.fldQuantity - 1>
                 </cfif>
                 <cfif local.newQuantity EQ 0>
-                    <cfquery datasource="#application.datasource#" >
-                        DELETE 
-                        FROM 
-                            tblCart
-                        WHERE fldProductId = <cfqueryparam value="#local.decryptedId#" cfsqltype="cf_sql_integer">
-                    </cfquery>
-                    <cfset local.response = {status="success", message="Product removed from the cart."}>
+                    <cfset local.response = {status="error", message="Product cannot removed from the cart"}>
                     <cfreturn local.response>
                 <cfelse>
                     <cfquery datasource = "#application.datasource#" result="local.updateProductQuantity">
-        			    UPDATE tblCart
-				        SET 
+                        UPDATE tblCart
+                        SET 
                             fldQuantity = <cfqueryparam value="#local.newQuantity#" cfsqltype="cf_sql_integer">
                         WHERE
                             fldProductId = <cfqueryparam value="#local.decryptedId#" cfsqltype="cf_sql_integer">
                     </cfquery>
                     <cfset local.response = {status="success", message="Product updated successfully."}>
-        	        <cfreturn local.response>
+                    <cfreturn local.response>
                 </cfif>
             <cfelse>
                 <cfset local.response = {status="failed", message="Product not updated."}>
-        	    <cfreturn local.response>
+                <cfreturn local.response>
             </cfif>  
-    		<cfcatch>
-				<cfset local.response = {status="error", message="An error occurred while deleting the product."}>
-        		<cfreturn local.response>
-    		</cfcatch>
+            <cfcatch>
+                <cfset local.response = {status="error", message="An error occurred while deleting the product."}>
+                <cfreturn local.response>
+            </cfcatch>
         </cftry>
     </cffunction>
 <!---------------------------------User Profile Page functions------------------------------------------------------------- --->
@@ -182,7 +176,7 @@
     <!------ Stored Procedure ------>
     <cffunction name="getUserProfileDetails" access="public" returntype="any">
         <cfquery name="local.qryGetUserDetails" datasource="#application.datasource#">
-            CALL getUserProfileDetails(
+            CALL spGetUserProfileDetails(
                 <cfqueryparam value="#session.userid#" cfsqltype="cf_sql_integer">
             )
         </cfquery>
@@ -202,48 +196,48 @@
         <cfset local.errors = []>
         <!------- First Name ------->
         <cfif trim(arguments.firstName) EQ "">
-        	<cfset arrayAppend(local.errors, "*First Name is required.")>
-    	<cfelseif not reFind("^[A-Za-z]+$", trim(arguments.firstName))>
-        	<cfset arrayAppend(local.errors, "*First Name cannot contain numbers or special characters.")>
-    	</cfif>
+            <cfset arrayAppend(local.errors, "*First Name is required.")>
+        <cfelseif not reFind("^[A-Za-z]+$", trim(arguments.firstName))>
+            <cfset arrayAppend(local.errors, "*First Name cannot contain numbers or special characters.")>
+        </cfif>
         <!------- Last Name -------->
         <cfif trim(arguments.lastName) EQ "">
-    			<cfset arrayAppend(local.errors, "*Last Name is required.")>
-		<cfelseif not reFind("^[A-Za-z]+(\s[A-Za-z]+)*$", trim(arguments.lastName))>
-    			<cfset arrayAppend(local.errors, "*Last Name cannot contain numbers or special characters.")>
-		</cfif>
+            <cfset arrayAppend(local.errors, "*Last Name is required.")>
+        <cfelseif not reFind("^[A-Za-z]+(\s[A-Za-z]+)*$", trim(arguments.lastName))>
+            <cfset arrayAppend(local.errors, "*Last Name cannot contain numbers or special characters.")>
+        </cfif>
         <!-----   Address Line1      ---->
         <cfif trim(arguments.addressLine1) EQ "">
-			<cfset arrayAppend(local.errors, "*AddressLine1 is required.")>
-		</cfif>
+            <cfset arrayAppend(local.errors, "*AddressLine1 is required.")>
+        </cfif>
         <!-----   Address Line2      ---->
         <cfif trim(arguments.addressLine2) EQ "">
-			<cfset arrayAppend(local.errors, "*AddressLine2 is required.")>
-		</cfif>
+            <cfset arrayAppend(local.errors, "*AddressLine2 is required.")>
+        </cfif>
         <!-----   City      ---->
         <cfif trim(arguments.city) EQ "">
-			<cfset arrayAppend(local.errors, "*City is required.")>
-		</cfif>
+            <cfset arrayAppend(local.errors, "*City is required.")>
+        </cfif>
         <!-----   State      ---->
         <cfif trim(arguments.state) EQ "">
-			<cfset arrayAppend(local.errors, "*State is required.")>
-		</cfif>
+            <cfset arrayAppend(local.errors, "*State is required.")>
+        </cfif>
         <!-----   Pincode     ---->
         <cfif trim(arguments.pincode) EQ "" OR (NOT isNumeric(arguments.pincode))>
-			<cfset arrayAppend(local.errors, "*pincode must be numeric")>
-		<cfelseif len(arguments.pincode) GT 8>
-			<cfset arrayAppend(local.errors, "*pincode length must be less than 9")>
-		</cfif>
+            <cfset arrayAppend(local.errors, "*pincode must be numeric")>
+        <cfelseif len(arguments.pincode) GT 8>
+            <cfset arrayAppend(local.errors, "*pincode length must be less than 9")>
+        </cfif>
         <!-----   PhoneNumber    ---->
         <cfif trim(arguments.phoneNumber) EQ "" OR not reFind("^\d{10}$", arguments.phoneNumber)>
-			<cfset arrayAppend(local.errors, "*Phone number must contain exactly 10 digits.")>
-		</cfif>
+            <cfset arrayAppend(local.errors, "*Phone number must contain exactly 10 digits.")>
+        </cfif>
         <cfif arrayLen(local.errors) EQ 0>
             <cfset local.addCatogory=createOrUpdateProfileDetails(argumentCollection=arguments)>
-			<cfreturn local.errors>
-		<cfelse>
-		    <cfreturn local.errors>
-		</cfif>
+            <cfreturn local.errors>
+        <cfelse>
+            <cfreturn local.errors>
+        </cfif>
     </cffunction>
 
     <cffunction name="createOrUpdateProfileDetails" access="public">
@@ -259,15 +253,15 @@
         <cfif StructKeyExists(arguments, "addressId") AND arguments.addressId NEQ "">
             <cfset local.decryptedId = application.modelAdminCtg.decryptId(arguments.addressId)>
             <cfquery datasource="#application.datasource#">
-        		UPDATE tblAddress
-				SET 
+                UPDATE tblAddress
+                SET 
                     fldFirstName = <cfqueryparam value="#arguments.firstName#" cfsqltype="cf_sql_varchar">,
                     fldLastName = <cfqueryparam value="#arguments.lastName#" cfsqltype="cf_sql_varchar">,
                     fldAddressLine1 = <cfqueryparam value="#arguments.addressLine1#" cfsqltype="cf_sql_varchar">,
                     fldAddressLine2 = <cfqueryparam value="#arguments.addressLine2#" cfsqltype="cf_sql_varchar">,
                     fldCity = <cfqueryparam value="#arguments.city#" cfsqltype="cf_sql_varchar">,
                     fldState = <cfqueryparam value="#arguments.state#" cfsqltype="cf_sql_varchar">,
-					fldPincode = <cfqueryparam value="#arguments.pincode#" cfsqltype="cf_sql_varchar">,
+                    fldPincode = <cfqueryparam value="#arguments.pincode#" cfsqltype="cf_sql_varchar">,
                     fldPhonenumber = <cfqueryparam value="#arguments.phoneNumber#" cfsqltype="cf_sql_varchar">,
                     fldCreatedDate  = NOW()
                 WHERE
@@ -360,25 +354,25 @@
     	<cfargument name="addressId" type="string" required="true">
         <cfset local.decryptedId = application.modelAdminCtg.decryptId(arguments.addressId)>
         <cftry>
-			<cfquery datasource="#application.datasource#">
-        		UPDATE tblAddress
-				SET 
+            <cfquery datasource="#application.datasource#">
+                UPDATE tblAddress
+                SET 
                     fldActive = <cfqueryparam value="0" cfsqltype="cf_sql_integer">,
                     fldDeactivatedDate = NOW()
                 WHERE
                     fldAddress_ID = <cfqueryparam value="#local.decryptedId#" cfsqltype="cf_sql_integer">
             </cfquery>
-			<cfset local.response = {status="success", message="Category deleted successfully."}>
-        	<cfreturn local.response>
-    		<cfcatch>
-				<cfset local.response = {status="error", message="An error occurred while deleting the category"}>
-        		<cfreturn local.response>
-    		</cfcatch>
-		</cftry>
+            <cfset local.response = {status="success", message="Category deleted successfully."}>
+            <cfreturn local.response>
+            <cfcatch>
+                <cfset local.response = {status="error", message="An error occurred while deleting the category"}>
+                <cfreturn local.response>
+            </cfcatch>
+        </cftry>
     </cffunction>
 
     <cffunction name="getUserDetailsById" access="remote" returntype="any" returnformat="JSON">	
-		<cfargument name="editUserId" type="string" required="true">
+        <cfargument name="editUserId" type="string" required="true">
         <cfset local.decryptedId = application.modelAdminCtg.decryptId(arguments.editUserId)>
         <cfquery name="local.qryGetEachUserDetails" datasource="#application.datasource#">
             SELECT 
@@ -404,26 +398,26 @@
         <cfset local.errors = []>
         <!------- First Name ------->
         <cfif trim(arguments.firstName) EQ "">
-        	<cfset arrayAppend(local.errors, "*First Name is required.")>
-    	<cfelseif not reFind("^[A-Za-z]+$", trim(arguments.firstName))>
-        	<cfset arrayAppend(local.errors, "*First Name cannot contain numbers or special characters.")>
-    	</cfif>
+            <cfset arrayAppend(local.errors, "*First Name is required.")>
+        <cfelseif not reFind("^[A-Za-z]+$", trim(arguments.firstName))>
+            <cfset arrayAppend(local.errors, "*First Name cannot contain numbers or special characters.")>
+        </cfif>
         <!------- Last Name -------->
         <cfif trim(arguments.lastName) EQ "">
-    			<cfset arrayAppend(local.errors, "*Last Name is required.")>
+            <cfset arrayAppend(local.errors, "*Last Name is required.")>
 		<cfelseif not reFind("^[A-Za-z]+(\s[A-Za-z]+)*$", trim(arguments.lastName))>
-    			<cfset arrayAppend(local.errors, "*Last Name cannot contain numbers or special characters.")>
-		</cfif>
+            <cfset arrayAppend(local.errors, "*Last Name cannot contain numbers or special characters.")>
+        </cfif>
         <!------- Email -------->
         <cfquery name="local.qryCheckUserEmail" datasource="#application.datasource#">
             SELECT *
-        	FROM 
-			    tblUser
+            FROM 
+                tblUser
         	WHERE 
-				fldEmail = <cfqueryparam value="#arguments.email#" cfsqltype="cf_sql_varchar">
+                fldEmail = <cfqueryparam value="#arguments.email#" cfsqltype="cf_sql_varchar">
             AND 
                 fldUser_ID <> <cfqueryparam value="#session.userid#" cfsqltype="cf_sql_integer">
-    	</cfquery>
+        </cfquery>
         <cfif len(trim(arguments.email)) EQ 0>
             <cfset arrayAppend(local.errors, "*Email is required")>
         <cfelseif NOT reFindNoCase("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", arguments.email)>
@@ -434,24 +428,24 @@
         <!-----   PhoneNumber    ---->
         <cfquery name="local.qryCheckUserPhone" datasource="#application.datasource#">
             SELECT *
-        	FROM 
-			    tblUser
-        	WHERE
-				fldPhone  = <cfqueryparam value="#arguments.phone#" cfsqltype="cf_sql_varchar">
-			AND
-				fldUser_ID <> <cfqueryparam value="#session.userid#" cfsqltype="cf_sql_integer">
-    	</cfquery>
+            FROM 
+                tblUser
+            WHERE
+                fldPhone  = <cfqueryparam value="#arguments.phone#" cfsqltype="cf_sql_varchar">
+            AND
+                fldUser_ID <> <cfqueryparam value="#session.userid#" cfsqltype="cf_sql_integer">
+        </cfquery>
         <cfif trim(arguments.phone) EQ "" OR not reFind("^\d{10}$", arguments.phone)>
-			<cfset arrayAppend(local.errors, "*Phone number must contain exactly 10 digits.")>
+            <cfset arrayAppend(local.errors, "*Phone number must contain exactly 10 digits.")>
         <cfelseif local.qryCheckUserPhone.recordCount GT 0>
             <cfset arrayAppend(local.errors, "*Phone Number is already registered.")>
-		</cfif>
+        </cfif>
         <cfif arrayLen(local.errors) EQ 0>
             <cfset local.addCatogory=UpdateUserDetails(argumentCollection=arguments)>
-			<cfreturn local.errors>
-		<cfelse>
-		    <cfreturn local.errors>
-		</cfif>
+            <cfreturn local.errors>
+        <cfelse>
+            <cfreturn local.errors>
+        </cfif>
     </cffunction>
 
     <cffunction name="UpdateUserDetails" access="public">
@@ -462,8 +456,8 @@
         <cfargument name="editUserId" type="string" required="true">
         <cfset local.decryptedId = application.modelAdminCtg.decryptId(arguments.editUserId)>
         <cfquery datasource="#application.datasource#">
-        	UPDATE tblUser
-			SET 
+            UPDATE tblUser
+            SET 
                 fldFirstName = <cfqueryparam value="#arguments.firstName#" cfsqltype="cf_sql_varchar">,
                 fldLastName = <cfqueryparam value="#arguments.lastName#" cfsqltype="cf_sql_varchar">,
                 fldEmail = <cfqueryparam value="#arguments.email#" cfsqltype="cf_sql_varchar">,
@@ -487,27 +481,27 @@
         <cfset local.cardCode = "12345678912">
         <!-----   CardNumber     ---->
         <cfif trim(arguments.cardNumber) EQ "" OR (NOT isNumeric(arguments.cardNumber))>
-			<cfset arrayAppend(local.errors, "*Card Number must be numeric")>
-		<cfelseif len(arguments.cardNumber) GT 11 OR len(arguments.cardNumber) LT 11>
-			<cfset arrayAppend(local.errors, "*Card Number length must be exact 11")>
+            <cfset arrayAppend(local.errors, "*Card Number must be numeric")>
+        <cfelseif len(arguments.cardNumber) GT 11 OR len(arguments.cardNumber) LT 11>
+            <cfset arrayAppend(local.errors, "*Card Number length must be exact 11")>
         <cfelseif arguments.cardNumber NEQ local.cardCode>
             <cfset arrayAppend(local.errors, "*Enter a valid Card Number")>
         <cfelse>
             <cfset arguments['cardNumber'] = "8912">
-		</cfif>
+        </cfif>
         <!-----   cvv    ---->
         <cfset local.cvvCode = "123">
         <cfif trim(arguments.cvv) EQ "" OR not reFind("^\d{3}$", arguments.cvv)>
-			<cfset arrayAppend(local.errors, "*CVV must contain exactly 3 digits.")>
+            <cfset arrayAppend(local.errors, "*CVV must contain exactly 3 digits.")>
         <cfelseif arguments.cvv NEQ local.cvvcode>
             <cfset arrayAppend(local.errors, "*Enter a valid CVV.")>
-		</cfif>
+        </cfif>
         <cfif arrayLen(local.errors) EQ 0>
             <cfset local.addCatogory=createOrUpdateCardDetails(argumentCollection=arguments)>
-			<cfreturn local.errors>
-		<cfelse>
-		    <cfreturn local.errors>
-		</cfif>
+            <cfreturn local.errors>
+        <cfelse>
+            <cfreturn local.errors>
+        </cfif>
     </cffunction>
 
     <cffunction name="createOrUpdateCardDetails" access="public">

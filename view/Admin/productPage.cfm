@@ -26,9 +26,11 @@
     <body>
         <header class="d-flex align-items-center bg-dark text-white py-3 px-4">
             <i class="fas fa-shopping-cart logo-icon me-2"></i>
-             <a href="dashboard.cfm" class="text-decoration-none">
-                <span class="brand fs-4" style="color:rgb(248, 248, 248); cursor: pointer;">QuickCart</span>
-            </a>
+            <cfoutput>
+                <a href="subCategory.cfm?categoryId=#url.categoryId#" class="text-decoration-none">
+                    <span class="brand fs-4" style="color:rgb(248, 248, 248); cursor: pointer;">QuickCart</span>
+                </a>
+            </cfoutput>
             <div class="ms-auto">
                 <a href="../Login.cfm?logOut" class="btn btn-light">LogOut</a> 
             </div>

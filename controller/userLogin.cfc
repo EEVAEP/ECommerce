@@ -6,8 +6,8 @@
         <cfset local.hashedPass = hash(local.saltedPass,"SHA-256","UTF-8")>	
         <cfreturn local.hashedPass>
     </cffunction>
-	
-	<cffunction name="validateRegisterInput" access="public" returntype="array">
+
+    <cffunction name="validateRegisterInput" access="public" returntype="array">
         <cfargument name="fname" required="true" type="string">
         <cfargument name="lname" required="true" type="string">
         <cfargument name="email" required="true" type="string">
@@ -38,5 +38,5 @@
             <cfset arrayAppend(local.errors, "*Please enter a valid password (minimum 8 characters, 1 lowercase, 1 uppercase, 1 special character)")>
         </cfif>
         <cfreturn local.errors>
-	</cffunction>
+    </cffunction>
 </cfcomponent>

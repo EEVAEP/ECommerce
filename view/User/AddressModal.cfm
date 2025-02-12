@@ -13,6 +13,7 @@
             </div>
             <div class="modal-body">
                 <form method="post" id="userAddressForm" action="">
+                    <div id="errorAddressMessages"></div>
                     <div class="form-group pt-1">
                         <label for="firstName">First Name</label>
                         <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Enter First Name">
@@ -50,8 +51,7 @@
                         <button type="button" name="saveUserAddressButton" class="btn btn-success mb-3" id="saveUserAddressButton">Submit</button>
                         <button type="button" name="editUserAddressButton" class="btn btn-success mb-3" id="editUserAddressButton">Update</button>
                     </div>            
-                    <div id="errorMessages"></div>
-                </form>
+                  </form>
             </div>
         </div>
     </div>

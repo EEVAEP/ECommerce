@@ -161,9 +161,9 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 $(document).on("click", ".view", function () {
 	const subCategoryId = $(this).data("id");
-
+	const categoryId = $(this).data("category-id");
 	if (subCategoryId) {
-		window.location.href = `ProductPage.cfm?subCategoryId=${encodeURIComponent(subCategoryId)}`;
+		window.location.href = `ProductPage.cfm?subCategoryId=${encodeURIComponent(subCategoryId)}&categoryId=${encodeURIComponent(categoryId)}`;
 	} else {
 		alert("Category ID is missing.");
 	}

@@ -1,5 +1,7 @@
 DELIMITER $$
-CREATE PROCEDURE getUserProfileDetails(IN p_UserID INT)
+USE `shoppingcart`$$
+DROP PROCEDURE IF EXISTS `spGetUserProfileDetails`$$
+CREATE PROCEDURE spGetUserProfileDetails(p_UserID INT)
 BEGIN
     SELECT 
         fldUser_ID,

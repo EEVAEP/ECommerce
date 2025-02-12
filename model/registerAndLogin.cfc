@@ -3,7 +3,7 @@
         <cfquery name="local.RoleName" datasource="#application.datasource#">
             SELECT 
 				fldRole_ID,
-                fldRoleName
+				fldRoleName
 			FROM 
 				tblroles
         </cfquery>
@@ -23,7 +23,7 @@
         <cfargument name="lname" required="true" type="string">
         <cfargument name="email" required="true" type="string">
         <cfargument name="phone" required="true" type="string">
-    	<cfargument name="password" required="true" type="string">
+		<cfargument name="password" required="true" type="string">
 		<cfset local ={}>
 		<cfquery name="local.qryCheckUser" datasource="#application.datasource#">
             SELECT *
@@ -66,10 +66,10 @@
     </cffunction>
 
     <cffunction name="validateUserLogin" access="public" returntype="struct">
-    	<cfargument name="username" required="true" type="string">
-    	<cfargument name="password" required="true" type="string">
+		<cfargument name="username" required="true" type="string">
+		<cfargument name="password" required="true" type="string">
 		<cfquery name="local.qryLogin" datasource="#application.datasource#">
-        	SELECT 
+			SELECT 
 				fldUser_ID AS userid,
 				fldEmail,
                 fldPhone,

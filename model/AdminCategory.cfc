@@ -1,9 +1,9 @@
 <cfcomponent>
     <cffunction name="decryptId" access="public" returntype="string" output="false">
-    	<cfargument name="encryptedId" type="string" required="true">
-    	<cfset local.decryptedId = decrypt(arguments.encryptedId, application.encryptionKey, "AES", "Hex")>
-    	<cfreturn local.decryptedId>
-	</cffunction>
+        <cfargument name="encryptedId" type="string" required="true">
+        <cfset local.decryptedId = decrypt(arguments.encryptedId, application.encryptionKey, "AES", "Hex")>
+        <cfreturn local.decryptedId>
+    </cffunction>
 
     <cffunction  name= "validateCategoryDetails" access= "remote" returnformat="JSON">
         <cfargument name="categoryName" type="string" required="true">
@@ -26,11 +26,11 @@
             <cfset arrayAppend(local.errors, "*This category already exists")>
         </cfif>
         <cfif arrayLen(local.errors) EQ 0>
-			<cfset local.addCatogory = createOrUpdateCategory(argumentCollection = arguments)>
-			<cfreturn local.errors>
-		<cfelse>
-			<cfreturn local.errors>
-		</cfif>
+            <cfset local.addCatogory = createOrUpdateCategory(argumentCollection = arguments)>
+            <cfreturn local.errors>
+        <cfelse>
+            <cfreturn local.errors>
+        </cfif>
     </cffunction>
 
     <cffunction name="createOrUpdateCategory" access="public">
@@ -39,9 +39,9 @@
         <cfif StructKeyExists(arguments, "categoryId") AND arguments.categoryId NEQ "">
             <cfset local.decryptedId = decryptId(arguments.categoryId)>
             <cfquery name="local.updateCategory" datasource="#application.datasource#">
-        		UPDATE tblcategory
-				SET 
-					fldCategoryName = <cfqueryparam value="#arguments.categoryName#" cfsqltype="cf_sql_varchar">,
+                UPDATE tblcategory
+                SET 
+                    fldCategoryName = <cfqueryparam value="#arguments.categoryName#" cfsqltype="cf_sql_varchar">,
                     fldUpdatedById = <cfqueryparam value="#session.userid#" cfsqltype="cf_sql_integer">,
                     fldUpdatedDate = NOW()
                 WHERE
@@ -75,8 +75,8 @@
     </cffunction>
 
     <cffunction name="getCategoryById" access="remote" returntype="any" returnformat="JSON">	
-		<cfargument name="categoryById" type="string" required="true">
-		<cfset local.decryptedId = decryptId(arguments.categoryById)>
+        <cfargument name="categoryById" type="string" required="true">
+        <cfset local.decryptedId = decryptId(arguments.categoryById)>
         <cfquery name="local.qryGetEachCategoryId" datasource="#application.datasource#">
             SELECT 
                 fldCategory_ID, fldCategoryName 
@@ -89,25 +89,25 @@
     </cffunction>
 
     <cffunction name="deleteCategory" access="remote" returnformat = "JSON">
-    	<cfargument name="categoryId" type="string" required="true">
-		<cfset local.decryptedId = decryptId(arguments.categoryId)>
+        <cfargument name="categoryId" type="string" required="true">
+        <cfset local.decryptedId = decryptId(arguments.categoryId)>
         <cftry>
-			<cfquery datasource="#application.datasource#">
-        		UPDATE tblcategory
-				SET 
+            <cfquery datasource="#application.datasource#">
+                UPDATE tblcategory
+                SET 
                     fldActive = 0,
                     fldUpdatedById = <cfqueryparam value="#session.userid#" cfsqltype="cf_sql_integer">,
                     fldUpdatedDate = NOW()
                 WHERE
                     fldCategory_ID = <cfqueryparam value="#local.decryptedId#" cfsqltype="cf_sql_integer">
             </cfquery>
-			<cfset local.response = {status="success", message="Category deleted successfully."}>
-        	<cfreturn local.response>
-    		<cfcatch>
-				<cfset local.response = {status="error", message="An error occurred while deleting the category"}>
-        		<cfreturn local.response>
-    		</cfcatch>
-		</cftry>
+            <cfset local.response = {status="success", message="Category deleted successfully."}>
+            <cfreturn local.response>
+            <cfcatch>
+                <cfset local.response = {status="error", message="An error occurred while deleting the category"}>
+                <cfreturn local.response>
+            </cfcatch>
+        </cftry>
     </cffunction>
 
     <!--------------------------- Admin Dashboard SubCategories functions ------------------------------------------------>
@@ -141,11 +141,11 @@
             </cfif>
         </cfif>
         <cfif arrayLen(local.errors) EQ 0>
-			<cfset local.addCatogory=createOrUpdateSubCategory(argumentCollection=arguments)>
-			<cfreturn local.errors>
-		<cfelse>
-		    <cfreturn local.errors>
-		</cfif>
+            <cfset local.addCatogory=createOrUpdateSubCategory(argumentCollection=arguments)>
+            <cfreturn local.errors>
+        <cfelse>
+            <cfreturn local.errors>
+        </cfif>
     </cffunction>
 
     <cffunction name="createOrUpdateSubCategory" access="public">
@@ -155,10 +155,10 @@
         <cfif StructKeyExists(arguments, "subCategoryId") AND arguments.subCategoryId NEQ "">
             <cfset local.decryptedId = decryptId(arguments.subCategoryId)>
             <cfquery datasource="#application.datasource#">
-        		UPDATE tblsubcategory
-				SET 
+                UPDATE tblsubcategory
+                SET 
                     fldCategoryId = <cfqueryparam value="#arguments.categoryName#" cfsqltype="cf_sql_integer">,
-					fldSubCategoryName = <cfqueryparam value="#arguments.subCategoryName#" cfsqltype="cf_sql_varchar">,
+                    fldSubCategoryName = <cfqueryparam value="#arguments.subCategoryName#" cfsqltype="cf_sql_varchar">,
                     fldUpdatedById = <cfqueryparam value="#session.userid#" cfsqltype="cf_sql_integer">,
                     fldUpdatedDate = NOW()
                 WHERE
@@ -199,7 +199,7 @@
     </cffunction>
 
     <cffunction name="getSubCategoryById" access="remote" returntype="any" returnformat="JSON">	
-		<cfargument name="subCategoryById" type="string" required="true">
+        <cfargument name="subCategoryById" type="string" required="true">
         <cfset local.decryptedId = decryptId(arguments.subCategoryById)>
         <cfquery name="local.qryGetEachSubCategoryId" datasource="#application.datasource#">
             SELECT 
@@ -217,23 +217,23 @@
     </cffunction>
 
     <cffunction name="deleteSubCategory" access="remote" returnformat = "JSON">
-    	<cfargument name="subCategoryId" type="string" required="true">
+        <cfargument name="subCategoryId" type="string" required="true">
         <cfset local.decryptedId = decryptId(arguments.subCategoryId)>
         <cftry>
-			<cfquery datasource="#application.datasource#">
-        		UPDATE tblsubcategory
-				SET 
+            <cfquery datasource="#application.datasource#">
+                UPDATE tblsubcategory
+                SET 
                     fldActive = 0,
                     fldUpdatedById = <cfqueryparam value="#session.userid#" cfsqltype="cf_sql_integer">,
                     fldUpdatedDate = NOW()
             </cfquery>
-			<cfset local.response = {status="success", message="SubCategory deleted successfully."}>
-        	<cfreturn local.response>
-    		<cfcatch>
-				<cfset local.response = {status="error", message="An error occurred while deleting the SubCategory."}>
-        		<cfreturn local.response>
-    		</cfcatch>
-		</cftry>
+            <cfset local.response = {status="success", message="SubCategory deleted successfully."}>
+            <cfreturn local.response>
+            <cfcatch>
+                <cfset local.response = {status="error", message="An error occurred while deleting the SubCategory."}>
+                <cfreturn local.response>
+            </cfcatch>
+        </cftry>
     </cffunction>
 
 <!--- ----------------------------------------- Product Page functions -------------------------------------------- --->
@@ -242,10 +242,10 @@
     <cffunction name="getSubCategoryName" access="public" returntype="query">
         <cfquery name="local.qrySubCategoryName" datasource="#application.datasource#">
             SELECT 
-				fldSubCategory_ID,
+                fldSubCategory_ID,
                 fldSubCategoryName
-			FROM 
-				tblsubcategory
+            FROM 
+                tblsubcategory
             WHERE
                 fldActive = 1
         </cfquery>
@@ -255,11 +255,11 @@
     <cffunction name="getProductBrandName" access="public" returntype="query">
         <cfquery name="local.qryBrandName" datasource="#application.datasource#">
             SELECT 
-				fldBrand_ID,
+                fldBrand_ID,
                 fldBrandName
-			FROM 
-				tblbrands
-             WHERE
+            FROM 
+                tblbrands
+            WHERE
                 fldActive = 1
         </cfquery>
         <cfreturn local.qryBrandName>
@@ -356,11 +356,11 @@
             <cfset arguments['productImg'] = local.uploadedImagePath>
         </cfif>   
         <cfif arrayLen(local.errors) EQ 0>
-			<cfset local.addCatogory=createOrUpdateProduct(argumentCollection=arguments)>
-			<cfreturn local.errors>
-		<cfelse>
-		    <cfreturn local.errors>
-		</cfif>
+            <cfset local.addCatogory=createOrUpdateProduct(argumentCollection=arguments)>
+            <cfreturn local.errors>
+        <cfelse>
+            <cfreturn local.errors>
+        </cfif>
         <cfreturn local.errors>
     </cffunction>
 
@@ -377,11 +377,11 @@
         <cfif StructKeyExists(arguments, "productId") AND arguments.productId NEQ "">
             <cfset local.decryptedId = decryptId(arguments.productId)>
                 <cfquery result = "local.qryEditProduct" datasource="#application.datasource#">
-        		    UPDATE tblproduct
-				    SET 
+                    UPDATE tblproduct
+                    SET 
                         fldProductName = <cfqueryparam value="#arguments.productName#" cfsqltype="cf_sql_varchar">,
                         fldSubCategoryId = <cfqueryparam value="#arguments.subCategoryId#" cfsqltype="cf_sql_integer">,
-					    fldBrandId = <cfqueryparam value="#arguments.productBrand#" cfsqltype="cf_sql_integer">,
+                        fldBrandId = <cfqueryparam value="#arguments.productBrand#" cfsqltype="cf_sql_integer">,
                         fldDescription = <cfqueryparam value="#arguments.productDescription#" cfsqltype="cf_sql_varchar">,
                         fldPrice = <cfqueryparam value = "#arguments.productPrice#" cfsqltype = "cf_sql_decimal">,
                         fldTax = <cfqueryparam value = "#arguments.productTax#" cfsqltype = "cf_sql_decimal">,
@@ -549,22 +549,22 @@
     	<cfargument name="productId" type="string" required="true">
         <cfset local.decryptedId = decryptId(arguments.productId)>
         <cftry>
-			<cfquery datasource="#application.datasource#">
-        			UPDATE tblProduct
-				    SET 
+            <cfquery datasource="#application.datasource#">
+                    UPDATE tblProduct
+                    SET 
                         fldActive = 0,
                         fldUpdatedById = <cfqueryparam value="#session.userid#" cfsqltype="cf_sql_integer">,
                         fldUpdatedDate = NOW()
                     WHERE
                         fldProduct_ID = <cfqueryparam value="#local.decryptedId#" cfsqltype="cf_sql_integer">
             </cfquery>
-			<cfset local.response = {status="success", message="Product deleted successfully."}>
-        	<cfreturn local.response>
-    		<cfcatch>
-				<cfset local.response = {status="error", message="An error occurred while deleting the product."}>
-        		<cfreturn local.response>
-    		</cfcatch>
-		</cftry>
+            <cfset local.response = {status="success", message="Product deleted successfully."}>
+            <cfreturn local.response>
+            <cfcatch>
+                <cfset local.response = {status="error", message="An error occurred while deleting the product."}>
+                <cfreturn local.response>
+            </cfcatch>
+        </cftry>
     </cffunction>
     <!--- --------------------------Product Image delete ---------------------------------------------- --->
 
@@ -637,7 +637,7 @@
 <!--------- --------------------------------Display Product Details----------------------------------->
     
     <cffunction name="getProductDetails" access="remote" returnformat="JSON">	
-		<cfargument name="productId" type="string" required="true">
+        <cfargument name="productId" type="string" required="true">
         <cfset local.decryptedId = decryptId(arguments.productId)>
         <cfquery name="local.qryGetDisplayProduct" datasource="#application.datasource#">
             SELECT 
