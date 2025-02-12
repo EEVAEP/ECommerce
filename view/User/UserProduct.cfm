@@ -1,5 +1,4 @@
 <cfinclude template="header.cfm">
-
 <cfparam name="url.productId" default="">
 <cfif structKeyExists(url, "productId")>
     <cfset variables.displaySingleProductQry = application.modelAdminCtg.getProductsList(productId = url.productId)>
@@ -12,9 +11,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
-
 <body>
-
     <div class="container mt-4">
         <h4 class="text-center mb-4">Product List</h4>
         <div class="row">
@@ -55,11 +52,9 @@
                         <p class="text-description mb-2">#variables.displaySingleProductQry.fldDescription#</p>
                         <p class="font-weight-bold text-danger mb-3"><i class="fa-solid fa-indian-rupee-sign"></i>#variables.displaySingleProductQry.fldPrice#</p>
                     </div>
-
                     <cfset encryptedId = encrypt(variables.displaySingleProductQry.idProduct, application.encryptionKey, "AES", "Hex")>
-                   
-                    <div class="product-item d-flex gap-2">
-                        <a href="UserCart.cfm?productId=#encryptedId#" class="btn btn-info btn-sm">Add To Cart</a>
+                   <div class="product-item d-flex gap-2">
+                        <a href="UserCart.cfm?action=buyToCart&productId=#encryptedId#" class="btn btn-info btn-sm">Add To Cart</a>
                         <button 
                             class="btn btn-success btn-sm me-2 orderNow"
                             id="orderNowBtn"
@@ -111,7 +106,6 @@
                                                 <input type="hidden" name="productId" value="#encryptedId#">
                                             </cfoutput>
                                         </div>
-                                        
                                     </form>
                                     <div class="modal-footer form-group pt-1 mt-3">
                                         <button type="button" class="btn btn-secondary mb-3" data-bs-dismiss="modal">Cancel</button> 
@@ -131,8 +125,7 @@
                                             Payment Details
                                         </button>
                                     </div>
-                                    
-                                </div>
+                                 </div>
                             </div>
                         </div>
                     </div>
@@ -141,10 +134,8 @@
             </cfoutput>
         </div>
     </div>
-
-
-    
     <cfinclude template="footer.cfm">
+
 	<script>
         $(document).ready(function() {
             $("#createUserAddressBtn").click(function() {

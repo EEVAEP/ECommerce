@@ -1,5 +1,4 @@
 <cfinclude template="header.cfm">
-
 <cfset variables.displayRandomProducts = application.modelUserPage.getRandomProducts()>
 
 <!DOCTYPE html>
@@ -8,13 +7,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
-    
     <section class = "app-section">
         <div class="container">
             <img src="../../assets/img/cartImage" class="banner-img" alt = "banner">
         </div>
     </section>
-
     <div class="container mt-4">
         <h4 class="custom-heading">Random Products</h4>
         <div class="row random-products mt-4">
@@ -34,7 +31,6 @@
             </cfoutput>
         </div>
     </div>
-    
     <cfinclude template="footer.cfm">
 </body>
 </html>

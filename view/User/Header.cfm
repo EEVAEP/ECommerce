@@ -48,8 +48,10 @@
                         </cfif>
                     </cfoutput></span>
                 </p></a>
+                <a href="../Login.cfm?logOut" class="btn btn-light">LogOut</a>
+            <cfelseif NOT structKeyExists(session, "userid") AND NOT structKeyExists(session, "roleid")>
+                <a href="../Login.cfm?logOut" class="btn btn-light">LogIn</a>
             </cfif>
-            <a href="../Login.cfm?logOut" class="btn btn-light">LogOut</a>
         </div>
     </header>
     <nav class="navbar navbar-expand-lg navbar-custom py-1 px-1">

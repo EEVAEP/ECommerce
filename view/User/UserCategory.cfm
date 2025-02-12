@@ -3,9 +3,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
-
 <body>
-
     <cfset variables.displaySubCategoryQry = application.modelAdminCtg.listSubCategories(categoryId = url.categoryId)>
     <div class="container mt-4">
         <h4 class="custom-SubCatHeading">Category List Page</h4>
@@ -33,8 +31,6 @@
             </div>
         </cfoutput>
     </div>
-    
     <cfinclude template="footer.cfm">
-	
 </body>
 </html>

@@ -31,3 +31,90 @@
 .buttonSuccess:hover {
     background: #0056b3;
 }
+/* Order History */
+.historyContainer {
+    width: 80%;
+    margin: 20px auto;
+    background: #d5dfcc;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.orderHistory-card {
+    background: #e8f5e9;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+.orderHistory-header {
+    font-size: 16px;
+}
+.productHistory-card {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+}
+.productHistory-card img {
+    width: 100px;
+    height: auto;
+    margin-right: 15px;
+    border-radius: 8px;
+}
+.productHistory-info {
+    flex-grow: 1;
+}
+.productHistory-info p{
+    font-size: 9px;
+}
+.priceHistory {
+    color: red;
+}
+.totalHistory-price {
+    font-size: 17px;
+    font-weight: bold;
+    text-align: right;
+    margin-top: 10px;
+    color: red;
+}
+.searchHistory-bar {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+.searchHistory-bar input {
+    padding: 8px;
+    width: 250px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+.searchHistory-bar button {
+    padding: 8px 15px;
+    background: green;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    margin-left: 5px;
+    cursor: pointer;
+}
+.fa-file-pdf {
+    color: red;
+    font-size: 18px; 
+}
+.btn-outline-danger {
+    margin-left: 250px;
+    color: red;
+    background: transparent;
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+}
+.btn-outline-danger:hover {
+    background: rgb(214, 183, 183);
+    color: white;
+}
+.fa-indian-rupee-sign { 
+    font-size: 13px;   
+}
