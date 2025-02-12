@@ -38,8 +38,13 @@
         </cfquery>
         <cfif local.qryCheckProduct.ProductCount EQ 0>
             <cfquery name="local.qryInsertProductIntoCart" result="local.insertProductIntoCart" datasource="#application.datasource#">
-                INSERT INTO tblcart
-                    (fldUserId, fldProductId, fldQuantity, fldCreatedDate)
+                INSERT INTO 
+                    tblcart(
+                            fldUserId,
+                            fldProductId,
+                            fldQuantity,
+                            fldCreatedDate
+                    )
                 VALUES 
                     (
                         <cfqueryparam value="#session.userid#" cfsqltype="cf_sql_integer">,
@@ -253,7 +258,8 @@
         <cfif StructKeyExists(arguments, "addressId") AND arguments.addressId NEQ "">
             <cfset local.decryptedId = application.modelAdminCtg.decryptId(arguments.addressId)>
             <cfquery datasource="#application.datasource#">
-                UPDATE tblAddress
+                UPDATE 
+                    tblAddress
                 SET 
                     fldFirstName = <cfqueryparam value="#arguments.firstName#" cfsqltype="cf_sql_varchar">,
                     fldLastName = <cfqueryparam value="#arguments.lastName#" cfsqltype="cf_sql_varchar">,
@@ -458,7 +464,8 @@
         <cfargument name="editUserId" type="string" required="true">
         <cfset local.decryptedId = application.modelAdminCtg.decryptId(arguments.editUserId)>
         <cfquery datasource="#application.datasource#">
-            UPDATE tblUser
+            UPDATE 
+                tblUser
             SET 
                 fldFirstName = <cfqueryparam value="#arguments.firstName#" cfsqltype="cf_sql_varchar">,
                 fldLastName = <cfqueryparam value="#arguments.lastName#" cfsqltype="cf_sql_varchar">,
@@ -534,14 +541,14 @@
                 <cfquery name="local.qryInsertOrderDetails" result="local.createOrderTableResult" datasource="#application.datasource#">
                     INSERT INTO 
                         tblOrder(
-                                    fldOrder_ID,
-                                    fldOrderId,
-                                    fldAddressId,
-                                    fldTotalPrice,
-                                    fldTotalTax,
-                                    fldPhonenumber,
-                                    fldOrderDate,
-                                    fldCardPart
+                                fldOrder_ID,
+                                fldOrderId,
+                                fldAddressId,
+                                fldTotalPrice,
+                                fldTotalTax,
+                                fldPhonenumber,
+                                fldOrderDate,
+                                fldCardPart
                         )
                     VALUES 
                         (
@@ -604,11 +611,11 @@
             <cfquery name="local.qryOrderSingleItemsTable" datasource="#application.datasource#">
                 INSERT INTO 
                     tblorderItems(
-                                    fldOrderId,
-                                    fldProductId,
-                                    fldQuantity,
-                                    fldUnitPrice,
-                                    fldUnitTax
+                                fldOrderId,
+                                fldProductId,
+                                fldQuantity,
+                                fldUnitPrice,
+                                fldUnitTax
                     )
                 VALUES 
                     (
@@ -625,11 +632,11 @@
                 <cfquery name="local.qryOrderCartItemsTable" datasource = "#application.datasource#" >
                     INSERT INTO 
                         tblorderItems(
-                                        fldOrderId,
-                                        fldProductId,
-                                        fldQuantity,
-                                        fldUnitPrice,
-                                        fldUnitTax
+                                    fldOrderId,
+                                    fldProductId,
+                                    fldQuantity,
+                                    fldUnitPrice,
+                                    fldUnitTax
                         )
                     VALUES 
                         (

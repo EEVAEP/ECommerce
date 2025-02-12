@@ -172,9 +172,9 @@
             <cfquery name="local.qryInsertSubCategory" datasource="#application.datasource#">
                 INSERT INTO 
                     tblsubcategory(
-                                        fldCategoryId,
-                                        fldSubCategoryName,
-                                        fldCreatedById
+                                    fldCategoryId,
+                                    fldSubCategoryName,
+                                    fldCreatedById
                     )
                 VALUES 
                     (
@@ -385,7 +385,8 @@
         <cfif StructKeyExists(arguments, "productId") AND arguments.productId NEQ "">
             <cfset local.decryptedId = decryptId(arguments.productId)>
                 <cfquery result = "local.qryEditProduct" datasource="#application.datasource#">
-                    UPDATE tblproduct
+                    UPDATE 
+                        tblproduct
                     SET 
                         fldProductName = <cfqueryparam value="#arguments.productName#" cfsqltype="cf_sql_varchar">,
                         fldSubCategoryId = <cfqueryparam value="#arguments.subCategoryId#" cfsqltype="cf_sql_integer">,
@@ -447,12 +448,12 @@
                 <cfquery result = "local.qryAddImage" datasource="#application.datasource#">
                     INSERT INTO
                         tblProductImages(
-                                            fldProductId,
-                                            fldImageFileName,
-                                            fldDefaultImage,
-                                            fldCreatedById,
-                                            fldDeactivatedById,
-                                            fldDeactivatedDate
+                                        fldProductId,
+                                        fldImageFileName,
+                                        fldDefaultImage,
+                                        fldCreatedById,
+                                        fldDeactivatedById,
+                                        fldDeactivatedDate
                         )    
                     VALUES(
                             <cfqueryparam value = "#arguments.productId#" cfsqltype = "cf_sql_integer">,

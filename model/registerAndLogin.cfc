@@ -39,15 +39,15 @@
 			<cfset local.hashedPassword = hashPassword(arguments.password, local.salt)>
 			<cfquery datasource="#application.datasource#">
 				INSERT INTO 
-						tblUser(
-									fldFirstname,
-								 	fldLastname,
-									fldEmail,
-									fldPhone,
-									fldRoleId,
-									fldHashedPassword,
-									fldUserSaltString
-								)
+					tblUser(
+							fldFirstname,
+							fldLastname,
+							fldEmail,
+							fldPhone,
+							fldRoleId,
+							fldHashedPassword,
+							fldUserSaltString
+					)
 				VALUES(
 						<cfqueryparam value="#arguments.fname#" cfsqltype="cf_sql_varchar">,
 						<cfqueryparam value="#arguments.lname#" cfsqltype="cf_sql_varchar">,
