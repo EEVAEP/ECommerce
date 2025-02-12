@@ -1,16 +1,12 @@
 <cfinclude template="header.cfm">
-
 <cfparam name="url.query" default="">
 
 <!DOCTYPE html>
 <html lang="en">
-
 <body>
     <cfif len(trim(url.query))>
         <cftry>
         <cfset variables.getSearchResult = application.modelAdminCtg.getProductsList(searchText = url.query)>
-        
-
         <div class="container mt-4">
             <h4 class="custom-SubCatHeading">Search Results...</h4>
             <cfif variables.getSearchResult.recordCount gt 0>
@@ -41,8 +37,6 @@
         </cfcatch>
         </cftry>
     </cfif>
-    
     <cfinclude template="footer.cfm">
-	
 </body>
 </html>
