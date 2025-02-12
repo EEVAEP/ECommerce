@@ -76,18 +76,18 @@
 				fldHashedPassword,
 				fldUserSaltString,
 				fldRoleId
-		FROM 
+			FROM 
 				tblUser
-		WHERE 
+			WHERE 
 				fldEmail = <cfqueryparam value="#arguments.username#" cfsqltype="cf_sql_varchar">
 				OR fldPhone = <cfqueryparam value="#arguments.username#" cfsqltype="cf_sql_varchar">
-	</cfquery>
-	<cfif local.qryLogin.recordCount EQ 1>
+		</cfquery>
+		<cfif local.qryLogin.recordCount EQ 1>
 			<cfset local.salt = local.qryLogin.fldUserSaltString>
 			<cfset local.hashedPassword  = hashPassword(arguments.password, local.salt)>
 			<cfset local.result = {}>
 			<cfif local.hashedPassword  EQ  local.qryLogin.fldHashedPassword>
-			<cfset local.result['userid'] = local.qryLogin.userid>
+				<cfset local.result['userid'] = local.qryLogin.userid>
 				<cfset local.result['username'] = local.qryLogin.fldEmail>
 				<cfset local.result['role'] = local.qryLogin.fldRoleId>
 			</cfif>
