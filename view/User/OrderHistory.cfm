@@ -9,7 +9,7 @@
         <cfloop array="#variables.orders#" index="order">
             <div class="orderHistory-card">
                 <div class="orderHistory-header">
-                   <strong> Order ID: #order.orderId#</strong> | Ordered On: #DateFormat(order.orderDate, "mmm d yyyy")#  
+                   <strong> Order ID: #order.orderId#</strong> | Ordered On: #DateFormat(order.orderDate, "mmm d yyyy")# #TimeFormat(order.orderDate, "hh:mm tt")# 
                    <button class="btn btn-outline-danger me-2"
                         onclick="window.location.href='PdfPage.cfm?orderId=#order.orderId# '">
                         <i class="fa-solid fa-file-pdf"></i>

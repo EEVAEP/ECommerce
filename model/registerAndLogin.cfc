@@ -38,14 +38,16 @@
 			<cfset local.salt = generateSecretKey("AES")>
 			<cfset local.hashedPassword = hashPassword(arguments.password, local.salt)>
 			<cfquery datasource="#application.datasource#">
-				INSERT INTO tblUser(
+				INSERT INTO 
+						tblUser(
 									fldFirstname,
 								 	fldLastname,
 									fldEmail,
 									fldPhone,
 									fldRoleId,
 									fldHashedPassword,
-									fldUserSaltString)
+									fldUserSaltString
+								)
 				VALUES(
 						<cfqueryparam value="#arguments.fname#" cfsqltype="cf_sql_varchar">,
 						<cfqueryparam value="#arguments.lname#" cfsqltype="cf_sql_varchar">,
@@ -82,10 +84,10 @@
 				fldEmail = <cfqueryparam value="#arguments.username#" cfsqltype="cf_sql_varchar">
 				OR fldPhone = <cfqueryparam value="#arguments.username#" cfsqltype="cf_sql_varchar">
 		</cfquery>
+		<cfset local.result = {}>
 		<cfif local.qryLogin.recordCount EQ 1>
 			<cfset local.salt = local.qryLogin.fldUserSaltString>
 			<cfset local.hashedPassword  = hashPassword(arguments.password, local.salt)>
-			<cfset local.result = {}>
 			<cfif local.hashedPassword  EQ  local.qryLogin.fldHashedPassword>
 				<cfset local.result['userid'] = local.qryLogin.userid>
 				<cfset local.result['username'] = local.qryLogin.fldEmail>

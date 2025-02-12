@@ -269,17 +269,19 @@
             </cfquery>
         <cfelse>
             <cfquery name="local.qryInsertUserDetails" datasource="#application.datasource#">
-                INSERT INTO tbladdress 
-                    (fldUserId,
-                    fldFirstName,
-                    fldLastName, 
-                    fldAddressLine1,
-                    fldAddressLine2,
-                    fldCity,
-                    fldState,
-                    fldPincode,
-                    fldPhoneNumber,
-                    fldActive)
+                INSERT INTO
+                    tbladdress(
+                                fldUserId,
+                                fldFirstName,
+                                fldLastName, 
+                                fldAddressLine1,
+                                fldAddressLine2,
+                                fldCity,
+                                fldState,
+                                fldPincode,
+                                fldPhoneNumber,
+                                fldActive
+                    )
                 VALUES 
                     (
                         <cfqueryparam value="#session.userid#" cfsqltype="cf_sql_integer">,
@@ -530,15 +532,17 @@
         <cftry>
             <cftransaction action="begin">
                 <cfquery name="local.qryInsertOrderDetails" result="local.createOrderTableResult" datasource="#application.datasource#">
-                    INSERT INTO tblOrder 
-                        (fldOrder_ID,
-                        fldOrderId,
-                        fldAddressId,
-                        fldTotalPrice,
-                        fldTotalTax,
-                        fldPhonenumber,
-                        fldOrderDate,
-                        fldCardPart)
+                    INSERT INTO 
+                        tblOrder(
+                                    fldOrder_ID,
+                                    fldOrderId,
+                                    fldAddressId,
+                                    fldTotalPrice,
+                                    fldTotalTax,
+                                    fldPhonenumber,
+                                    fldOrderDate,
+                                    fldCardPart
+                        )
                     VALUES 
                         (
                             <cfqueryparam value="# local.Order_ID#" cfsqltype="cf_sql_varchar">,
@@ -552,7 +556,7 @@
                                 <cfqueryparam value="#local.totalTax#" cfsqltype="cf_sql_varchar" >,
                             </cfif>
                             <cfqueryparam value="#local.phoneNumber#" cfsqltype="cf_sql_varchar" >,
-                            <cfqueryparam value = "#now()#" cfsqltype = "cf_sql_date" >,
+                            <cfqueryparam value = "#now()#" cfsqltype = "cf_sql_timestamp" >,
                             <cfqueryparam value="#arguments.cardNumber#" cfsqltype="cf_sql_varchar" >
                         )
                 </cfquery>
@@ -598,12 +602,14 @@
         <cfif structKeyExists(arguments, "productId") AND structKeyExists(arguments, "quantity") AND NOT arguments.productId EQ "undefined">
             <cfset local.decryptedId = application.modelAdminCtg.decryptId(arguments.productId)>
             <cfquery name="local.qryOrderSingleItemsTable" datasource="#application.datasource#">
-                INSERT INTO tblorderItems
-                    (fldOrderId,
-                    fldProductId,
-                    fldQuantity,
-                    fldUnitPrice,
-                    fldUnitTax)
+                INSERT INTO 
+                    tblorderItems(
+                                    fldOrderId,
+                                    fldProductId,
+                                    fldQuantity,
+                                    fldUnitPrice,
+                                    fldUnitTax
+                    )
                 VALUES 
                     (
                         <cfqueryparam value="#arguments.orderId#" cfsqltype="cf_sql_varchar">,
@@ -617,12 +623,14 @@
             <cfset local.getCartProducts = application.modelUserPage.getCartProductsList()>
             <cfloop query="local.getCartProducts">
                 <cfquery name="local.qryOrderCartItemsTable" datasource = "#application.datasource#" >
-                    INSERT INTO tblorderItems
-                        (fldOrderId,
-                        fldProductId,
-                        fldQuantity,
-                        fldUnitPrice,
-                        fldUnitTax)
+                    INSERT INTO 
+                        tblorderItems(
+                                        fldOrderId,
+                                        fldProductId,
+                                        fldQuantity,
+                                        fldUnitPrice,
+                                        fldUnitTax
+                        )
                     VALUES 
                         (
                             <cfqueryparam value="#arguments.orderId#" cfsqltype="cf_sql_varchar">,

@@ -23,9 +23,9 @@
                 O.fldCardPart
             FROM 
                 tblorderitems AS OI
-            INNER JOIN tblproduct AS P ON P.fldProduct_ID = OI.fldProductId
-            INNER JOIN tblOrder AS O ON O.fldOrder_ID  = OI.fldOrderId
-            INNER JOIN shoppingcart.tblAddress AS A ON A.fldAddress_ID = O.fldAddressId
+                INNER JOIN tblproduct AS P ON P.fldProduct_ID = OI.fldProductId
+                INNER JOIN tblOrder AS O ON O.fldOrder_ID  = OI.fldOrderId
+                INNER JOIN shoppingcart.tblAddress AS A ON A.fldAddress_ID = O.fldAddressId
             WHERE
                 O.fldOrderId  = <cfqueryparam value = "#session.userid#" cfsqltype = "cf_sql_integer">
                 AND O.fldOrder_ID  = <cfqueryparam value = "#arguments.orderId#" cfsqltype = "cf_sql_varchar">
@@ -104,10 +104,10 @@
                 I.fldImageFileName
             FROM 
                 tblorderitems AS OI
-            INNER JOIN tblproduct AS P ON P.fldProduct_ID = OI.fldProductId
-            INNER JOIN tblOrder AS O  ON O.fldOrder_ID = OI.fldOrderId
-            INNER JOIN tblAddress AS A ON A.fldAddress_ID = O.fldAddressId
-            INNER JOIN tblproductimages AS I ON I.fldProductId = OI.fldProductId
+                INNER JOIN tblproduct AS P ON P.fldProduct_ID = OI.fldProductId
+                INNER JOIN tblOrder AS O  ON O.fldOrder_ID = OI.fldOrderId
+                INNER JOIN tblAddress AS A ON A.fldAddress_ID = O.fldAddressId
+                INNER JOIN tblproductimages AS I ON I.fldProductId = OI.fldProductId
             WHERE
                 O.fldOrderId = <cfqueryparam value="#session.userid#" cfsqltype="cf_sql_integer">
                 AND I.fldDefaultImage = 1

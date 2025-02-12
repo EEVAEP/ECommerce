@@ -19,8 +19,7 @@
                 tblcategory 
             WHERE 
                 fldCategoryName = <cfqueryparam value="#arguments.categoryName#" cfsqltype="cf_sql_varchar">
-            AND
-                fldActive = 1
+                AND fldActive = 1
         </cfquery>
         <cfif local.qryCheckCategoryName.recordcount GT 0>
             <cfset arrayAppend(local.errors, "*This category already exists")>
@@ -39,7 +38,8 @@
         <cfif StructKeyExists(arguments, "categoryId") AND arguments.categoryId NEQ "">
             <cfset local.decryptedId = decryptId(arguments.categoryId)>
             <cfquery name="local.updateCategory" datasource="#application.datasource#">
-                UPDATE tblcategory
+                UPDATE 
+                    tblcategory
                 SET 
                     fldCategoryName = <cfqueryparam value="#arguments.categoryName#" cfsqltype="cf_sql_varchar">,
                     fldUpdatedById = <cfqueryparam value="#session.userid#" cfsqltype="cf_sql_integer">,
@@ -49,8 +49,11 @@
             </cfquery>
         <cfelse>
             <cfquery name="local.insertCategory" datasource="#application.datasource#">
-                INSERT INTO tblcategory 
-                    (fldCategoryName, fldCreatedById)
+                INSERT INTO 
+                        tblcategory(
+                                    fldCategoryName,
+                                    fldCreatedById
+                        )
                 VALUES 
                     (
                         <cfqueryparam value="#arguments.categoryName#" cfsqltype="cf_sql_varchar" >,
@@ -70,7 +73,6 @@
             WHERE 
                 fldActive = 1
         </cfquery>
-
         <cfreturn local.qryCategoryList>
     </cffunction>
 
@@ -93,7 +95,8 @@
         <cfset local.decryptedId = decryptId(arguments.categoryId)>
         <cftry>
             <cfquery datasource="#application.datasource#">
-                UPDATE tblcategory
+                UPDATE 
+                    tblcategory
                 SET 
                     fldActive = 0,
                     fldUpdatedById = <cfqueryparam value="#session.userid#" cfsqltype="cf_sql_integer">,
@@ -133,8 +136,7 @@
                     tblsubcategory 
                 WHERE 
                     fldSubCategoryName = <cfqueryparam value="#arguments.subCategoryName#" cfsqltype="cf_sql_varchar">
-                AND
-                    fldActive = 1
+                    AND fldActive = 1
             </cfquery>
             <cfif local.qryCheckSubCategoryName.recordcount GT 0>
                 <cfset arrayAppend(local.errors, "*This SubCategory already exists")>
@@ -155,7 +157,8 @@
         <cfif StructKeyExists(arguments, "subCategoryId") AND arguments.subCategoryId NEQ "">
             <cfset local.decryptedId = decryptId(arguments.subCategoryId)>
             <cfquery datasource="#application.datasource#">
-                UPDATE tblsubcategory
+                UPDATE 
+                    tblsubcategory
                 SET 
                     fldCategoryId = <cfqueryparam value="#arguments.categoryName#" cfsqltype="cf_sql_integer">,
                     fldSubCategoryName = <cfqueryparam value="#arguments.subCategoryName#" cfsqltype="cf_sql_varchar">,
@@ -167,8 +170,12 @@
             </cfquery>
         <cfelse>
             <cfquery name="local.qryInsertSubCategory" datasource="#application.datasource#">
-                INSERT INTO tblsubcategory 
-                    (fldCategoryId, fldSubCategoryName, fldCreatedById)
+                INSERT INTO 
+                    tblsubcategory(
+                                        fldCategoryId,
+                                        fldSubCategoryName,
+                                        fldCreatedById
+                    )
                 VALUES 
                     (
                         <cfqueryparam value="#arguments.categoryName#" cfsqltype="cf_sql_integer" >,
@@ -189,7 +196,7 @@
                 C.fldCategoryName
             FROM 
                 tblsubCategory AS SC
-            INNER JOIN tblcategory AS C ON C.fldCategory_ID = SC.fldCategoryId
+                INNER JOIN tblcategory AS C ON C.fldCategory_ID = SC.fldCategoryId
             WHERE 
                 SC.fldCategoryId = <cfqueryparam value="#local.decryptedId#" cfsqltype="cf_sql_integer">
                 AND SC.fldActive = 1
@@ -209,7 +216,7 @@
                 C.fldCategory_ID
             FROM 
                 tblsubcategory AS SC
-            INNER JOIN tblcategory AS C ON C.fldCategory_ID = SC.fldCategoryId
+                INNER JOIN tblcategory AS C ON C.fldCategory_ID = SC.fldCategoryId
             WHERE 
                 SC.fldSubCategory_ID = <cfqueryparam value=#local.decryptedId#  cfsqltype="cf_sql_integer">
         </cfquery>
@@ -221,7 +228,8 @@
         <cfset local.decryptedId = decryptId(arguments.subCategoryId)>
         <cftry>
             <cfquery datasource="#application.datasource#">
-                UPDATE tblsubcategory
+                UPDATE 
+                    tblsubcategory
                 SET 
                     fldActive = 0,
                     fldUpdatedById = <cfqueryparam value="#session.userid#" cfsqltype="cf_sql_integer">,
@@ -400,8 +408,16 @@
                 </cfif>
        <cfelse>
             <cfquery name="local.qryInsertProduct" result="local.insertProductResult" datasource="#application.datasource#">
-                INSERT INTO tblproduct
-                    (fldSubCategoryId, fldProductName, fldBrandId, fldDescription, fldPrice, fldTax, fldCreatedById)
+                INSERT INTO 
+                    tblproduct(
+                                fldSubCategoryId,
+                                fldProductName,
+                                fldBrandId,
+                                fldDescription,
+                                fldPrice,
+                                fldTax,
+                                fldCreatedById
+                    )
                 VALUES 
                     (
                         <cfqueryparam value="#arguments.subCategoryId#" cfsqltype="cf_sql_integer" >,
@@ -486,9 +502,9 @@
                 SC.fldSubCategory_ID
             FROM 
                 tblproduct AS P
-            INNER JOIN tblsubcategory AS SC ON SC.fldSubCategory_ID =  P.fldSubCategoryId
-            INNER JOIN tblbrands AS B ON B.fldBrand_ID =  P.fldBrandId
-            INNER JOIN tblproductImages AS I ON I.fldProductId = P.fldProduct_ID
+                INNER JOIN tblsubcategory AS SC ON SC.fldSubCategory_ID =  P.fldSubCategoryId
+                INNER JOIN tblbrands AS B ON B.fldBrand_ID =  P.fldBrandId
+                INNER JOIN tblproductImages AS I ON I.fldProductId = P.fldProduct_ID
             WHERE 
                 P.fldActive = 1
                 AND I.fldDefaultImage = 1
@@ -550,7 +566,8 @@
         <cfset local.decryptedId = decryptId(arguments.productId)>
         <cftry>
             <cfquery datasource="#application.datasource#">
-                    UPDATE tblProduct
+                    UPDATE 
+                        tblProduct
                     SET 
                         fldActive = 0,
                         fldUpdatedById = <cfqueryparam value="#session.userid#" cfsqltype="cf_sql_integer">,
@@ -652,9 +669,9 @@
                 P.fldDescription
             FROM 
                 tblproduct AS P
-            INNER JOIN tblsubcategory AS SC ON SC.fldSubCategory_ID = P.fldSubCategoryId
-            INNER JOIN tblbrands AS B ON B.fldBrand_ID = P.fldBrandId
-            INNER JOIN tblproductImages AS I ON I.fldProductId = P.fldProduct_ID
+                INNER JOIN tblsubcategory AS SC ON SC.fldSubCategory_ID = P.fldSubCategoryId
+                INNER JOIN tblbrands AS B ON B.fldBrand_ID = P.fldBrandId
+                INNER JOIN tblproductImages AS I ON I.fldProductId = P.fldProduct_ID
             WHERE 
                 P.fldProduct_ID = <cfqueryparam value="#local.decryptedId#" cfsqltype="cf_sql_integer">
                 AND P.fldActive = 1
