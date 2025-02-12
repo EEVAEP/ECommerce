@@ -27,14 +27,14 @@
                 INNER JOIN tblOrder AS O ON O.fldOrder_ID  = OI.fldOrderId
                 INNER JOIN shoppingcart.tblAddress AS A ON A.fldAddress_ID = O.fldAddressId
             WHERE
-                O.fldOrderId  = <cfqueryparam value = "#session.userid#" cfsqltype = "cf_sql_integer">
+                O.fldUserId  = <cfqueryparam value = "#session.userid#" cfsqltype = "cf_sql_integer">
                 AND O.fldOrder_ID  = <cfqueryparam value = "#arguments.orderId#" cfsqltype = "cf_sql_varchar">
             GROUP BY 
                 P.fldProductName,
                 P.fldProduct_ID,
                 OI.fldOrderId,
                 OI.fldQuantity,
-                P.fldPrice ,
+                P.fldPrice,
                 P.fldTax,
                 O.fldTotalPrice,
                 O.fldTotalTax 
@@ -109,7 +109,7 @@
                 INNER JOIN tblAddress AS A ON A.fldAddress_ID = O.fldAddressId
                 INNER JOIN tblproductimages AS I ON I.fldProductId = OI.fldProductId
             WHERE
-                O.fldOrderId = <cfqueryparam value="#session.userid#" cfsqltype="cf_sql_integer">
+                O.fldUserId = <cfqueryparam value="#session.userid#" cfsqltype="cf_sql_integer">
                 AND I.fldDefaultImage = 1
                 AND I.fldActive = 1
                 <cfif structKeyExists(arguments, "orderId") AND len(trim(arguments.orderId)) GT 0>

@@ -542,7 +542,7 @@
                     INSERT INTO 
                         tblOrder(
                                 fldOrder_ID,
-                                fldOrderId,
+                                fldUserId,
                                 fldAddressId,
                                 fldTotalPrice,
                                 fldTotalTax,
