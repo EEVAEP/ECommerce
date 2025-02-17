@@ -1,21 +1,21 @@
 <cftry>
     <cfif structKeyExists(form, "submit")>
         <cfset variables.validationErrors = application.userLogin.validateRegisterInput(fname=form.fname,
- 												lname=form.lname,
+                                                lname=form.lname,
                                                 email=form.email,
-												phone=form.phone, 
-												password=form.password)>
+                                                phone=form.phone, 
+                                                password=form.password)>
 	    <cfif structKeyExists(variables, "validationErrors") AND arrayLen(validationErrors) EQ 0>
-		    <cfset result = application.userLoginService.registerUser(form.fname,
- 												form.lname,
+            <cfset result = application.userLoginService.registerUser(form.fname,
+                                                form.lname,
                                                 form.email,
-												form.phone, 
-												form.password)>
-		    <cfif result.success>
-            	    <cfset successMessage = result.message>
-		    <cfelse>
-			    <cfset errorMessage = result.message>
-		    </cfif>
+                                                form.phone, 
+                                                form.password)>
+            <cfif result.success>
+                    <cfset successMessage = result.message>
+            <cfelse>
+                <cfset errorMessage = result.message>
+            </cfif>
         </cfif>
     </cfif>     
     <cfcatch>
@@ -81,7 +81,7 @@
                         <cfoutput>#errorMessage#</cfoutput>
                     </span>
                 </cfif>
-				<cfif structKeyExists(variables, "successMessage")>
+                <cfif structKeyExists(variables, "successMessage")>
                     <span class="success">
                         <cfoutput>#successMessage#</cfoutput>
                     </span>

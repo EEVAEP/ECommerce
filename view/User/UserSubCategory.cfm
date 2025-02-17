@@ -2,20 +2,12 @@
 <cfinclude template="header.cfm">
 <cfparam name="url.SubCategoryId" default="">
 <cftry>
-    <cfif structKeyExists(url, "SubCategoryId")>
-        <cfset variables.subCategoryQry = application.modelAdminCtg.getProductsList(subCategoryId = url.SubCategoryId)>
-    </cfif>
-    <cfif structKeyExists(url, "sortOrder")>
-        <cfset variables.sortProductsQuery = application.modelAdminCtg.getProductsList(
-                                                                subCategoryId = url.subCategoryId,
-                                                                sortOrder = url.sortOrder)>
-        
-    </cfif>
-    <cfif structKeyExists(form, "applyFilterBtn")>
-        <cfset variables.filterProductsQuery = application.modelAdminCtg.getProductsList(
-                                                                subCategoryId = url.subCategoryId,
-                                                                minPrice = form.minPrice,
-                                                                maxPrice = form.maxPrice)>
+    <cfif structKeyExists(url, "SubCategoryId") OR structKeyExists(form, "applyFilterBtn")
+        OR structKeyExists(url, "sortOrder")>
+        <cfset variables.subCatSortFilterQry = application.modelAdminCtg.getProductsList(subCategoryId = url.SubCategoryId,
+                                                                                        sortOrder = (structKeyExists(url, "sortOrder") ? url.sortOrder : ""),
+                                                                                        minPrice = (structKeyExists(form, "minPrice") ? form.minPrice : ""),
+                                                                                        maxPrice = (structKeyExists(form, "maxPrice") ? form.maxPrice : ""))>
     </cfif>
 <cfcatch>
     <cfdump  var="#cfcatch#">
@@ -30,7 +22,9 @@
 <body>
     <div class="container mt-4">
         <h4 class="custom-SubCatHeading">SubCategory List Page</h4>
-        <h5 class="subcategory-title"><cfoutput>#variables.subcategoryQry.fldSubCategoryName#</cfoutput></h5>
+        <cfif structKeyExists(variables, "subcategoryQry")>
+            <h5 class="subcategory-title"><cfoutput>#variables.subcategoryQry.fldSubCategoryName#</cfoutput></h5>
+        </cfif>
         <div class="d-flex justify-content gap-1 mb-3">
             <cfoutput>
                 <a href="UserSubCategory.cfm?subCategoryId=#url.SubCategoryId#&sortOrder=asc" class="btn btn-outline-success btn-sm mr-2">Low to High</a>
@@ -76,52 +70,52 @@
                 </div>
             </cfoutput>
         </div>
-        <cfif structKeyExists(variables, "subCategoryQry") AND NOT structKeyExists(url, "sortOrder") AND NOT structKeyExists(form, "applyFilterBtn")>
+        <cfif structKeyExists(variables, "subCatSortFilterQry") AND NOT structKeyExists(url, "sortOrder") AND NOT structKeyExists(form, "applyFilterBtn")>
             <div class="product-grid">
-                <cfoutput query="variables.subcategoryQry">
-                    <cfset encryptedId = encrypt(variables.subcategoryQry.idProduct, application.encryptionKey, "AES", "Hex")>
+                <cfoutput query="variables.subCatSortFilterQry">
+                    <cfset encryptedId = encrypt(variables.subCatSortFilterQry.idProduct, application.encryptionKey, "AES", "Hex")>
                     <div class="product-item">
                         <a href="UserProduct.cfm?productId=#encryptedId#" class="product-link">
                             <div class="card product-card">
-                                <img src="/uploads/#variables.subcategoryQry.fldImageFileName#" class="card-img-top" alt="Product">
+                                <img src="/uploads/#variables.subCatSortFilterQry.fldImageFileName#" class="card-img-top" alt="Product">
                                 <div class="card-body text-center">
-                                    <h6 class="product-name">#variables.subcategoryQry.fldProductName#</h6>
-                                    <p class="product-price"><i class="fa-solid fa-indian-rupee-sign"></i>#variables.subcategoryQry.fldPrice#</p>
+                                    <h6 class="product-name">#variables.subCatSortFilterQry.fldProductName#</h6>
+                                    <p class="product-price"><i class="fa-solid fa-indian-rupee-sign"></i>#variables.subCatSortFilterQry.fldPrice#</p>
                                 </div>
                             </div>
                         </a>
                     </div>
                 </cfoutput>
             </div>
-        <cfelseif structKeyExists(variables, "sortProductsQuery") AND structKeyExists(url, "sortOrder")  AND NOT structKeyExists(form, "applyFilterBtn")>
+        <cfelseif structKeyExists(variables, "subCatSortFilterQry") AND structKeyExists(url, "sortOrder")  AND NOT structKeyExists(form, "applyFilterBtn")>
             <div class="product-grid">
-                <cfoutput query="variables.sortProductsQuery">
-                    <cfset encryptedId = encrypt(variables.sortProductsQuery.idProduct, application.encryptionKey, "AES", "Hex")>
+                <cfoutput query="variables.subCatSortFilterQry">
+                    <cfset encryptedId = encrypt(variables.subCatSortFilterQry.idProduct, application.encryptionKey, "AES", "Hex")>
                     <div class="product-item">
                         <a href="UserProduct.cfm?productId=#encryptedId#" class="product-link">
                             <div class="card product-card">
-                                <img src="/uploads/#variables.sortProductsQuery.fldImageFileName#" class="card-img-top" alt="Product">
+                                <img src="/uploads/#variables.subCatSortFilterQry.fldImageFileName#" class="card-img-top" alt="Product">
                                 <div class="card-body text-center">
-                                    <h6 class="product-name">#variables.sortProductsQuery.fldProductName#</h6>
-                                    <p class="product-price"><i class="fa-solid fa-indian-rupee-sign"></i>#variables.sortProductsQuery.fldPrice#</p>
+                                    <h6 class="product-name">#variables.subCatSortFilterQry.fldProductName#</h6>
+                                    <p class="product-price"><i class="fa-solid fa-indian-rupee-sign"></i>#variables.subCatSortFilterQry.fldPrice#</p>
                                 </div>
                             </div>
                         </a>
                     </div>
                 </cfoutput>
             </div>
-        <cfelseif structKeyExists(variables, "filterProductsQuery") >
-            <cfif variables.filterProductsQuery.recordCount GT 0>
+        <cfelseif structKeyExists(form, "applyFilterBtn") AND NOT structKeyExists(url, "sortOrder")>
+            <cfif variables.subCatSortFilterQry.recordCount GT 0>
                 <div class="product-grid">
-                    <cfoutput query="variables.filterProductsQuery">
-                        <cfset encryptedId = encrypt(variables.filterProductsQuery.idProduct, application.encryptionKey, "AES", "Hex")>
+                    <cfoutput query="variables.subCatSortFilterQry">
+                        <cfset encryptedId = encrypt(variables.subCatSortFilterQry.idProduct, application.encryptionKey, "AES", "Hex")>
                         <div class="product-item">
                             <a href="UserProduct.cfm?productId=#encryptedId#" class="product-link">
                                 <div class="card product-card">
-                                    <img src="/uploads/#variables.filterProductsQuery.fldImageFileName#" class="card-img-top" alt="Product">
+                                    <img src="/uploads/#variables.subCatSortFilterQry.fldImageFileName#" class="card-img-top" alt="Product">
                                     <div class="card-body text-center">
-                                        <h6 class="product-name">#variables.filterProductsQuery.fldProductName#</h6>
-                                        <p class="product-price"><i class="fa-solid fa-indian-rupee-sign"></i>#variables.filterProductsQuery.fldPrice#</p>
+                                        <h6 class="product-name">#variables.subCatSortFilterQry.fldProductName#</h6>
+                                        <p class="product-price"><i class="fa-solid fa-indian-rupee-sign"></i>#variables.subCatSortFilterQry.fldPrice#</p>
                                     </div>
                                 </div>
                             </a>
