@@ -1,4 +1,3 @@
-
 <cfparam name="url.productId" default="">
 <cfset variables.NavCategory = application.modelAdminCtg.getCategoryList()>
 <cfset variables.displayUserAddress = application.modelUserPage.getUserAddress()>
@@ -26,7 +25,6 @@
         <cfdump var="#cfcatch#">
     </cfcatch>
 </cftry>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -171,28 +169,28 @@
                 </cfoutput>
             </div>
             <div class="modal fade" 
-			    id="deleteConfirmModal" 
+                id="deleteConfirmModal" 
                 data-bs-backdrop="static" 
-			    data-bs-keyboard="false"
-			    tabindex="-1" 
-			    aria-labelledby="deleteConfirmLabel" 
-			    aria-hidden="true">
-    		    <div class="modal-dialog">
-        		    <div class="modal-content">
-            		    <div class="modal-header">
-                		    <h5 class="modal-title mx-auto d-block" id="deleteConfirmLabel">CONFIRM DELETION</h5>
-                		    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            		    </div>
-            		    <div class="modal-body">
-                		    Are you sure you want to remove this product?
-            		    </div>
-            		    <div class="modal-footer">
-                		    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                data-bs-keyboard="false"
+                tabindex="-1" 
+                aria-labelledby="deleteConfirmLabel" 
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title mx-auto d-block" id="deleteConfirmLabel">CONFIRM DELETION</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to remove this product?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                             <button type="button" class="btn btn-danger" id="confirmDeleteButton">Delete</button>
-            		    </div>
-        		    </div>
-    		    </div>
-		    </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <cfset variables.cartActualPrice = 0>
             <cfset variables.cartTotalTax = 0>
             <cfset variables.cartTotalPrice = 0>
@@ -204,7 +202,8 @@
                 <cfset variables.cartTotalTax += variables.itemTotalTax>
                 <cfset variables.cartTotalPrice += variables.itemTotalPrice>
             </cfoutput>
-            <cfoutput>    
+            <cfoutput>
+                   
                 <div class="price-details">
                     <div class="price-row">
                         <span>Actual Price</span>
@@ -218,15 +217,17 @@
                         <strong>Total Price</strong>
                         <strong><i class="fa-solid fa-indian-rupee-sign"></i>#variables.cartTotalPrice#</strong>
                     </div>
-                    <button 
-                        class="btn btn-checkout btn-sm me-2 orderNow"
-                        id="orderNowBtn"
-                        name="orderNowBtn"
-                        data-bs-toggle="modal" 
-                        data-bs-target="##selectAddressModal"
-                        data-id="#encryptedId#">
-                        Bought Together
-                    </button>
+                    <cfif variables.cartTotalPrice GT 0>
+                        <button 
+                            class="btn btn-checkout btn-sm me-2 orderNow"
+                            id="orderNowBtn"
+                            name="orderNowBtn"
+                            data-bs-toggle="modal" 
+                            data-bs-target="##selectAddressModal"
+                            data-id="#encryptedId#">
+                            Bought Together
+                        </button>
+                    </cfif>
                 </div>
             </cfoutput>
             <div class="modal fade" 

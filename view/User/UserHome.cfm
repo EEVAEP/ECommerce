@@ -1,5 +1,5 @@
 <cfinclude template="header.cfm">
-<cfset variables.displayRandomProducts = application.modelUserPage.getRandomProducts()>
+<cfset variables.displayRandomProducts = application.modelAdminCtg.getProductsList(limit = 4)>
 
 <!DOCTYPE html>
 <html lang="en">

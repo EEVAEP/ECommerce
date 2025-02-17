@@ -187,19 +187,27 @@
     </cffunction>
 
     <cffunction  name="listSubCategories" access="public">
-        <cfargument name="categoryId" type="string" required="true">
-        <cfset local.decryptedId = decryptId(arguments.categoryId)>
+        <cfargument name="categoryId" type="string" required="false">
+        <cfif structKeyExists(arguments, "categoryId")>
+            <cfset local.decryptedId = decryptId(arguments.categoryId)>
+            <cfif NOT isNumeric(local.decryptedId) OR local.decryptedId LTE 0>
+                <cflocation url="searchResults.cfm">
+            </cfif>
+        </cfif>
         <cfquery name="local.qryGetSubCategoriesList" datasource="#application.datasource#">
             SELECT 
                 SC.fldSubCategoryName,
                 SC.fldSubCategory_ID AS idSubCategory,
-                C.fldCategoryName
+                C.fldCategoryName,
+                c.fldCategory_ID AS idCategory
             FROM 
                 tblsubCategory AS SC
                 INNER JOIN tblcategory AS C ON C.fldCategory_ID = SC.fldCategoryId
             WHERE 
-                SC.fldCategoryId = <cfqueryparam value="#local.decryptedId#" cfsqltype="cf_sql_integer">
-                AND SC.fldActive = 1
+                SC.fldActive = 1
+                <cfif structKeyExists(arguments, "categoryId")>
+                    AND SC.fldCategoryId = <cfqueryparam value="#local.decryptedId#" cfsqltype="cf_sql_integer">
+                </cfif>
                 AND C.fldActive = 1
         </cfquery>
         <cfreturn local.qryGetSubCategoriesList>
@@ -475,17 +483,23 @@
         </cftry>
     </cffunction>
 
-    <cffunction  name="getProductsList" access="public">
+    <cffunction  name="getProductsList" access="public" returntype="any">
         <cfargument name="subCategoryId" type="string" required="false">
         <cfargument name="productId" type="string" required="false">
         <cfargument name="sortOrder" type="string" required="false">
-        <cfargument name="minPrice" type="numeric" required="false">
-        <cfargument name="maxPrice" type="numeric" required="false">
+        <cfargument name="minPrice" type="string" required="false">
+        <cfargument name="maxPrice" type="string" required="false">
         <cfargument name="searchText" type="string" required="false">
+        <cfargument name="limit" type="numeric" required="false">
         <cfif structKeyExists(arguments, "subCategoryId")>
             <cfset local.decryptedId = decryptId(arguments.subCategoryId)>
         <cfelseif structKeyExists(arguments, "productId")>
             <cfset local.decryptedId = decryptId(arguments.productId)>
+        </cfif>
+        <cfif structKeyExists(arguments, "subCategoryId") OR structKeyExists(arguments, "productId")>
+            <cfif NOT isNumeric(local.decryptedId) OR local.decryptedId LTE 0>
+                <cflocation url="searchResults.cfm">
+            </cfif>
         </cfif>
         <cfquery name="local.qryGetProductList" datasource="#application.datasource#">
             SELECT 
@@ -508,24 +522,27 @@
                 INNER JOIN tblproductImages AS I ON I.fldProductId = P.fldProduct_ID
             WHERE 
                 P.fldActive = 1
-                AND I.fldDefaultImage = 1
+                AND I.fldActive = 1
+                <cfif NOT structKeyExists(arguments, "limit")>
+                    AND I.fldDefaultImage = 1
+                </cfif>
             <cfif structKeyExists(arguments, "subCategoryId")>
                 AND
                     P.fldSubCategoryId = <cfqueryparam value="#local.decryptedId#" cfsqltype="cf_sql_integer">
             </cfif>
-            <cfif structKeyExists(arguments, "minPrice") AND structKeyExists(arguments, "maxPrice")>
+            <cfif structKeyExists(arguments, "minPrice") AND structKeyExists(arguments, "maxPrice") AND len(arguments.minPrice) NEQ 0 AND len(arguments.maxPrice) NEQ 0>
                 AND P.fldPrice  BETWEEN <cfqueryparam value="#arguments.minPrice#" cfsqltype="cf_sql_integer">
                 AND <cfqueryparam value="#arguments.maxPrice#" cfsqltype="cf_sql_integer"> 
             </cfif>
-             <cfif structKeyExists(arguments, "sortOrder") AND arguments.sortOrder EQ "asc">
+            <cfif structKeyExists(arguments, "sortOrder") AND len(arguments.sortOrder) NEQ 0 AND arguments.sortOrder EQ "asc">
                 ORDER By
                     P.fldPrice ASC
             </cfif>
-            <cfif structKeyExists(arguments, "sortOrder") AND arguments.sortOrder EQ "desc">
+            <cfif structKeyExists(arguments, "sortOrder") AND len(arguments.sortOrder) NEQ 0 AND arguments.sortOrder EQ "desc">
                 ORDER BY
                     P.fldPrice DESC
             </cfif>
-             <cfif structKeyExists(arguments, "productId")>
+            <cfif structKeyExists(arguments, "productId")>
                 AND
                     P.fldProduct_ID = <cfqueryparam value=#local.decryptedId#  cfsqltype="cf_sql_integer">
             </cfif>
@@ -535,14 +552,24 @@
                 OR P.fldProductName LIKE "%#arguments.searchText#%"
                 OR SC.fldSubCategoryName LIKE "%#arguments.searchText#%")
             </cfif>
+            <cfif structKeyExists(arguments, "limit")>
+                ORDER BY RAND()
+                LIMIT 4
+            </cfif>
         </cfquery>
         <cfreturn local.qryGetProductList>
+        
     </cffunction>
 
 
     <cffunction name = "getProductImages" access = "public" returntype = "any">
         <cfargument name = "productId" type = "string" required = "true">
         <cfset local.decryptedId = decryptId(arguments.productId)>
+        <cfif structKeyExists(arguments, "productId")>
+            <cfif NOT isNumeric(local.decryptedId) OR local.decryptedId LTE 0>
+                <cflocation url="searchResults.cfm" addtoken="false">
+            </cfif>
+        </cfif>
         <cfquery name = "local.qryGetProductImages" datasource="#application.datasource#">
             SELECT 
                 fldProductImage_ID,
