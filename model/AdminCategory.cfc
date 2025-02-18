@@ -1,4 +1,8 @@
 <cfcomponent>
+    <cffunction name="generateSecretKey" access="public" returntype="string">
+		<cfreturn generateSecretKey("AES")>
+	</cffunction>
+    
     <cffunction name="decryptId" access="public" returntype="string" output="false">
         <cfargument name="encryptedId" type="string" required="true">
         <cfset local.decryptedId = decrypt(arguments.encryptedId, application.encryptionKey, "AES", "Hex")>
