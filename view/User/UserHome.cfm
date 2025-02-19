@@ -9,7 +9,7 @@
 <body>
     <section class = "app-section">
         <div class="container">
-            <img src="../../assets/img/cartImage" class="banner-img" alt = "banner">
+            <img src="../../assets/img/cartImage.webp" class="banner-img" alt = "banner">
         </div>
     </section>
     <div class="container mt-4">
