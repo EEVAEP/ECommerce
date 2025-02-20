@@ -1,21 +1,31 @@
 <cftry>
     <cfif structKeyExists(form, "submit")>
-        <cfset variables.validationErrors = application.userLogin.validateRegisterInput(fname=form.fname,
- 												lname=form.lname,
-                                                email=form.email,
-												phone=form.phone, 
-												password=form.password)>
-	    <cfif structKeyExists(variables, "validationErrors") AND arrayLen(validationErrors) EQ 0>
-		    <cfset result = application.userLoginService.registerUser(form.fname,
- 												form.lname,
-                                                form.email,
-												form.phone, 
-												form.password)>
-		    <cfif result.success>
-            	    <cfset successMessage = result.message>
-		    <cfelse>
-			    <cfset errorMessage = result.message>
-		    </cfif>
+        <cfif 
+            structKeyExists(form, "fname") 
+            AND structKeyExists(form, "lname")
+            AND structKeyExists(form, "email")
+            AND structKeyExists(form, "phone")
+            AND structKeyExists(form, "password")
+        >
+            <cfset variables.validationErrors = application.userLogin.validateRegisterInput(fname=form.fname,
+                                                    lname=form.lname,
+                                                    email=form.email,
+                                                    phone=form.phone, 
+                                                    password=form.password)>
+            <cfif structKeyExists(variables, "validationErrors") AND arrayLen(validationErrors) EQ 0>
+                <cfset result = application.userLoginService.registerUser(form.fname,
+                                                    form.lname,
+                                                    form.email,
+                                                    form.phone, 
+                                                    form.password)>
+                <cfif result.success>
+                        <cfset successMessage = result.message>
+                <cfelse>
+                    <cfset errorMessage = result.message>
+                </cfif>
+            </cfif>
+        <cfelse>
+            <cfset errorMessage = "Please fill all the fields">
         </cfif>
     </cfif>     
     <cfcatch>
@@ -81,7 +91,7 @@
                         <cfoutput>#errorMessage#</cfoutput>
                     </span>
                 </cfif>
-				<cfif structKeyExists(variables, "successMessage")>
+                <cfif structKeyExists(variables, "successMessage")>
                     <span class="success">
                         <cfoutput>#successMessage#</cfoutput>
                     </span>

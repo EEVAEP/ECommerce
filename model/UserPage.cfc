@@ -1,32 +1,12 @@
 <cfcomponent>
-    <cffunction  name="getRandomProducts" access="public" returntype="query">
-       <cfquery name="local.qryRandomProducts" datasource="#application.datasource#">
-            SELECT 
-                P.fldProductName,
-                P.fldProduct_ID AS idProduct,
-                SC.fldSubCategoryName,
-                B.fldBrandName,
-                P.fldPrice,
-                P.fldTax,
-                I.fldDefaultImage,
-                I.fldImageFileName
-            FROM 
-                tblproduct AS P
-                INNER JOIN tblsubcategory AS SC ON SC.fldSubCategory_ID =  P.fldSubCategoryId
-                INNER JOIN tblbrands AS B ON B.fldBrand_ID =  P.fldBrandId
-                INNER JOIN tblproductImages AS I ON I.fldProductId = P.fldProduct_ID
-            WHERE 
-                P.fldActive = 1
-                AND I.fldDefaultImage = 1
-            ORDER BY RAND()
-            LIMIT 4
-        </cfquery>
-        <cfreturn local.qryRandomProducts>
-    </cffunction>
-
     <cffunction name="createCartProducts" access="public" returntype="any">
         <cfargument name="productId" type="string" required="true">
         <cfset local.decryptedId = application.modelAdminCtg.decryptId(arguments.productId)>
+        <cfif structKeyExists(arguments, "productId")>
+            <cfif NOT isNumeric(local.decryptedId) OR local.decryptedId LTE 0>
+                <cflocation url="searchResults.cfm">
+            </cfif>
+        </cfif>
         <cfquery name="local.qryCheckProduct" datasource="#application.datasource#">
             SELECT 
                 COUNT(*) AS ProductCount
@@ -53,6 +33,9 @@
                         <cfqueryparam value = "#now()#" cfsqltype = "cf_sql_date" >
                     )
             </cfquery>
+        <cfelse>
+            <cfset arguments['mode'] = "1">
+            <cfset local.addCatogory=increaseOrDecreaseCartProduct(argumentCollection=arguments)>
         </cfif>
         <cfreturn "success">
     </cffunction>
@@ -552,7 +535,7 @@
                         )
                     VALUES 
                         (
-                            <cfqueryparam value="# local.Order_ID#" cfsqltype="cf_sql_varchar">,
+                            <cfqueryparam value="#local.Order_ID#" cfsqltype="cf_sql_varchar">,
                             <cfqueryparam value="#session.userid#" cfsqltype="cf_sql_integer">,
                             <cfqueryparam value="#local.decryptedId#" cfsqltype="cf_sql_varchar" >,
                             <cfif structKeyExists(arguments, "productId") AND structKeyExists(arguments, "quantity") AND NOT arguments.productId EQ "undefined">
