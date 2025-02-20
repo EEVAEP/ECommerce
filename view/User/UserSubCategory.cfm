@@ -4,10 +4,11 @@
 <cftry>
     <cfif structKeyExists(url, "SubCategoryId") OR structKeyExists(form, "applyFilterBtn")
         OR structKeyExists(url, "sortOrder")>
-        <cfset variables.subCatSortFilterQry = application.modelAdminCtg.getProductsList(subCategoryId = url.SubCategoryId,
-                                                                                        sortOrder = (structKeyExists(url, "sortOrder") ? url.sortOrder : ""),
-                                                                                        minPrice = (structKeyExists(form, "minPrice") ? form.minPrice : ""),
-                                                                                        maxPrice = (structKeyExists(form, "maxPrice") ? form.maxPrice : ""))>
+        <cfset variables.argumentStruct = {subCategoryId = url.SubCategoryId,
+                                sortOrder = (structKeyExists(url, "sortOrder") ? url.sortOrder : ""),
+                                minPrice = (structKeyExists(form, "minPrice") ? form.minPrice : ""),
+                                maxPrice = (structKeyExists(form, "maxPrice") ? form.maxPrice : "")}>
+        <cfset variables.subCatSortFilterQry = application.modelAdminCtg.getProductsList(argumentCollection = variables.argumentStruct)>
     </cfif>
 <cfcatch>
     <cfdump  var="#cfcatch#">

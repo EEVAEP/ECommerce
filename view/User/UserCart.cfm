@@ -8,6 +8,7 @@
     <cfelseif structKeyExists(url, "productId") AND (len(url.productId) NEQ 0) AND structKeyExists(session, "userid") AND structKeyExists(session, "roleid")>
         <cfset variables.createCartPrdQuery = application.modelUserPage.createCartProducts(productId = url.productId)>
         <cfif variables.createCartPrdQuery EQ "success">
+            <cflocation url="UserCart.cfm" addtoken="no">
             <cfset variables.displayCartDetails = application.modelUserPage.getCartProductsList()>
         </cfif>
        <cfset variables.getCartcountQuery = application.modelUserPage.getCartProductsCount()>

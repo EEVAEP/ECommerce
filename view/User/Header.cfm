@@ -21,7 +21,6 @@
     </cfif>
 </cfoutput>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -71,7 +70,7 @@
                 </p></a>
                 <a href="../Login.cfm?logOut" class="btn btn-light">LogOut</a>
             <cfelseif NOT structKeyExists(session, "userid") AND NOT structKeyExists(session, "roleid")>
-                <a href="../Login.cfm?logOut" class="btn btn-light">LogIn</a>
+                <a href="../Login.cfm" class="btn btn-light">LogIn</a>
             </cfif>
         </div>
     </header>

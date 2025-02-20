@@ -3,26 +3,30 @@
 </cfif>
 <cftry>
     <cfif structKeyExists(form, "submit")>
-        <cfset user = application.userLoginService.validateUserLogin(form.username,
-                                                                    form.password)>
-        <cfif structKeyExists(user, "username") AND user.username EQ form.username>
-            <cfset session.username = user.username>
-            <cfset session.userid = user.userid>
-            <cfset session.roleid = user.role>
-            <cfif session.roleid EQ "1">
-                <cflocation url="../view/Admin/dashboard.cfm" addtoken="false">
-            <cfelseif session.roleid EQ "2">
-                <cfif structKeyExists(session, "productId") AND structKeyExists(session, "action") AND len(session.action) NEQ 0>
-                    <cfset structDelete(session, "action")>
-                    <cflocation url="../view/User/UserCart.cfm?productId=#session.productId#" addtoken="false">
-                <cfelseif structKeyExists(session, "productId") AND NOT structKeyExists(session, "action")>
-                    <cflocation url="../view/User/UserProduct.cfm?productId=#session.productId#" addtoken="false">
-                <cfelse>
-                    <cflocation url="../view/User/UserHome.cfm" addtoken="false">
+        <cfif structKeyExists(form, "username") AND structKeyExists(form, "password")>
+            <cfset user = application.userLoginService.validateUserLogin(form.username,
+                                                                        form.password)>
+            <cfif structKeyExists(user, "username")>
+                <cfset session.username = user.username>
+                <cfset session.userid = user.userid>
+                <cfset session.roleid = user.role>
+                <cfif session.roleid EQ "1">
+                    <cflocation url="../view/Admin/dashboard.cfm" addtoken="false">
+                <cfelseif session.roleid EQ "2">
+                    <cfif structKeyExists(url, "productId") AND structKeyExists(session, "action") AND session.action EQ "buyToCart">
+                        <cfset structDelete(session, "action")>
+                        <cflocation url="../view/User/UserCart.cfm?productId=#url.productId#" addtoken="false">
+                    <cfelseif structKeyExists(url, "productId") AND len(url.productId) NEQ 0 AND NOT structKeyExists(session, "action")>
+                        <cflocation url="../view/User/UserProduct.cfm?productId=#url.productId#" addtoken="false">
+                    <cfelse>
+                        <cflocation url="../view/User/UserHome.cfm" addtoken="false">
+                    </cfif>
                 </cfif>
+            <cfelse>
+                <cfset errorMessage = "Invalid Username or Password">
             </cfif>
         <cfelse>
-        	<cfset errorMessage = "Invalid Username or Password">
+            <cfset errorMessage = "Please enter username and password">
         </cfif>
     </cfif>
     <cfcatch>

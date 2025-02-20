@@ -30,13 +30,10 @@
         <cfif (NOT structKeyExists(session, 'roleid')  AND (arrayFindNoCase(local.adminPages, local.currentPage) 
                 OR arrayFindNoCase(local.userPages, local.currentPage)))
                 OR (structKeyExists(session, 'roleid') AND session.roleid NEQ 1 AND arrayFindNoCase(local.adminPages, local.currentPage))>
-            <cfif len(local.productId)>
-                <cfset session.productId = local.productId>
-            </cfif>
             <cfif len(local.action)>
                 <cfset session.action = local.action>
             </cfif>
-            <cflocation url = "../Login.cfm" addToken = "false">
+            <cflocation url = "../Login.cfm?productId=#productId#" addToken = "false">
         </cfif>
     </cffunction>
 </cfcomponent>
