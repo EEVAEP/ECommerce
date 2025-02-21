@@ -2,13 +2,20 @@
 <cfinclude template="header.cfm">
 <cfparam name="url.SubCategoryId" default="">
 <cftry>
-    <cfif structKeyExists(url, "SubCategoryId") OR structKeyExists(form, "applyFilterBtn")
-        OR structKeyExists(url, "sortOrder")>
-        <cfset variables.argumentStruct = {subCategoryId = url.SubCategoryId,
+    <cfif structKeyExists(url, "SubCategoryId")>
+        <cfset variables.decryptedSubCategoryId = application.modelAdminCtg.decryptId(url.SubCategoryId)>
+        <cfif NOT isNumeric(variables.decryptedSubCategoryId) OR variables.decryptedSubCategoryId LTE 0>
+            <div class="alert alert-warning text-center mt-6">
+                No results found. Please try another search.
+            </div>
+        <cfelseif structKeyExists(url, "SubCategoryId") OR structKeyExists(form, "applyFilterBtn")
+            OR structKeyExists(url, "sortOrder")>
+            <cfset variables.argumentStruct = {subCategoryId = url.SubCategoryId,
                                 sortOrder = (structKeyExists(url, "sortOrder") ? url.sortOrder : ""),
                                 minPrice = (structKeyExists(form, "minPrice") ? form.minPrice : ""),
                                 maxPrice = (structKeyExists(form, "maxPrice") ? form.maxPrice : "")}>
-        <cfset variables.subCatSortFilterQry = application.modelAdminCtg.getProductsList(argumentCollection = variables.argumentStruct)>
+            <cfset variables.subCatSortFilterQry = application.modelAdminCtg.getProductsList(argumentCollection = variables.argumentStruct)>
+        </cfif>
     </cfif>
 <cfcatch>
     <cfdump  var="#cfcatch#">

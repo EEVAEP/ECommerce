@@ -13,11 +13,18 @@
                 <cfif session.roleid EQ "1">
                     <cflocation url="../view/Admin/dashboard.cfm" addtoken="false">
                 <cfelseif session.roleid EQ "2">
-                    <cfif structKeyExists(url, "productId") AND structKeyExists(session, "action") AND session.action EQ "buyToCart">
-                        <cfset structDelete(session, "action")>
-                        <cflocation url="../view/User/UserCart.cfm?productId=#url.productId#" addtoken="false">
-                    <cfelseif structKeyExists(url, "productId") AND len(url.productId) NEQ 0 AND NOT structKeyExists(session, "action")>
-                        <cflocation url="../view/User/UserProduct.cfm?productId=#url.productId#" addtoken="false">
+                    <cfif structKeyExists(url, "productId") AND len(url.productId) NEQ 0>
+                        <cfset variables.decryptedProductId = application.modelAdminCtg.decryptId(url.productId)>
+                        <cfif NOT isNumeric(variables.decryptedProductId) OR variables.decryptedProductId LTE 0>
+                            <div class="alert alert-warning text-center mt-6">
+                                No results found. Please try another search.
+                            </div>
+                        <cfelseif structKeyExists(session, "action") AND session.action EQ "buyToCart">
+                            <cfset structDelete(session, "action")>
+                            <cflocation url="../view/User/UserCart.cfm?productId=#url.productId#" addtoken="false">
+                        <cfelseif NOT structKeyExists(session, "action")>
+                            <cflocation url="../view/User/UserProduct.cfm?productId=#url.productId#" addtoken="false">
+                        </cfif>
                     <cfelse>
                         <cflocation url="../view/User/UserHome.cfm" addtoken="false">
                     </cfif>

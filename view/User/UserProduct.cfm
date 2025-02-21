@@ -61,7 +61,7 @@
                             <p class="font-weight-bold text-danger mb-3"><i class="fa-solid fa-indian-rupee-sign"></i>#variables.displaySingleProductQry.fldPrice#</p>
                         </div>
                         <cfset encryptedId = encrypt(variables.displaySingleProductQry.idProduct, application.encryptionKey, "AES", "Hex")>
-                    <div class="product-item d-flex gap-2">
+                        <div class="product-item d-flex gap-2">
                             <a href="UserCart.cfm?action=buyToCart&productId=#encryptedId#" class="btn btn-info btn-sm">Add To Cart</a>
                             <button 
                                 class="btn btn-success btn-sm me-2 orderNow"

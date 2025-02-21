@@ -489,18 +489,22 @@
 
     <cffunction  name="getProductsList" access="public" returntype="any">
         <cfargument name="subCategoryId" type="string" required="false">
+         <cfargument name="categoryId" type="string" required="false">
         <cfargument name="productId" type="string" required="false">
         <cfargument name="sortOrder" type="string" required="false">
         <cfargument name="minPrice" type="string" required="false">
         <cfargument name="maxPrice" type="string" required="false">
         <cfargument name="searchText" type="string" required="false">
         <cfargument name="limit" type="numeric" required="false">
+        <cfargument name="row" type="numeric" required="false">
         <cfif structKeyExists(arguments, "subCategoryId")>
             <cfset local.decryptedId = decryptId(arguments.subCategoryId)>
         <cfelseif structKeyExists(arguments, "productId")>
             <cfset local.decryptedId = decryptId(arguments.productId)>
+        <cfelseif structKeyExists(arguments, "categoryId")>
+            <cfset local.decryptedId = decryptId(arguments.categoryId)>
         </cfif>
-        <cfif structKeyExists(arguments, "subCategoryId") OR structKeyExists(arguments, "productId")>
+        <cfif structKeyExists(arguments, "subCategoryId") OR structKeyExists(arguments, "productId") OR structKeyExists(arguments, "categoryId")>
             <cfif NOT isNumeric(local.decryptedId) OR local.decryptedId LTE 0>
                 <cflocation url="searchResults.cfm">
             </cfif>
@@ -518,7 +522,8 @@
                 I.fldDefaultImage,
                 I.fldImageFileName,
                 SC.fldCategoryId,
-                SC.fldSubCategory_ID
+                SC.fldSubCategory_ID,
+                P.fldSubCategoryId
             FROM 
                 tblproduct AS P
                 INNER JOIN tblsubcategory AS SC ON SC.fldSubCategory_ID =  P.fldSubCategoryId
@@ -529,6 +534,9 @@
                 AND I.fldActive = 1
                 <cfif NOT structKeyExists(arguments, "limit")>
                     AND I.fldDefaultImage = 1
+                </cfif>
+                <cfif structKeyExists(arguments, "categoryId")>
+                    AND SC.fldCategoryId = <cfqueryparam value="#local.decryptedId#" cfsqltype="cf_sql_integer">
                 </cfif>
                 <cfif structKeyExists(arguments, "subCategoryId")>
                     AND P.fldSubCategoryId = <cfqueryparam value="#local.decryptedId#" cfsqltype="cf_sql_integer">
@@ -556,7 +564,7 @@
                 <cfelse>
                     P.fldProductName ASC
                 </cfif>
-            <cfif structKeyExists(arguments, "limit")>
+            <cfif structKeyExists(arguments, "limit") OR structKeyExists(arguments, "row")>
                 LIMIT 4
             </cfif>
         </cfquery>
