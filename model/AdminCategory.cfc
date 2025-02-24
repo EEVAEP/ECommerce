@@ -1,6 +1,7 @@
 <cfcomponent>
     <cffunction name="generateSecretKey" access="public" returntype="string">
-		<cfreturn generateSecretKey("AES")>
+		<cfset local.secretkey = "xjpmGn7Cf7HD9sYiWV3SDw==">
+        <cfreturn  local.secretkey>
 	</cffunction>
     
     <cffunction name="decryptId" access="public" returntype="string" output="false">
@@ -541,7 +542,8 @@
                 <cfif structKeyExists(arguments, "subCategoryId")>
                     AND P.fldSubCategoryId = <cfqueryparam value="#local.decryptedId#" cfsqltype="cf_sql_integer">
                 </cfif>
-                <cfif structKeyExists(arguments, "minPrice") AND structKeyExists(arguments, "maxPrice") AND len(arguments.minPrice) NEQ 0 AND len(arguments.maxPrice) NEQ 0>
+                <cfif structKeyExists(arguments, "minPrice") AND structKeyExists(arguments, "maxPrice")
+                    AND len(arguments.minPrice) NEQ 0 AND len(arguments.maxPrice) NEQ 0>
                     AND P.fldPrice  BETWEEN <cfqueryparam value="#arguments.minPrice#" cfsqltype="cf_sql_integer">
                     AND <cfqueryparam value="#arguments.maxPrice#" cfsqltype="cf_sql_integer"> 
                 </cfif>
