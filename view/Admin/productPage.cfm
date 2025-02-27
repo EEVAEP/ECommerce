@@ -1,6 +1,7 @@
 <cfparam name="url.subCategoryId" default="">
 <cftry>
-    <cfset productListQuery = application.modelAdminCtg.getProductsList(url.subCategoryId)>
+     <cfset local.decryptedSubCategoryId = application.modelAdminCtg.decryptId(url.subCategoryId)>
+    <cfset productListQuery = application.modelAdminCtg.getProductsList(local.decryptedSubCategoryId)>
     <cfcatch>
         <cfdump  var="#cfcatch#">
     </cfcatch>

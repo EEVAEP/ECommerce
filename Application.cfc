@@ -12,7 +12,7 @@
         <cfset application.modelAdminCtg = createObject("component","model.AdminCategory")>
         <cfset application.modelUserPage = createObject("component","model.UserPage")>
         <cfset application.modelOrderPage = createObject("component","model.OrderPage")>
-        <cfset application.encryptionKey = application.modelAdminCtg.generateSecretKey()>
+        <cfset application.encryptionKey = "xjpmGn7Cf7HD9sYiWV3SDw==">
         <cfset application.datasource = "shoppingcart">         
         <cfreturn true>
     </cffunction>

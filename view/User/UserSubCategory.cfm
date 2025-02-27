@@ -24,18 +24,20 @@
         </cfif>
     </cfif>
     <cfif structKeyExists(url, "SubCategoryId")>
+        <cfset variables.argumentStruct = {}>
         <cfset variables.decryptedSubCategoryId = application.modelAdminCtg.decryptId(url.SubCategoryId)>
         <cfif NOT isNumeric(variables.decryptedSubCategoryId) OR variables.decryptedSubCategoryId LTE 0>
             <div class="alert alert-warning text-center mt-6">
                 No results found. Please try another search.
             </div>
-        <cfelseif structKeyExists(url, "SubCategoryId") OR structKeyExists(form, "applyFilterBtn")
-            OR structKeyExists(url, "sortOrder") OR structKeyExists(url, "priceOrder")>
-            <cfset variables.argumentStruct = {subCategoryId = url.SubCategoryId,
-                                sortOrder = (structKeyExists(url, "sortOrder") ? url.sortOrder : ""),
-                                minPrice = (structKeyExists(form, "minPrice") ? form.minPrice : ""),
-                                maxPrice = (structKeyExists(form, "maxPrice") ? form.maxPrice : ""),
-                                priceOrder = (structKeyExists(url, "priceOrder") ? url.priceOrder : "")}>
+        <cfelseif structKeyExists(url, "SubCategoryId")>  
+            <cfset variables.argumentStruct.subCategoryId = variables.decryptedSubCategoryId>
+            <cfif structKeyExists(url, "sortOrder")>
+                <cfset variables.argumentStruct.sortOrder = url.sortOrder>
+            <cfelseif structKeyExists(form, "applyFilterBtn")>
+                <cfset variables.argumentStruct.minPrice = form.minPrice>
+                <cfset variables.argumentStruct.maxPrice = form.maxPrice>
+            </cfif>
             <cfset variables.subCatSortFilterQry = application.modelAdminCtg.getProductsList(argumentCollection = variables.argumentStruct)>
         </cfif>
     </cfif>
@@ -60,7 +62,7 @@
             <cfoutput>
                 <a href="UserSubCategory.cfm?subCategoryId=#url.SubCategoryId#&sortOrder=asc" class="btn btn-outline-success btn-sm mr-2">Low to High</a>
                 <a href="UserSubCategory.cfm?subCategoryId=#url.SubCategoryId#&sortOrder=desc" class="btn btn-outline-success btn-sm">High to Low</a>
-               <button type="button" 
+                <button type="button" 
                     id="createfilterProductBtn"
                     class="btn btn-outline-success" 
                     data-id = "#url.SubCategoryId#"

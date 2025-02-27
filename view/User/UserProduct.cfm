@@ -7,7 +7,8 @@
             No results found. Please try another search.
         </div>
     <cfelse>
-        <cfset variables.displaySingleProductQry = application.modelAdminCtg.getProductsList(productId = url.productId)>
+        <cfset local.decryptedProductId = application.modelAdminCtg.decryptId(url.productId)>
+        <cfset variables.displaySingleProductQry = application.modelAdminCtg.getProductsList(productId = local.decryptedProductId)>
         <cfset variables.displayProductImages = application.modelAdminCtg.getProductImages(productId = url.productId)>
     </cfif>
 </cfif>

@@ -8,7 +8,8 @@
         </div>
     <cfelse>
         <cfset variables.displaySubCategoryQry = application.modelAdminCtg.listSubCategories(categoryId = url.categoryId)>
-        <cfset variables.allProducts = application.modelAdminCtg.getProductsList(categoryId = url.categoryId)>
+        <cfset local.decryptedCategoryId = application.modelAdminCtg.decryptId(url.categoryId)>
+        <cfset variables.allProducts = application.modelAdminCtg.getProductsList(categoryId = local.decryptedCategoryId)>
     </cfif>
 </cfif>
 <cfif structKeyExists(variables, "allProducts")>
