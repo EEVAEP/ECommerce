@@ -1,28 +1,6 @@
-
 <cfinclude template="header.cfm">
 <cfparam name="url.SubCategoryId" default="">
 <cftry>
-    <cfif structKeyExists(form, "applyFilterBtn")>
-        <cfif structKeyExists(form, "minPrice") AND structKeyExists(form, "maxPrice")>
-            <cfset variables.filterErrors = application.userLogin.validateFilterInput(minPrice = form.minPrice, maxPrice = form.maxPrice)>
-            <cfset variables.isFilterValid = arrayLen(variables.filterErrors) EQ 0>
-            <cfif NOT variables.isFilterValid>
-                <cfoutput>
-                    <div id="signUpError" class="alert alert-danger">
-                        <cfloop array="#variables.filterErrors#" index="error">
-                            <div>#error#</div>
-                        </cfloop>
-                    </div>
-                </cfoutput>
-            </cfif>
-        <cfelse>
-            <cfoutput>
-                <div id="signUpError" class="alert alert-danger">
-                    Please fill all the fields.
-                </div>
-            </cfoutput>
-        </cfif>
-    </cfif>
     <cfif structKeyExists(url, "SubCategoryId")>
         <cfset variables.argumentStruct = {}>
         <cfset variables.decryptedSubCategoryId = application.modelAdminCtg.decryptId(url.SubCategoryId)>
@@ -32,11 +10,28 @@
             </div>
         <cfelseif structKeyExists(url, "SubCategoryId")>  
             <cfset variables.argumentStruct.subCategoryId = variables.decryptedSubCategoryId>
-            <cfif structKeyExists(url, "sortOrder")>
-                <cfset variables.argumentStruct.sortOrder = url.sortOrder>
-            <cfelseif structKeyExists(form, "applyFilterBtn")>
-                <cfset variables.argumentStruct.minPrice = form.minPrice>
-                <cfset variables.argumentStruct.maxPrice = form.maxPrice>
+            <cfif structKeyExists(url, "minPrice") AND structKeyExists(url, "maxPrice") AND NOT structKeyExists(url, "sortOrder")>
+                <cfset variables.filterErrors = application.userLogin.validateFilterInput(minPrice = url.minPrice, maxPrice = url.maxPrice)>
+                <cfset variables.isFilterValid = arrayLen(variables.filterErrors) EQ 0>
+                <cfset variables.argumentStruct.minPrice = url.minPrice>
+                <cfset variables.argumentStruct.maxPrice = url.maxPrice>
+                <cfif NOT variables.isFilterValid>
+                    <cfoutput>
+                        <div id="signUpError" class="alert alert-danger">
+                            <cfloop array="#variables.filterErrors#" index="error">
+                                <div>#error#</div>
+                            </cfloop>
+                        </div>
+                    </cfoutput>
+                </cfif>
+            <cfelseif structKeyExists(url, "sortOrder")>
+                <cfif structKeyExists(url, "minPrice") AND structKeyExists(url, "maxPrice")>
+                    <cfset variables.argumentStruct.minPrice = url.minPrice>
+                    <cfset variables.argumentStruct.maxPrice = url.maxPrice>
+                    <cfset variables.argumentStruct.sortOrder = url.sortOrder>
+                <cfelse> 
+                    <cfset variables.argumentStruct.sortOrder = url.sortOrder>
+                </cfif>
             </cfif>
             <cfset variables.subCatSortFilterQry = application.modelAdminCtg.getProductsList(argumentCollection = variables.argumentStruct)>
         </cfif>
@@ -60,8 +55,14 @@
         </cfif>
         <div class="d-flex justify-content gap-1 mb-3">   
             <cfoutput>
-                <a href="UserSubCategory.cfm?subCategoryId=#url.SubCategoryId#&sortOrder=asc" class="btn btn-outline-success btn-sm mr-2">Low to High</a>
-                <a href="UserSubCategory.cfm?subCategoryId=#url.SubCategoryId#&sortOrder=desc" class="btn btn-outline-success btn-sm">High to Low</a>
+                <a href="UserSubCategory.cfm?subCategoryId=#url.SubCategoryId#&sortOrder=asc<cfif structKeyExists(url,'minPrice') AND structKeyExists(url,'maxPrice')>&minPrice=#url.minPrice#&maxPrice=#url.maxPrice#</cfif>" 
+                    class="btn btn-outline-success btn-sm mr-2">
+                    Low to High
+                </a>
+                <a href="UserSubCategory.cfm?subCategoryId=#url.SubCategoryId#&sortOrder=desc<cfif structKeyExists(url,'minPrice') AND structKeyExists(url,'maxPrice')>&minPrice=#url.minPrice#&maxPrice=#url.maxPrice#</cfif>" 
+                    class="btn btn-outline-success btn-sm">
+                    High to Low
+                </a>
                 <button type="button" 
                     id="createfilterProductBtn"
                     class="btn btn-outline-success" 
@@ -83,7 +84,7 @@
                                 <h5 class="modal-title mx-auto d-block" id="filterModalLabel">Filter by Price</h5>
                             </div>
                             <div class="modal-body">
-                                <form method="POST" action="" id="filterForm" >
+                                <form method="GET" action="" id="filterForm" >
                                     <div class="form-group pt-1">
                                         <label for="minPrice">Minimum Price</label>
                                         <input type="number" id="minPrice" name="minPrice" class="form-control" placeholder="Enter minimum price">
@@ -96,6 +97,7 @@
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                         <button type="submit" class="btn btn-success" name="applyFilterBtn" id="applyFilterBtn">Apply Filter</button>
                                     </div>
+                                    <input type = "hidden" name = "SubCategoryId" value = "#url.SubCategoryId#">
                                 </form>
                             </div>
                         </div>
@@ -137,7 +139,7 @@
                     </div>
                 </cfoutput>
             </div>
-        <cfelseif structKeyExists(variables, "isFilterValid") AND NOT structKeyExists(url, "sortOrder")>
+        <cfelseif structKeyExists(variables, "isFilterValid")>
             <cfif variables.subCatSortFilterQry.recordCount GT 0>
                 <div class="product-grid">
                     <cfoutput query="variables.subCatSortFilterQry">

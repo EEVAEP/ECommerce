@@ -541,9 +541,7 @@
                     OR SC.fldSubCategoryName LIKE "%#arguments.searchText#%")
                 </cfif>
             ORDER BY
-                <cfif local.hasLimit>
-                    RAND()
-                <cfelseif structKeyExists(arguments, "sortOrder") AND len(arguments.sortOrder) NEQ 0>
+                <cfif structKeyExists(arguments, "sortOrder") AND len(trim(arguments.sortOrder)) NEQ 0>
                     <cfif arguments.sortOrder EQ "asc">
                         P.fldPrice ASC
                     <cfelseif arguments.sortOrder EQ "desc">
@@ -551,6 +549,8 @@
                     <cfelse>
                         P.fldPrice ASC
                     </cfif>
+                <cfelseif local.hasLimit>
+                    RAND()
                 <cfelse>
                     P.fldProductName ASC
                 </cfif>
@@ -596,7 +596,7 @@
                     UPDATE 
                         tblProduct
                     SET 
-                        fldActive = 0,
+                        fldActive = 0,  
                         fldUpdatedById = <cfqueryparam value="#session.userid#" cfsqltype="cf_sql_integer">,
                         fldUpdatedDate = NOW()
                     WHERE
