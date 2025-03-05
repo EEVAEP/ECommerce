@@ -1,5 +1,5 @@
 
-<cfset variables.NavCategory = application.modelAdminCtg.getCategoryList()>
+<cfset variables.NavCategory = application.modelAdminCtg.listSubCategories()>
 <cfif structKeyExists(session, "userid") AND structKeyExists(session, "roleid")>
     <cfset variables.getCartcountQuery = application.modelUserPage.getCartProductsCount()>
 </cfif>
@@ -40,6 +40,9 @@
         </div>
         <div class="d-flex align-items-center gap-2 profile">
             <cfif structKeyExists(session, "userid") AND structKeyExists(session, "roleid")>
+                <cfif session.roleid EQ 1>
+                    <a href="../Admin/dashboard.cfm" class="btn btn-outline-light">Admin</a>
+                </cfif>
                 <a href="UserProfile.cfm"><i class="fa-solid fa-user profile-icon"></i></a>
                 <a href = "UserCart.cfm" class="cartNameAnchor"><p class="cartName">
                     Cart <span id="cart-count" class="count"><cfoutput>
@@ -50,7 +53,7 @@
                 </p></a>
                 <a href="../Login.cfm?logOut" class="btn btn-light">LogOut</a>
             <cfelseif NOT structKeyExists(session, "userid") AND NOT structKeyExists(session, "roleid")>
-                <a href="../Login.cfm?logOut" class="btn btn-light">LogIn</a>
+                <a href="../Login.cfm" class="btn btn-light">LogIn</a>
             </cfif>
         </div>
     </header>
@@ -64,39 +67,35 @@
                             Menu
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuBtn">
-                            <cfif structKeyExists(variables, "NavCategory")>
-                                <cfoutput query = "variables.NavCategory">
-                                    <cfset encryptedCategoryId_1 = encrypt(variables.NavCategory.idCategory, application.encryptionKey, "AES","Hex")>
-                                        <li>
-                                            <a class="dropdown-item subcategory-link" 
-                                                href="UserCategory.cfm?categoryId=#encryptedCategoryId_1#">
-                                                #variables.NavCategory.fldCategoryName#
-                                            </a>                                   
-                                        </li>                               
-                                </cfoutput>
-                            </cfif>
+                            <cfoutput query="variables.NavCategory" group="idCategory">
+                                <cfset encryptedCategoryId = encrypt(idCategory, application.encryptionKey, "AES", "Hex")>
+                                <li>
+                                    <a class="dropdown-item subcategory-link" 
+                                        href="UserCategory.cfm?categoryId=#encryptedCategoryId#">
+                                        #fldCategoryName#
+                                    </a>                                   
+                                </li>
+                            </cfoutput>
                         </ul>
                     </div>
                     <cfset count = 1>
-                    <cfoutput query = "variables.NavCategory">
+                    <cfoutput query="variables.NavCategory" group="idCategory">
                         <div class="dropdown">
-                            <button class="btn category-list-btn dropdown-toggle" type="button" id="dropdownMenuButton#count#"
-                                data-bs-toggle="dropdown" aria-expanded="false" 
-                                data-id = "#variables.NavCategory.idCategory#">
-                                #variables.NavCategory.fldCategoryName#
+                            <button class="btn category-list-btn dropdown-toggle" type="button" 
+                                id="dropdownMenuButton#count#"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                #fldCategoryName#
                             </button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <cfset encryptedId = encrypt(variables.NavCategory.idCategory, application.encryptionKey, "AES", "Hex")>
-                                <cfset variables.getSubCategory = application.modelAdminCtg.listSubCategories(categoryId = encryptedId)>
-                                <cfloop query = "variables.getSubCategory">
-                                    <cfset encryptedSubId = encrypt(variables.getSubCategory.idSubCategory, application.encryptionKey, "AES", "Hex")>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton#count#">
+                                <cfoutput>
+                                    <cfset encryptedSubId = encrypt(idSubCategory, application.encryptionKey, "AES", "Hex")>
                                     <li>
-                                        <a class="dropdown-item subcategory-link"
-                                            href = "UserSubCategory.cfm?SubCategoryId=#encryptedSubId#">
-                                            #variables.getSubCategory.fldSubCategoryName#
-                                        </a>
+                                    <a class="dropdown-item subcategory-link"
+                                        href="UserSubCategory.cfm?SubCategoryId=#encryptedSubId#">
+                                        #fldSubCategoryName#
+                                    </a>
                                     </li>
-                                </cfloop>
+                                </cfoutput>
                             </ul>
                         </div> 
                         <cfset count  = count + 1 >

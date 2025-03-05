@@ -1,7 +1,8 @@
 <cfcomponent>
     <cffunction name="getProductById" access="remote" returntype="any" returnformat="JSON">	
         <cfargument name="productId" type="string" required="true">
-        <cfset local.productData = application.modelAdminCtg.getProductsList(productId = arguments.productId)>
+         <cfset local.decryptedProductId = application.modelAdminCtg.decryptId(url.productId)>
+        <cfset local.productData = application.modelAdminCtg.getProductsList(productId = local.decryptedProductId)>
         <cfset local.productImages = application.modelAdminCtg.getProductImages(productId = arguments.productId)>
         <cfset local.productArr = []>
         <cfloop query = "local.productImages" >

@@ -2,17 +2,17 @@
     <cfset this.name = "ECommerceAuthentication"> 
     <cfset this.applicationTimeout = createTimeSpan(1, 0, 0, 0)> 
     <cfset this.sessionManagement = true> 
-    <cfset this.sessionTimeout = createTimeSpan(0, 0, 30, 0)> >
+    <cfset this.sessionTimeout = createTimeSpan(0, 0, 30, 0)> 
     <cfset this.setClientCookies = true>
-	
+
     <cffunction name="onApplicationStart" returnType="boolean">
-        <cfset application.encryptionKey = generateSecretKey("AES")>
-        <cfset application.userLogin = createObject("component","controller.userLogin")>
+       <cfset application.userLogin = createObject("component","controller.userLogin")>
         <cfset application.CntrlProduct = createObject("component","controller.AdminProduct")>
         <cfset application.userLoginService = createObject("component","model.registerAndLogin")>
         <cfset application.modelAdminCtg = createObject("component","model.AdminCategory")>
         <cfset application.modelUserPage = createObject("component","model.UserPage")>
         <cfset application.modelOrderPage = createObject("component","model.OrderPage")>
+        <cfset application.encryptionKey = "xjpmGn7Cf7HD9sYiWV3SDw==">
         <cfset application.datasource = "shoppingcart">         
         <cfreturn true>
     </cffunction>
@@ -30,13 +30,10 @@
         <cfif (NOT structKeyExists(session, 'roleid')  AND (arrayFindNoCase(local.adminPages, local.currentPage) 
                 OR arrayFindNoCase(local.userPages, local.currentPage)))
                 OR (structKeyExists(session, 'roleid') AND session.roleid NEQ 1 AND arrayFindNoCase(local.adminPages, local.currentPage))>
-            <cfif len(local.productId)>
-                <cfset session.productId = local.productId>
-            </cfif>
             <cfif len(local.action)>
                 <cfset session.action = local.action>
             </cfif>
-            <cflocation url = "../Login.cfm" addToken = "false">
+            <cflocation url = "../Login.cfm?productId=#productId#" addToken = "false">
         </cfif>
-	</cffunction>
+    </cffunction>
 </cfcomponent>
