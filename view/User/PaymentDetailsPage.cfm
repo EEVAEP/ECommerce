@@ -1,7 +1,8 @@
 <cfinclude template = "Header.cfm">
 <cfif structKeyExists(url, "productId") AND structKeyExists(url, "addressId")>
     <cfset variables.displayOrderAddress = application.modelUserPage.getUserAddress(url.addressId)>
-    <cfset variables.displayOrderedProducts = application.modelAdminCtg.getProductsList(productId = url.productId)>
+    <cfset local.decryptedProductId = application.modelAdminCtg.decryptId(url.productId)>
+    <cfset variables.displayOrderedProducts = application.modelAdminCtg.getProductsList(productId = local.decryptedProductId)>
 </cfif>
 <cfif structKeyExists(url, "addressId") AND NOT structKeyExists(url, "productId")>
     <cfset variables.displayOrderedCartProducts = application.modelUserPage.getCartProductsList()>

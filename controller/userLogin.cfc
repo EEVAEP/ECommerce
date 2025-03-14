@@ -18,11 +18,15 @@
             <cfset arrayAppend(local.errors, "*First Name is required")>
         <cfelseif NOT reFindNoCase("^[A-Za-z]+(\s[A-Za-z]+)*$", arguments.fname)>
             <cfset arrayAppend(local.errors, "*Enter a valid First Name")>
+        <cfelseif len(trim(arguments.fname)) GT 20>
+            <cfset arrayAppend(local.errors, "*First Name should not exceed 20 characters")>
         </cfif>
         <cfif len(trim(arguments.lname)) EQ 0>
             <cfset arrayAppend(local.errors, "*Last Name is required")>
         <cfelseif NOT reFindNoCase("^[A-Za-z]+(\s[A-Za-z]+)*$", arguments.lname)>
             <cfset arrayAppend(local.errors, "*Enter a valid Last Name")>
+        <cfelseif len(trim(arguments.lname)) GT 20>
+            <cfset arrayAppend(local.errors, "*Last Name should not exceed 20 characters")>
         </cfif>
         <cfif len(trim(arguments.email)) EQ 0>
             <cfset arrayAppend(local.errors, "*Email is required")>
@@ -38,5 +42,21 @@
             <cfset arrayAppend(local.errors, "*Please enter a valid password (minimum 8 characters, 1 lowercase, 1 uppercase, 1 special character)")>
         </cfif>
         <cfreturn local.errors>
+    </cffunction>
+
+    <cffunction name="validateFilterInput" access="public" returntype="array">
+        <cfargument name="minPrice" required="true" type="string">
+        <cfargument name="maxPrice" required="true" type="string">
+        <cfset var errors = []> 
+        <cfif NOT isNumeric(arguments.minPrice) OR arguments.minPrice LTE 1>
+            <cfset arrayAppend(errors, "Minimum price must be greater than 0.")>
+        </cfif>
+        <cfif NOT isNumeric(arguments.maxPrice) OR arguments.maxPrice LTE 1>
+            <cfset arrayAppend(errors, "Maximum price must be greater than 0.")>
+        </cfif>
+        <cfif isNumeric(arguments.minPrice) AND isNumeric(arguments.maxPrice) AND arguments.minPrice GT arguments.maxPrice>
+            <cfset arrayAppend(errors, "Maximum price must be greater than or equal to the minimum price.")>
+        </cfif>
+        <cfreturn errors>
     </cffunction>
 </cfcomponent>
