@@ -494,6 +494,12 @@
         <cfargument name="searchText" type="string" required="false">
         <cfargument name="limit" type="numeric" required="false">
         <cfset local.hasLimit = structKeyExists(arguments, "limit") AND arguments.limit GT 0>
+        <cfset local.sortDirection = "ASC">
+        <cfif structKeyExists(arguments, "sortOrder") AND len(trim(arguments.sortOrder)) NEQ 0>
+            <cfif arguments.sortOrder EQ "desc">
+                <cfset local.sortDirection = "DESC">
+            </cfif>
+        </cfif>
         <cfquery name="local.qryGetProductList" datasource="#application.datasource#">
             SELECT 
                 P.fldProductName,
@@ -541,18 +547,10 @@
                     OR SC.fldSubCategoryName LIKE "%#arguments.searchText#%")
                 </cfif>
             ORDER BY
-                <cfif structKeyExists(arguments, "sortOrder") AND len(trim(arguments.sortOrder)) NEQ 0>
-                    <cfif arguments.sortOrder EQ "asc">
-                        P.fldPrice ASC
-                    <cfelseif arguments.sortOrder EQ "desc">
-                        P.fldPrice DESC
-                    <cfelse>
-                        P.fldPrice ASC
-                    </cfif>
-                <cfelseif local.hasLimit>
+                <cfif local.hasLimit>
                     RAND()
                 <cfelse>
-                    P.fldProductName ASC
+                    P.fldPrice #local.sortDirection#
                 </cfif>
             <cfif local.hasLimit>
                 LIMIT <cfqueryparam value="#arguments.limit#" cfsqltype = "cf_sql_integer">
