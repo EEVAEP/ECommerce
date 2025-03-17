@@ -11,44 +11,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Dashboard</title>
-
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&amp;display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-
-    
-    
     <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="../../assets/css/LoginStyle.css">
     <link rel="stylesheet" href="../../assets/css/AdminStyle.css">
     <link rel="stylesheet" href="../../assets/css/AdminDashboard.css">
 </head>
 <body>
-
     <header class="d-flex align-items-center bg-dark text-white py-3 px-4">
         <i class="fas fa-shopping-cart logo-icon me-2"></i>
         <span class="brand fs-4">QuickCart</span>
-    
         <div class="ms-auto">
+            <button class="btn btn-outline-light" type="submit" onclick="window.location.href='../User/UserHome.cfm'">
+               Home
+            </button>
             <a href="../../view/Login.cfm?logOut" class="btn btn-light">LogOut</a> 
         </div>
     </header>
     <div class="container mt-1">
         <h3 class="text-center custom-title">Admin Dashboard</h3>
     </div>
-
     <div class="container d-flex justify-content-center">
         <div class="card shadow-lg p-4 mt-1" style="width: 30rem;">
             <div class="d-flex justify-content-between align-items-center mb-1">
             <h4>Categories</h4>
-
             <button class="btn btn-success text-white add"
                     id="createCategoryBtn"
                     data-bs-toggle="modal" 
                     data-bs-target="#createCategoryModal">
                     <i class="bi bi-plus-circle"></i>
             </button>
-
             <div class="modal fade" 
 				id="createCategoryModal"
                 data-bs-backdrop="static" 
@@ -61,7 +55,6 @@
             					<div class="modal-header">
                 					<h5 class="modal-title mx-auto d-block" id="createCategoryLabel">Add Categories</h5>
                                 </div>
-
                                 <div class="modal-body">
                                     <form method="post" id="categoryForm" action="">
                                         <div class="form-group pt-1 ">
@@ -82,8 +75,6 @@
                         </div>
                     </div>
             </div>
-
-        
             <div class="table-responsive">
                 <table class="table table-striped">
                     <tbody>
@@ -118,8 +109,6 @@
                     </tbody>
                 </table>
             </div>
-
-
             <div class="modal fade" 
 			    id="deleteConfirmModal" 
                 data-bs-backdrop="static" 
@@ -145,17 +134,10 @@
 		    </div>
         </div>
     </div>
-    
-       
-    
 
     <script src="../../assets/js/jquery.js"></script>
-    
     <script src="../../assets/js/bootstrap.min.js"></script>
 	<script src="../../assets/js/bootstrap.bundle.min.js"></script>
     <script src="../../assets/js/AdminCategory.js"></script>
-        
-    
-
 </body>
 </html>

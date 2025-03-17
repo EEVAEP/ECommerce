@@ -3,12 +3,9 @@
 <cfset variables.displayUserDetailsQry = application.modelUserPage.getUserProfileDetails()>
 <cfset variables.displayUserAddressQry = application.modelUserPage.getUserAddress()>
 
-
 <!DOCTYPE html>
 <html lang="en">
-
 <body>
-
     <div class="user-container">
         <div class="user-header">
             <div class="user-icon">
@@ -19,6 +16,7 @@
                     <cfset encryptedUserId = encrypt(variables.displayUserDetailsQry.fldUser_ID, application.encryptionKey, "AES", "Hex")>
                         <p class="user-name">Hello, #variables.displayUserDetailsQry.fullname#</p>
                         <p class="user-email">#variables.displayUserDetailsQry.fldEmail#</p>
+                        <p class="user-email">#variables.displayUserDetailsQry.fldPhone#</p>
                         <button 
                             class="btn btn-sm btn-outline-success me-2 editUser"
                             id="editUserBtn"
@@ -41,6 +39,7 @@
                                 <h5 class="modal-title mx-auto d-block" id="editUserdetailsLabel">Edit Details</h5>
                             </div>
                             <div class="modal-body">
+                                <div id="errorMessages1"></div>
                                 <form method="post" id="editUserdetailsForm" action="">
                                     <div class="form-group pt-1">
                                         <label for="fname">First Name</label>
@@ -59,12 +58,10 @@
                                         <label for="phone">Phone Number</label>
                                         <input type="text" class="form-control" id="phone" name="phone" placeholder="Enter Phone Number">
                                     </div>
-
                                     <div class="form-group pt-1 mt-3">
                                         <button type="button" class="btn btn-secondary mb-3" data-bs-dismiss="modal">Cancel</button>
                                         <button type="button" name="editUserDetailsButton" class="btn btn-success mb-3" id="editUserDetailsButton">Update</button>
                                     </div>
-                                    <div id="errorMessages"></div>
                                 </form>
                             </div>
                         </div>
@@ -84,13 +81,11 @@
                             <strong>#variables.displayUserAddressQry.fldFirstName#</strong>, 
                             <span>#variables.displayUserAddressQry.fldPhonenumber#</span>
                         </div>
-                
                         <div class="address-line">
                             #variables.displayUserAddressQry.fldAddressLine1#,
                             #variables.displayUserAddressQry.fldAddressLine2#,
                             #variables.displayUserAddressQry.fldCity#
                         </div>
-                
                         <div class="address-line">
                             #variables.displayUserAddressQry.fldState# - #variables.displayUserAddressQry.fldPincode#
                         </div>
@@ -114,11 +109,11 @@
                 data-bs-target="#createUserAddressModal">
                 Add New Address
             </button>
-
-             <button class="btn btn-outline-primary">Order Details</button>
+            <button class="btn btn-outline-primary"
+                onclick="window.location.href='OrderHistory.cfm'">
+                Order Details
+            </button>
         </div>
-
-        
         <div class="modal fade" 
 			id="deleteAddressConfirmModal" 
             data-bs-backdrop="static" 
@@ -143,14 +138,6 @@
     		</div>
 		</div>
     </div>
-    
-
-
-           
-        
-    
-
-
     <cfinclude template="footer.cfm">
 </body>
 </html>

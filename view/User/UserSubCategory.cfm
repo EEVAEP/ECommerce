@@ -16,35 +16,26 @@
                                                                 subCategoryId = url.subCategoryId,
                                                                 minPrice = form.minPrice,
                                                                 maxPrice = form.maxPrice)>
-        
     </cfif>
 <cfcatch>
     <cfdump  var="#cfcatch#">
 </cfcatch>
 </cftry>
 
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 </head>
-
 <body>
-
-
     <div class="container mt-4">
         <h4 class="custom-SubCatHeading">SubCategory List Page</h4>
         <h5 class="subcategory-title"><cfoutput>#variables.subcategoryQry.fldSubCategoryName#</cfoutput></h5>
-
-         <div class="d-flex justify-content gap-1 mb-3">
+        <div class="d-flex justify-content gap-1 mb-3">
             <cfoutput>
                 <a href="UserSubCategory.cfm?subCategoryId=#url.SubCategoryId#&sortOrder=asc" class="btn btn-outline-success btn-sm mr-2">Low to High</a>
                 <a href="UserSubCategory.cfm?subCategoryId=#url.SubCategoryId#&sortOrder=desc" class="btn btn-outline-success btn-sm">High to Low</a>
-                 
-                <button type="button" 
+               <button type="button" 
                     id="createfilterProductBtn"
                     class="btn btn-outline-success" 
                     data-id = "#url.SubCategoryId#"
@@ -52,8 +43,6 @@
                     data-bs-target="##filterModal">
                     Filter <i class="fa-solid fa-filter"></i>
                 </button>
-
-
                 <div class="modal fade" 
                     id="filterModal" 
                     data-bs-backdrop="static" 
@@ -65,7 +54,6 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title mx-auto d-block" id="filterModalLabel">Filter by Price</h5>
-                                
                             </div>
                             <div class="modal-body">
                                 <form method="POST" action="" id="filterForm" >
@@ -77,20 +65,15 @@
                                         <label for="maxPrice">Maximum Price</label>
                                         <input type="number" id="maxPrice" name="maxPrice" class="form-control" placeholder="Enter maximum price" required>
                                     </div>
-                                    
-
                                     <div class="form-group pt-1 mt-3">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                         <button type="submit" class="btn btn-success" name="applyFilterBtn" id="applyFilterBtn">Apply Filter</button>
-
-
                                     </div>
                                 </form>
                             </div>
                         </div>
                     </div>
                 </div>
-                
             </cfoutput>
         </div>
         <cfif structKeyExists(variables, "subCategoryQry") AND NOT structKeyExists(url, "sortOrder") AND NOT structKeyExists(form, "applyFilterBtn")>
@@ -152,8 +135,6 @@
             </cfif>
         </cfif>
     </div>
-    
-   <cfinclude template="footer.cfm">
-     
-</body>
+    <cfinclude template="footer.cfm">
+ </body>
 </html>
